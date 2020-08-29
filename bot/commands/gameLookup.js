@@ -1,6 +1,7 @@
 const {getGames} = require("../blaseball-api/game");
 const { getTeam } = require("../util/teamUtils");
 const { MessageEmbed } = require("discord.js");
+const { Weather } = require("../util/gameUtils");
 
 const command = {
     name: "game",
@@ -31,7 +32,8 @@ const command = {
             .addField("Winner",winner)
             .addField(`${game.homeTeamNickname} Score`, game.homeScore, true)
             .addField(`${game.awayTeamNickname} Score`, game.awayScore, true)
-            .addField("Inning", `${game.topOfInning?"Top":"Bottom"} of inning ${game.inning}`)
+            .addField("Inning", `${game.gameStart?game.topOfInning?"Top":"Bottom":"*Game yet to start*"} of inning ${game.inning}`)
+            .addField("Weather", Weather[game.weather], true)
             .addField("Loser Shamed?",game.shame?"Yes":"No",true)
             ;
             

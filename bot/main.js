@@ -54,7 +54,20 @@ Mongoose.connection
 client.once("ready", () => {
     console.log(`Ready! Serving ${client.guilds.cache.size} blaseball communities!`);
     console.log("The commissioner is doing a great job");
+    if(client.mode == 1){
+        client.user.setActivity("Can't connect to blasball :c");
+    } else {
+        client.user.setActivity("Blaseball! | bb!help");
+    }
 });
+
+client.setInterval(()=>{
+    if(client.mode == 1){
+        client.user.setActivity("the waiting game | Can't connect to blaseball :c");
+    } else {
+        client.user.setActivity("Blaseball! | bb!help");
+    }
+}, 300000);
 
 // Command Handler
 client.on("message", async (message) => {

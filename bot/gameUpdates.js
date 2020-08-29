@@ -40,6 +40,7 @@ async function broadcastGames(games){
 
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 const lastPlay = new NodeCache({stdTTL:60, checkperiod:300});
+const { Weather } = require("./util/gameUtils");
 
 function generatePlay(game){
 
@@ -47,7 +48,7 @@ function generatePlay(game){
 
     let play = "";
 
-    if(!lastupdate) play += `> **${game.homeTeamNickname} v ${game.awayTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n`;
+    if(!lastupdate) play += `> **${game.homeTeamNickname} v ${game.awayTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n> Weather: ${Weather[game.weather]}\n`;
 
     if(!lastupdate || lastupdate.homeScore != game.homeScore || lastupdate.awayScore != game.awayScore) play += `> ${String.fromCodePoint(game.homeTeamEmoji)}: ${game.homeScore} | ${String.fromCodePoint(game.awayTeamEmoji)}: ${game.awayScore}\n`;
 
