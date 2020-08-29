@@ -26,7 +26,7 @@ async function updatePlayerCache(){
         setTimeout(updatePlayerCache,2*60*1000);
         return console.warn("Couldn't get a response from blaseball! trying again in 2 minutes!");
     }
-    client.mode = 0;
+    client.mode = 3;
     let playerPromises = [];
     for (let index = 0; index < teams.length; index++) {
         const team = TeamCache.get(teams[index]);
@@ -44,6 +44,7 @@ async function updatePlayerCache(){
     }
     await Promise.all(playerPromises);
     let endCache = performance.now();
+    client.mode = 0;
     console.log(`Cached ${PlayerCache.keys().length} players in ${Math.ceil(endCache-beginCache)}ms!`);
 
 }

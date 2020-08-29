@@ -85,6 +85,7 @@ client.on("message", async (message) => {
     } else return;
 
     if(client.mode == 1) return message.channel.send("I can't reach blaseball right now :c");
+    if(client.mode == 3) return message.channel.send("I am currently doing some Blaseball research, try again in a minute c:");
 
     //Get args
     let args = messageContent.split(/\s/);
