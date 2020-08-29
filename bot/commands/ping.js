@@ -1,7 +1,7 @@
 const command = {
     name: "ping",
     aliases: [],
-    description: "pong!",
+    description: "pong!\nbb!ping",
     async execute(message, args) {
         message.channel.send("Splortsmanship!");
     },

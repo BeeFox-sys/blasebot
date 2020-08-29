@@ -3,7 +3,7 @@ const subscriptions = require("../schemas/subscription");
 const command = {
     name: "unsubscribe",
     aliases: [],
-    description: "Unsubscribes from the game of a channel",
+    description: "Unsubscribes from the game of a channel\nbb!unsubscribe",
     async execute(message, args) {
         let err, docs = await subscriptions.find({channel_id: message.channel.id});
         if(err) throw err;

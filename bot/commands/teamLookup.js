@@ -4,7 +4,7 @@ const { MessageEmbed } = require("discord.js");
 const command = {
     name: "team",
     aliases: [],
-    description: "Looks up a team",
+    description: "Looks up a team\nbb!team [team name]",
     async execute(message, args) {
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
