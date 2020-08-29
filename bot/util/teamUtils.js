@@ -3,7 +3,8 @@ const {getAllTeams} = require("../blaseball-api/teams");
 const { Collection } = require("discord.js");
 const client = global.client;
 const { performance } = require("perf_hooks");
-var debounce = require("lodash.debounce");
+const debounce = require("lodash.debounce");
+const { MessageEmbed } = require("discord.js");
 
 //TeamCache
 const TeamNames = new Collection();
@@ -54,9 +55,25 @@ async function getTeam(name){
     else return team;
 }
 
+async function generateTeamCard(team){
+    let teamCard = new MessageEmbed()
+        .setTitle(String.fromCodePoint(team.emoji) + " " + team.fullName)
+        .setColor(team.mainColor)
+        .addField("Championships",team.championships)
+        .addField("** **","** **")
+        .addField("Been Shamed",team.totalShames, true)
+        .addField("Shamed Others",team.totalShamings,true)
+        .addField("** **","** **")
+        .addField("Been Shamed This Season", team.seasonShames, true)
+        .addField("Shamed Others This Season", team.seasonShamings,true)
+        .setFooter(team.slogan);
+    return teamCard;
+}
+
 
 module.exports = {
     getTeam: getTeam,
     updateTeamCache: updateTeamCache,
+    generateTeamCard: generateTeamCard,
     TeamCache: TeamCache
 };
