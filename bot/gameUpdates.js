@@ -54,10 +54,10 @@ function generatePlay(game){
 
     play += `${game.lastUpdate}`;
 
-    if(play == lastPlay.get(game.id)) return;
+    if(game.lastUpdate == lastPlay.get(game.id)) return;
 
     gameCache.set(game.id, game);
-    lastPlay.set(game.id, play);
+    lastPlay.set(game.id, game.lastUpdate);
 
     return play;
 }
