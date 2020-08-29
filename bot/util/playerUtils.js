@@ -22,14 +22,17 @@ async function updatePlayerCache(){
     let beginCache = performance.now();
     let teams = TeamCache.keys();
     if(!teams.length) {
-        client.mode = 1;
-        setTimeout(updatePlayerCache,2*60*1000);
-        return console.warn("Couldn't get a response from blaseball! trying again in 2 minutes!");
+        console.log("Team cache empty, trying again in 2 seconds");
+        return client.setTimeout(updatePlayerCache, 2000);
     }
     client.mode = 3;
     let playerPromises = [];
     for (let index = 0; index < teams.length; index++) {
         const team = TeamCache.get(teams[index]);
+        if(!team) {
+            console.log("Team cache empty, trying again in 2 seconds");
+            return client.setTimeout(updatePlayerCache, 2000);
+        }
         let playerIDs = team.lineup.concat(team.rotation, team.bullpen, team.bench);
         playerPromises.push(
             getPlayers(playerIDs).then((players)=>{

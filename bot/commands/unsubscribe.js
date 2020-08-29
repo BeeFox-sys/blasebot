@@ -1,4 +1,4 @@
-const subscriptions = require("../schemas/subscription");
+const {subscriptions} = require("../schemas/subscription");
 
 const command = {
     name: "unsubscribe",

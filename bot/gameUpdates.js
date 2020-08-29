@@ -1,7 +1,7 @@
 
 const client = global.client;
 const EventSource = require("eventsource");
-const { updateGameCache } = require("./util/gameUtils");
+const { updateGameCache, generateGameCard } = require("./util/gameUtils");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -16,15 +16,16 @@ source.on("open", (event)=>{
 });
 source.on("error",(error)=>console.error);
 
-const subscriptions = require("./schemas/subscription");
+const {subscriptions, summaries} = require("./schemas/subscription");
 const NodeCache = require("node-cache");
 
+const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 
 async function broadcastGames(games){
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
 
-        if(game.gameComplete) continue;
+        if(game.gameComplete);
 
         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]});
         if(err) throw err;
@@ -37,9 +38,22 @@ async function broadcastGames(games){
             client.channels.fetch(subscription.channel_id).then(c=>c.send(play));
         }
     }
+    for(const game of games){
+        let lastupdate = gameCache.get(game.id);
+        if(!lastupdate) continue;
+        if(lastupdate.gameComplete == false && game.gameComplete == true){
+            let summary = generateGameCard(game);
+            let err, docs = await summaries.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]});
+            if(err) throw err;
+            if(docs.length == 0) continue;
+            for (const summarySubscription of docs) {
+                client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} finished!`,summary));
+            }
+        }
+        gameCache.set(game.id, game);        
+    }
 }
 
-const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 const lastPlay = new NodeCache({stdTTL:60, checkperiod:300});
 const { Weather } = require("./util/gameUtils");
 
@@ -57,7 +71,6 @@ function generatePlay(game){
 
     if(game.lastUpdate == lastPlay.get(game.id)) return;
 
-    gameCache.set(game.id, game);
     lastPlay.set(game.id, game.lastUpdate);
 
     return play;
