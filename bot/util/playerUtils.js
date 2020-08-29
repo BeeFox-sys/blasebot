@@ -22,8 +22,8 @@ async function updatePlayerCache(){
     let beginCache = performance.now();
     let teams = TeamCache.keys();
     if(!teams.length) {
-        console.log("Team cache empty, trying again in 2 seconds");
-        return client.setTimeout(updatePlayerCache, 2000);
+        console.log("Team cache empty, trying again in 1 minute");
+        return client.setTimeout(updatePlayerCache, 2000*60);
     }
     client.mode = 3;
     let playerPromises = [];

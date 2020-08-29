@@ -11,7 +11,7 @@ source.on("message",(message)=>{
     if(data.games) broadcastGames(data.games.schedule);
 
 });
-source.on("open", (event)=>{
+source.once("open", (event)=>{
     console.log("Subscribed to event stream!");
 });
 source.on("error",(error)=>console.error);
@@ -42,7 +42,8 @@ async function broadcastGames(games){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
         if(lastupdate.gameComplete == false && game.gameComplete == true){
-            let summary = generateGameCard(game);
+            console.log(game.id," finished!");
+            let summary = await generateGameCard(game);
             let err, docs = await summaries.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]});
             if(err) throw err;
             if(docs.length == 0) continue;
