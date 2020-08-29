@@ -55,7 +55,7 @@ client.once("ready", () => {
     console.log(`Ready! Serving ${client.guilds.cache.size} blaseball communities!`);
     console.log("The commissioner is doing a great job");
     if(client.mode == 1){
-        client.user.setActivity("Can't connect to blasball :c");
+        client.user.setActivity("the waiting game | Can't connect to blasball :c");
     } else {
         client.user.setActivity("Blaseball! | bb!help");
     }
