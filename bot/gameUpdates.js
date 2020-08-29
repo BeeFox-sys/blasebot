@@ -51,6 +51,8 @@ async function broadcastGames(games){
                 client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} finished!`,summary));
             }
         }
+    }
+    for(const game of games){
         gameCache.set(game.id, game);        
     }
 }
