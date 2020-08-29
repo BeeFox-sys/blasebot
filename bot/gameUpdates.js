@@ -8,7 +8,8 @@ var source = new EventSource(client.config.apiUrlEvents+"/streamData");
 source.on("message",(message)=>{
     let data = JSON.parse(message.data).value;
     updateGameCache(data);
-    broadcastGames(data.games.schedule);
+    if(data.games) broadcastGames(data.games.schedule);
+
 });
 source.on("open", (event)=>{
     console.log("Subscribed to event stream!");
