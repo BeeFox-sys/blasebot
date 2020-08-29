@@ -5,7 +5,7 @@ const command = {
     async execute(message, args) {
         if(args.length){
             //Looking up a command
-            let command = message.client.commands.get(args[0]);
+            let command = message.client.commands.get(args[0]).replace("bb!","");
             if(!command) return message.channel.send("There is no command with the name "+args[0]);
             return message.channel.send(command.description);
 

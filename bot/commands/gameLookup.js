@@ -4,7 +4,7 @@ const { generateGameCard } = require("../util/gameUtils");
 const command = {
     name: "game",
     aliases: [],
-    description: "Lookup a game by season, day, and team!\nbb!game [season] [day] [team]\n*Postseason is day 100 of the previous season*",
+    description: "Lookup a game by season, day, and team!\nbb!game [season] [day] [team]\n*Postseason is days 100+ of the previous season*",
     async execute(message, args) {
         if(args < 3) return message.send("You must specify a season, day, and team!");
         let season = args.shift()-1;
