@@ -1,0 +1,1 @@
+docker run --rm --detach --publish 27017:27017 --name testDB mongo
