@@ -13,13 +13,14 @@ const command = {
         let team = await getTeam(args.join(" "));
         if(!team) return message.channel.send("I can't find that team!");
 
-        let savErr = new subscriptions({
+        // eslint-disable-next-line no-unused-vars
+        let savErr, doc = new subscriptions({
             channel_id: message.channel.id,
             guild_id: message.guild.id,
             team: team.id
         }).save();
         if(savErr) throw savErr;
-        message.channel.send(`Subscribed this channel to the ${team.nickname}'s games!`);
+        return message.channel.send(`Subscribed this channel to the ${team.nickname}'s games!`);
 
     },
 };
