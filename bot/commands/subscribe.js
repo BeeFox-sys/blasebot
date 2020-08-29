@@ -7,6 +7,9 @@ const command = {
     description: "Subscribes a channel to a teams games\nA guild can only have one channel per team at max, and one team per channel.\nbb!subscribe [team name]",
     async execute(message, args) {
 
+        if(!message.guild) return message.channel.send("This command must be used in a guild!");
+        if(!message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!");
+
         let team = await getTeam(args.join(" "));
         if(!team) return message.channel.send("I can't find that team!");
 
