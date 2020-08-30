@@ -25,7 +25,7 @@ async function broadcastGames(games){
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
 
-        if(game.gameComplete) return;
+        if(game.gameComplete) continue;
 
         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]});
         if(err) throw err;
@@ -48,6 +48,7 @@ async function broadcastGames(games){
             if(err) throw err;
             if(docs.length == 0) continue;
             for (const summarySubscription of docs) {
+                if(summarySubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==summarySubscription.channel_id)) continue;
                 client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} finished!`,summary));
             }
         }
