@@ -24,14 +24,22 @@ const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 async function broadcastGames(games){
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
-
-        if(game.gameComplete) continue;
+        
+        if(game.gameComplete && gameCache.get(game.id).gameComplete) continue;
 
         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]});
         if(err) throw err;
         if(docs.length == 0) continue;
 
         let play = generatePlay(game);
+        
+        if(game.gameComplete && !gameCache.get(game.id).gameComplete){
+            let winner;
+            if(game.homeScore>game.awayScore) winner = game.homeTeamNickname;
+            else winner = game.awayTeamNickname;
+            play = `**Game Over**\n> **${game.homeTeamNickname} v ${game.awayTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n> ${winner} wins!\n> > ${String.fromCodePoint(game.homeTeamEmoji)}: ${game.homeScore} | ${String.fromCodePoint(game.awayTeamEmoji)}: ${game.awayScore}`
+        }
+
         if(!play) continue;
 
         for (const subscription of docs) {
