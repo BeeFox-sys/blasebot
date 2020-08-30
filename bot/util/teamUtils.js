@@ -1,47 +1,8 @@
-const NodeCache = require("node-cache");
-const {getAllTeams} = require("../blaseball-api/teams");
-const { Collection } = require("discord.js");
-const client = global.client;
-const { performance } = require("perf_hooks");
-const debounce = require("lodash.debounce");
+const {TeamCache, TeamNames} = require("../blaseball-api/teams");
 const { MessageEmbed } = require("discord.js");
+const { playerList } = require("./playerUtils");
 
-//TeamCache
-const TeamNames = new Collection();
-const TeamCache = new NodeCache({stdTTL:900,checkperiod:600});
-async function updateTeamCache(){
-    console.log("Caching teams...");
-    if(client.mode == 3) return;
-    let beginCache = performance.now();
-    let res = await getAllTeams();
-    if(!res) {
-        client.mode = 1;
-        setTimeout(updateTeamCache,2*60*1000);
-        return console.warn("Couldn't get a response from blaseball! trying again in 2 minutes!");
-    }
-    client.mode = 3;
-    for (let index = 0; index < res.length; index++) {
-        const team = res[index];
-        TeamCache.set(team.id, team);
-        TeamNames.set(team.id, {
-            lowercase: team.fullName.toLowerCase(),
-            location: team.location.toLowerCase(),
-            nickname: team.nickname.toLowerCase(),
-            shorthand: team.shorthand.toLowerCase(),
-            emoji: String.fromCodePoint(team.emoji)
-        });
-    }
-    client.mode = 0;
-    let endCache = performance.now();
-    console.log(`Cached ${TeamCache.keys().length} Teams in ${Math.ceil(endCache-beginCache)}ms!`);
-    return;
-}
 
-let debouncedUpdate = debounce(updateTeamCache, 5000, {leading: true, trailing:false});
-
-TeamCache.on("del", function (key, value){
-    debouncedUpdate();
-});
 
 async function getTeam(name){
     let team = TeamCache.get(name);
@@ -59,21 +20,25 @@ async function generateTeamCard(team){
     let teamCard = new MessageEmbed()
         .setTitle(String.fromCodePoint(team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
-        .addField("Championships",team.championships)
-        .addField("** **","** **")
+        .addField("Lineup",playerList(team.lineup),true)
+        .addField("Rotation",playerList(team.rotation),true)
+        .addField("Bullpen", playerList(team.bullpen),true)
+        .addField("Bench", playerList(team.bench), true)
+        .addField("Championships",team.championships, true)
         .addField("Been Shamed",team.totalShames, true)
         .addField("Shamed Others",team.totalShamings,true)
-        .addField("** **","** **")
         .addField("Been Shamed This Season", team.seasonShames, true)
-        .addField("Shamed Others This Season", team.seasonShamings,true)
-        .setFooter(team.slogan);
+        .addField("Shamed Others This Season", team.seasonShamings, true)
+        // .addField("Permanent Attributes", player.permAttr.join(", "),true)
+        // .addField("Season Attributes", player.seasAttr.join(", "),true)
+        // .addField("Week Attributes", player.weekAttr.join(", "),true)
+        // .addField("Game Attributes", player.gameAttr.join(", "),true)
+        .setFooter(`${team.slogan} | ID: ${team.id}`);
     return teamCard;
 }
 
 
 module.exports = {
     getTeam: getTeam,
-    updateTeamCache: updateTeamCache,
     generateTeamCard: generateTeamCard,
-    TeamCache: TeamCache
 };

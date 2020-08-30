@@ -11,6 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "args": ["--trace-warnings"],
             "program": "${workspaceFolder}\\bot\\main.js"
         }
     ]

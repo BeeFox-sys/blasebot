@@ -23,8 +23,8 @@ for (const file of commandFiles) {
 let commandLoadEnd = performance.now();
 console.log(`Loaded ${loadedCommands} commands in ${Math.ceil(commandLoadEnd-commandLoadStart)}ms!`);
 console.log("Initaliszing Caches");
-const {updateTeamCache} = require("./util/teamUtils");
-const { updatePlayerCache } = require("./util/playerUtils");
+const {updateTeamCache} = require("./blaseball-api/teams");
+const { updatePlayerCache } = require("./blaseball-api/players");
 async function initCaches(){
     await updateTeamCache();
     await updatePlayerCache();

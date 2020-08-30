@@ -1,7 +1,8 @@
 
 const client = global.client;
 const EventSource = require("eventsource");
-const { updateGameCache, generateGameCard } = require("./util/gameUtils");
+const { generateGameCard } = require("./util/gameUtils");
+const { updateGameCache } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -25,7 +26,7 @@ async function broadcastGames(games){
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
         
-        if(game.gameComplete && gameCache.get(game.id).gameComplete) continue;
+        if(game.gameComplete && gameCache.get(game.id)?.gameComplete) continue;
 
         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]});
         if(err) throw err;
@@ -33,7 +34,7 @@ async function broadcastGames(games){
 
         let play = generatePlay(game);
         
-        if(game.gameComplete && !gameCache.get(game.id).gameComplete){
+        if(game.gameComplete && gameCache.get(game.id)?.gameComplete == false){
             let winner;
             if(game.homeScore>game.awayScore) winner = game.homeTeamNickname;
             else winner = game.awayTeamNickname;

@@ -1,15 +1,8 @@
-const NodeCache = require("node-cache");
 const { MessageEmbed } = require("discord.js");
 
 
 //PlayerCache
-const GameCache = new NodeCache({stdTTL:300,checkperiod:150});
 
-function updateGameCache(value){
-    GameCache.set("games",value.games);
-    GameCache.set("leagues",value.leagues);
-    GameCache.set("temporal",value.temporal);
-}
 
 const Weather = {
     0: "Void",
@@ -24,7 +17,8 @@ const Weather = {
     9: "Bloodwind",
     10: "Peanuts",
     11: "Bird",
-    12: "Feedback"
+    12: "Feedback",
+    13: "Reverb"
 };
 
 async function generateGameCard(game){
@@ -45,14 +39,13 @@ async function generateGameCard(game){
         .addField(`${game.awayTeamNickname} Score`, game.awayScore, true)
         .addField("Inning", game.gameStart?`${game.topOfInning?"Top":"Bottom"} of inning ${game.inning}`:"*Game yet to start*")
         .addField("Weather", Weather[game.weather], true)
-        .addField("Loser Shamed?",game.shame?"Yes":"No",true);
+        .addField("Loser Shamed?",game.shame?"Yes":"No",true)
+        .setFooter(`ID: ${game.id}`);
     return gameCard;
 }
 
 
 module.exports = {
-    updateGameCache: updateGameCache,
     generateGameCard: generateGameCard,
-    GameCache: GameCache,
     Weather: Weather
 };

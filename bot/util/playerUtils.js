@@ -1,55 +1,20 @@
-const NodeCache = require("node-cache");
-const {getPlayers} = require("../blaseball-api/players");
-const {TeamCache, getTeam} = require("./teamUtils.js");
-const { Collection, MessageEmbed } = require("discord.js");
-const { performance } = require("perf_hooks");
-const debounce = require("lodash.debounce");
-const client = global.client;
+const {PlayerCache, PlayerNames, PlayerTeams} = require("../blaseball-api/players");
+const {getTeam} = require("./teamUtils.js");
+const {MessageEmbed } = require("discord.js");
 
-//PlayerCache
-const PlayerNames = new Collection();
-const PlayerTeams = new Collection();
-const PlayerCache = new NodeCache({stdTTL:900,checkperiod:600});
 
-let debouncedUpdate = debounce(updatePlayerCache, 5000, {leading: true, trailing:false});
 
-TeamCache.on("del", function (key, value){
-    debouncedUpdate();
-});
-
-async function updatePlayerCache(){
-    console.log("Caching Players...");
-    let beginCache = performance.now();
-    let teams = TeamCache.keys();
-    if(!teams.length) {
-        console.log("Team cache empty, trying again in 1 minute");
-        return client.setTimeout(updatePlayerCache, 2000*60);
-    }
-    client.mode = 3;
-    let playerPromises = [];
-    for (let index = 0; index < teams.length; index++) {
-        const team = TeamCache.get(teams[index]);
-        if(!team) {
-            console.log("Team cache empty, trying again in 2 seconds");
-            return client.setTimeout(updatePlayerCache, 2000);
+function playerList(players){
+    let playerlist = PlayerCache.mget(players);
+    let list = "";
+    for (const player in playerlist) {
+        if (Object.prototype.hasOwnProperty.call(playerlist, player)) {
+            const playerinfo = playerlist[player];
+            const playername = playerinfo.name;
+            list += playername+"\n"; 
         }
-        let playerIDs = team.lineup.concat(team.rotation, team.bullpen, team.bench);
-        playerPromises.push(
-            getPlayers(playerIDs).then((players)=>{
-                let playerObjects = players.map(p => {return {key: p.id, val: p};});
-                PlayerCache.mset(playerObjects);
-                players.forEach(player => {
-                    PlayerNames.set(player.name.toLowerCase(), player.id);
-                    PlayerTeams.set(player.id, team.id);
-                });
-            })
-        );
     }
-    await Promise.all(playerPromises);
-    let endCache = performance.now();
-    client.mode = 0;
-    console.log(`Cached ${PlayerCache.keys().length} players in ${Math.ceil(endCache-beginCache)}ms!`);
-
+    return list;
 }
 
 
@@ -73,16 +38,22 @@ async function generatePlayerCard(player){
     if(player.bat) playerCard.addField("Bat",player.bat, true);
     playerCard
         .addField("Fingers",player.totalFingers+" Fingers",true)
-        .addField("Alergic to peanuts?",player.peanutAllergy?"Yes":"No",true)
+        .addField("Allergic to peanuts?",player.peanutAllergy?"Yes":"No",true)
         .addField("Fate",player.fate,true)
-        .addField("Vibes",vibeString(vibes(player)), true) 
+        .addField("Coffee",coffeeStyles[player.coffee]??"Coffee",true)
+        .addField("Vibes",vibeString(vibes(player))) 
+        .addField("Blood",bloodTypes[player.blood]??"Blood?",true)
+        .addField("Soul Scream",soulscream(player),true)
         .addField("**--Stars--**","** **")
         .addField("Batting", stars(battingRating(player)))
         .addField("Pitching", stars(pitchingRating(player)))
-        // .addField("** **","** **")
         .addField("Baserunning", stars(baserunningRating(player)))
         .addField("Defence", stars(defenceRating(player)))
-        .setFooter(team.slogan);
+        // .addField("Permanent Attributes", player.permAttr.join(", "),true)
+        // .addField("Season Attributes", player.seasAttr.join(", "),true)
+        // .addField("Week Attributes", player.weekAttr.join(", "),true)
+        // .addField("Game Attributes", player.gameAttr.join(", "),true)
+        .setFooter(`${team.slogan} | ID: ${player.id}`);
     return playerCard;
 }
 
@@ -148,15 +119,59 @@ function vibeString(vibe){
     else if(vibe > 0.1) return "🟩 Quality";
     else if(vibe > -0.1) return "⬜ Neutral";
     else if(vibe > -0.4) return "🟥 Less Then Ideal";
-    else if(vibe > -0.6) return "🟥 🟥 Far Less Then Ideal";
+    else if(vibe > -0.8) return "🟥 🟥 Far Less Then Ideal";
     else return "🟥 🟥 🟥 Honestly Terrible";
 }
+
+function soulscream(player){
+    let scream = "";
+    let letter = ["A", "E", "I", "O", "U", "X", "H", "A", "E", "I"];
+    let trait = [player.pressurization, player.divinity, player.tragicness, player.shakespearianism, player.ruthlessness]; 
+    for (let i = 0; i < player.soul; i++)
+        for (var j = 0; j < 11; j++) {
+            var a = 1 / Math.pow(10, j),
+                b = trait[j % trait.length] % a,
+                c = Math.floor(b / a * 10);
+            scream += letter[c];
+        }
+    return scream;
+}
+
+const coffeeStyles = {
+    0: "Black",
+    1: "Light & Sweet",
+    2: "Macchiato",
+    3: "Cream & Sugar",
+    4: "Cold Brew",
+    5: "Flat White",
+    6: "Americano",
+    8: "Heavy Foam",
+    9: "Latte",
+    10: "Decaf",
+    11: "Milk Substitute",
+    12: "Plenty of Sugar",
+    13: "Anything"
+};
+
+const bloodTypes = {
+    0: "A",
+    1: "AA",
+    2: "AAA",
+    3: "Acid",
+    4: "Base",
+    5: "O",
+    6: "O No",
+    7: "H²O",
+    8: "Electric",
+    9: "Love",
+    10: "Fire",
+    11: "Psychic",
+    12: "Grass"
+};
 
 
 module.exports = {
     getPlayer: getPlayer,
     generatePlayerCard: generatePlayerCard,
-    updatePlayerCache: updatePlayerCache,
-    playerCache: PlayerCache,
-    PlayerTeams: PlayerTeams
+    playerList: playerList,
 };

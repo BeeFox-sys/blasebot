@@ -1,6 +1,8 @@
 
 const fetch = require("node-fetch");
 const client = global.client;
+const NodeCache = require("node-cache");
+
 
 async function getPlayoff(season){
     return await fetch(client.config.apiUrl+"/playoffs?number="+season)
@@ -20,7 +22,17 @@ async function getGames(season,day){
         .catch(e => console.error("Error at endpoint /playoffs:",e.message));
 }
 
+const GameCache = new NodeCache({stdTTL:300,checkperiod:150});
+
+function updateGameCache(value){
+    GameCache.set("games",value.games);
+    GameCache.set("leagues",value.leagues);
+    GameCache.set("temporal",value.temporal);
+}
+
 module.exports = {
     getPlayoff: getPlayoff,
-    getGames: getGames
+    getGames: getGames,
+    GameCache: GameCache,
+    updateGameCache: updateGameCache
 };
