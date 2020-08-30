@@ -67,5 +67,6 @@ module.exports = {
     getPlayers: getPlayers,
     PlayerCache: PlayerCache,
     PlayerTeams: PlayerTeams,
+    PlayerNames: PlayerNames,
     updatePlayerCache: updatePlayerCache
 };
