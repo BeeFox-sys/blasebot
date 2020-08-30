@@ -21,25 +21,21 @@ async function generatePlayerCard(player){
     let playerCard = new MessageEmbed()
         .setTitle(String.fromCodePoint(team.emoji) + " " + player.name)
         .setColor(team.mainColor)
-        .addField("Team",team.fullName, true);
-    if(player.bat) playerCard.addField("Bat",player.bat, true);
-    playerCard
+        .addField("Team",team.fullName, true)
         .addField("Fingers",player.totalFingers+" Fingers",true)
         .addField("Allergic to peanuts?",player.peanutAllergy?"Yes":"No",true)
         .addField("Fate",player.fate,true)
         .addField("Coffee",coffeeStyles[player.coffee]??"Coffee",true)
-        .addField("Vibes",vibeString(vibes(player))) 
+        .addField("Vibes",vibeString(vibes(player)), true)
+        .addField("Item",items[player.bat]??"None",true) 
         .addField("Blood",bloodTypes[player.blood]??"Blood?",true)
-        .addField("Soul Scream",soulscream(player),true)
+        .addField("Attributes", attributes(player),true)
+        .addField("Soul Scream",soulscream(player),false)
         .addField("**--Stars--**","** **")
         .addField("Batting", stars(battingRating(player)))
         .addField("Pitching", stars(pitchingRating(player)))
         .addField("Baserunning", stars(baserunningRating(player)))
         .addField("Defence", stars(defenceRating(player)))
-        // .addField("Permanent Attributes", player.permAttr.join(", "),true)
-        // .addField("Season Attributes", player.seasAttr.join(", "),true)
-        // .addField("Week Attributes", player.weekAttr.join(", "),true)
-        // .addField("Game Attributes", player.gameAttr.join(", "),true)
         .setFooter(`${team.slogan} | ID: ${player.id}`);
     return playerCard;
 }
@@ -122,6 +118,44 @@ function soulscream(player){
             scream += letter[c];
         }
     return scream;
+}
+
+const items = {
+    FIREPROOF: "Fireproof Jacket",
+    GUNBLADE_A: "The Dial Tone",
+    GUNBLADE_B: "Vibe Check",
+    MUSHROOM: "Mushroom",
+    GRAPPLING_HOOK: "Grappling Hook",
+    HEADPHONES: "Noise-Cancelling Headphones",
+    ENGLAND_MEMORABILIA: "Bangers & Smash"
+};
+
+const attributesList = {
+    EXTRA_STRIKE: "The Fourth Strike",
+    SHAME_PIT: "Targeted Shame",
+    HOME_FIELD: "Home Field Advantage",
+    FIREPROOF: "Fireproof",
+    ALTERNATE: "Alternate",
+    SOUNDPROOF: "Soundproof",
+    SHELLED: "Shelled",
+    REVERBERATING: "Reverberating"
+};
+
+function attributes(player){
+    let attrString = "";
+    for(const attribute of player.permAttr){
+        attrString += attributesList[attribute] +" (Permanent)\n";
+    }
+    for(const attribute of player.seasAttr){
+        attrString += attributesList[attribute] +" (Season)\n";
+    }
+    for(const attribute of player.weekAttr){
+        attrString += attributesList[attribute] +" (Week)\n";
+    }
+    for(const attribute of player.gameAttr){
+        attrString += attributesList[attribute] +" (Day)\n";
+    }
+    return attrString || "None";
 }
 
 const coffeeStyles = {
