@@ -90,7 +90,7 @@ function stars(rating){
     return starsString;
 }
 
-const {GameCache} = require("../util/gameUtils");
+const {GameCache} = require("../blaseball-api/game");
 function vibes(player){
     let currentDay = GameCache.get("games").sim.day;
     let vibes = 0.5 * (player.pressurization+player.cinnamon) * 
