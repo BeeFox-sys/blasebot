@@ -83,7 +83,7 @@ async function generatePlayerCard(player){
         .addField("Baserunning", stars(baserunningRating(player)))
         .addField("Defence", stars(defenceRating(player)))
         .setFooter(team.slogan);
-    return playerCard();
+    return playerCard;
 }
 
 function battingRating(player){
