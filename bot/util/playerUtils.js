@@ -145,7 +145,7 @@ const bloodTypes = {
     1: "AA",
     2: "AAA",
     3: "Acid",
-    4: "Base",
+    4: "Basic",
     5: "O",
     6: "O No",
     7: "H²O",
