@@ -30,9 +30,21 @@ function updateGameCache(value){
     GameCache.set("temporal",value.temporal);
 }
 
+async function getGameByID(id){
+    return await fetch(client.config.apiUrl+"/gameById/"+id)
+        .then(res => {
+            if(res.status == 400) return null;
+            if(!res.ok) throw new Error(res.statusText);
+            // console.log(res.json());
+            return res.json();
+        })
+        .catch(e => console.error("Error at endpoint /gameByID:",e.message));
+}
+
 module.exports = {
     getPlayoff: getPlayoff,
     getGames: getGames,
+    getGameByID: getGameByID,
     GameCache: GameCache,
     updateGameCache: updateGameCache
 };
