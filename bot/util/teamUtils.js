@@ -1,6 +1,6 @@
 const {TeamCache, TeamNames} = require("../blaseball-api/teams");
+const {PlayerCache} = require("../blaseball-api/players");
 const { MessageEmbed } = require("discord.js");
-const { playerList } = require("./playerUtils");
 
 
 
@@ -35,6 +35,19 @@ async function generateTeamCard(team){
         // .addField("Game Attributes", player.gameAttr.join(", "),true)
         .setFooter(`${team.slogan} | ID: ${team.id}`);
     return teamCard;
+}
+
+function playerList(players){
+    let playerlist = PlayerCache.mget(players);
+    let list = "";
+    for (const player in playerlist) {
+        if (Object.prototype.hasOwnProperty.call(playerlist, player)) {
+            const playerinfo = playerlist[player];
+            const playername = playerinfo.name;
+            list += playername+"\n"; 
+        }
+    }
+    return list;
 }
 
 

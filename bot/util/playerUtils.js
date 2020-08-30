@@ -1,21 +1,8 @@
 const {PlayerCache, PlayerNames, PlayerTeams} = require("../blaseball-api/players");
-const {getTeam} = require("./teamUtils.js");
+const { getTeam } = require("./teamUtils.js");
 const {MessageEmbed } = require("discord.js");
 
 
-
-function playerList(players){
-    let playerlist = PlayerCache.mget(players);
-    let list = "";
-    for (const player in playerlist) {
-        if (Object.prototype.hasOwnProperty.call(playerlist, player)) {
-            const playerinfo = playerlist[player];
-            const playername = playerinfo.name;
-            list += playername+"\n"; 
-        }
-    }
-    return list;
-}
 
 
 async function getPlayer(name){
@@ -172,6 +159,5 @@ const bloodTypes = {
 
 module.exports = {
     getPlayer: getPlayer,
-    generatePlayerCard: generatePlayerCard,
-    playerList: playerList,
+    generatePlayerCard: generatePlayerCard
 };
