@@ -25,16 +25,41 @@ async function generateTeamCard(team){
         .addField("Bullpen", playerList(team.bullpen),true)
         .addField("Bench", playerList(team.bench), true)
         .addField("Championships",team.championships, true)
+        .addField("Attributes", attributes(team),true)
         .addField("Been Shamed",team.totalShames, true)
         .addField("Shamed Others",team.totalShamings,true)
         .addField("Been Shamed This Season", team.seasonShames, true)
         .addField("Shamed Others This Season", team.seasonShamings, true)
-        // .addField("Permanent Attributes", player.permAttr.join(", "),true)
-        // .addField("Season Attributes", player.seasAttr.join(", "),true)
-        // .addField("Week Attributes", player.weekAttr.join(", "),true)
-        // .addField("Game Attributes", player.gameAttr.join(", "),true)
         .setFooter(`${team.slogan} | ID: ${team.id}`);
     return teamCard;
+}
+
+const attributesList = {
+    EXTRA_STRIKE: "The Fourth Strike",
+    SHAME_PIT: "Targeted Shame",
+    HOME_FIELD: "Home Field Advantage",
+    FIREPROOF: "Fireproof",
+    ALTERNATE: "Alternate",
+    SOUNDPROOF: "Soundproof",
+    SHELLED: "Shelled",
+    REVERBERATING: "Reverberating"
+};
+
+function attributes(team){
+    let attrString = "";
+    for(const attribute of team.permAttr){
+        attrString += attributesList[attribute] +" (Permanent)\n";
+    }
+    for(const attribute of team.seasAttr){
+        attrString += attributesList[attribute] +" (Season)\n";
+    }
+    for(const attribute of team.weekAttr){
+        attrString += attributesList[attribute] +" (Week)\n";
+    }
+    for(const attribute of team.gameAttr){
+        attrString += attributesList[attribute] +" (Day)\n";
+    }
+    return attrString || "None";
 }
 
 function playerList(players){
