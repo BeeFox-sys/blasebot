@@ -26,7 +26,7 @@ async function broadcastGames(games){
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
         
-        if(game.gameComplete && gameCache.get(game.id)?.gameComplete) continue;
+        if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
 
         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]});
         if(err) throw err;
