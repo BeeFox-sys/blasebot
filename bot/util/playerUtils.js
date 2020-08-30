@@ -127,7 +127,8 @@ const items = {
     MUSHROOM: "Mushroom",
     GRAPPLING_HOOK: "Grappling Hook",
     HEADPHONES: "Noise-Cancelling Headphones",
-    ENGLAND_MEMORABILIA: "Bangers & Smash"
+    ENGLAND_MEMORABILIA: "Bangers & Smash",
+    ARM_CANNON: "Literal Arm Cannon"
 };
 
 const attributesList = {
