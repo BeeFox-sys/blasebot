@@ -2,7 +2,6 @@
 const fetch = require("node-fetch");
 const client = global.client;
 const { performance } = require("perf_hooks");
-const debounce = require("lodash.debounce");
 const NodeCache = require("node-cache");
 const { Collection } = require("discord.js");
 const { TeamCache } = require("./teams");
@@ -20,13 +19,9 @@ async function getPlayers(players){
 //PlayerCache
 const PlayerNames = new Collection();
 const PlayerTeams = new Collection();
-const PlayerCache = new NodeCache({stdTTL:900,checkperiod:600});
+const PlayerCache = new NodeCache();
 
-let debouncedUpdate = debounce(updatePlayerCache, 5000, {leading: true, trailing:false});
-
-PlayerCache.on("del", function (key, value){
-    debouncedUpdate();
-});
+let updateCache = setInterval(updatePlayerCache, 15*60*1000);
 
 async function updatePlayerCache(){
     console.log("Caching Players...");
@@ -36,30 +31,30 @@ async function updatePlayerCache(){
         console.log("Team cache empty, trying again in 1 minute");
         return client.setTimeout(updatePlayerCache, 2000*60);
     }
-    client.mode = 3;
     let playerPromises = [];
+    let playerIDs = [];
+    let requests = 0;
     for (let index = 0; index < teams.length; index++) {
         const team = TeamCache.get(teams[index]);
-        if(!team) {
-            console.log("Team cache empty, trying again in 2 seconds");
-            return client.setTimeout(updatePlayerCache, 2000);
+        playerIDs = playerIDs.concat(team.lineup, team.rotation, team.bullpen, team.bench);
+        if(playerIDs.length >= 200 || index == teams.length-1){
+            requests++;
+            playerPromises.push(
+                getPlayers(playerIDs).then((players)=>{
+                    let playerObjects = players.map(p => {return {key: p.id, val: p};});
+                    PlayerCache.mset(playerObjects);
+                    players.forEach(player => {
+                        PlayerNames.set(player.name.toLowerCase(), player.id);
+                        PlayerTeams.set(player.id, team.id);
+                    });
+                })
+            );
+            playerIDs = [];
         }
-        let playerIDs = team.lineup.concat(team.rotation, team.bullpen, team.bench);
-        playerPromises.push(
-            getPlayers(playerIDs).then((players)=>{
-                let playerObjects = players.map(p => {return {key: p.id, val: p};});
-                PlayerCache.mset(playerObjects);
-                players.forEach(player => {
-                    PlayerNames.set(player.name.toLowerCase(), player.id);
-                    PlayerTeams.set(player.id, team.id);
-                });
-            })
-        );
     }
     await Promise.all(playerPromises);
     let endCache = performance.now();
-    client.mode = 0;
-    console.log(`Cached ${PlayerCache.keys().length} players in ${Math.ceil(endCache-beginCache)}ms!`);
+    console.log(`Cached ${PlayerCache.keys().length} players using ${requests} requests in ${Math.ceil(endCache-beginCache)}ms!`);
 
 }
 

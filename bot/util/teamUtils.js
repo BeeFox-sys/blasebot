@@ -25,7 +25,7 @@ async function generateTeamCard(team){
         .addField("Bullpen", playerList(team.bullpen),true)
         .addField("Bench", playerList(team.bench), true)
         .addField("Championships",team.championships, true)
-        .addField("Attributes", attributes(team),true)
+        .addField("Attributes", attributes(team)||"None",true)
         .addField("Been Shamed",team.totalShames, true)
         .addField("Shamed Others",team.totalShamings,true)
         .addField("Been Shamed This Season", team.seasonShames, true)

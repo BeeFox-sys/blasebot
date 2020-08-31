@@ -11,7 +11,6 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "eventsource": "^1.0.7",
-    "lodash.debounce": "^4.0.8",
     "mongoose": "^5.10.2",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.0"

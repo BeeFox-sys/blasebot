@@ -4,7 +4,6 @@ const client = global.client;
 const NodeCache = require("node-cache");
 const { Collection } = require("discord.js");
 const { performance } = require("perf_hooks");
-const debounce = require("lodash.debounce");
 
 async function getAllTeams(){
     return await fetch(client.config.apiUrl+"/allTeams")
@@ -16,7 +15,11 @@ async function getAllTeams(){
 }
 
 const TeamNames = new Collection();
-const TeamCache = new NodeCache({stdTTL:900,checkperiod:600});
+const TeamCache = new NodeCache();
+
+let updateCache = setInterval(updateTeamCache, 30*60*1000);
+
+
 async function updateTeamCache(){
     console.log("Caching teams...");
     if(client.mode == 3) return;
@@ -27,7 +30,6 @@ async function updateTeamCache(){
         setTimeout(updateTeamCache,2*60*1000);
         return console.warn("Couldn't get a response from blaseball! trying again in 2 minutes!");
     }
-    client.mode = 3;
     for (let index = 0; index < res.length; index++) {
         const team = res[index];
         TeamCache.set(team.id, team);
@@ -44,12 +46,6 @@ async function updateTeamCache(){
     console.log(`Cached ${TeamCache.keys().length} Teams in ${Math.ceil(endCache-beginCache)}ms!`);
     return;
 }
-
-let debouncedUpdate = debounce(updateTeamCache, 5000, {leading: true, trailing:false});
-
-TeamCache.on("del", function (key, value){
-    debouncedUpdate();
-});
 
 module.exports = {
     getAllTeams: getAllTeams,
