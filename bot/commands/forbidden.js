@@ -18,7 +18,7 @@ const command = {
         guild.forbidden = !current;
         guild = await saveGuild(guild);
 
-        return await message.channel.send(`Now ${guild.forbidden?"showing":"hiding"} forbidden knowlage in this guild!`);
+        return await message.channel.send(`Now ${guild.forbidden?"showing":"hiding"} forbidden knowledge in this guild!`);
 
 
     },
