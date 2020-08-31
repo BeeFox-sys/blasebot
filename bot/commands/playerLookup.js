@@ -9,7 +9,7 @@ const command = {
     async execute(message, args) {
         let playerName = args.join(" ");
         let player = await getPlayer(playerName);
-        if(!player) return message.channel.send("I couldn't find that player!");
+        if(!player) return message.channel.send("I couldn't find that player!").catch(console.error);
         let forbidden;
         if(message.guild){
             let guild = await getGuild(message.guild.id);
@@ -18,7 +18,7 @@ const command = {
             forbidden = false;
         }
         let playerCard = await generatePlayerCard(player, forbidden);
-        await message.channel.send(playerCard);
+        await message.channel.send(playerCard).catch(console.error);
     },
 };
 

@@ -45,7 +45,7 @@ async function broadcastGames(games){
         if(!play) continue;
 
         for (const subscription of docs) {
-            client.channels.fetch(subscription.channel_id).then(c=>c.send(play));
+            client.channels.fetch(subscription.channel_id).then(c=>c.send(play).catch(console.error));
         }
     }
     for(const game of games){
@@ -59,7 +59,7 @@ async function broadcastGames(games){
             if(docs.length == 0) continue;
             for (const summarySubscription of docs) {
                 if(summarySubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==summarySubscription.channel_id)) continue;
-                client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} finished!`,summary));
+                client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} finished!`,summary)).catch(console.error);
             }
         }
     }

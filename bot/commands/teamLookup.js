@@ -8,7 +8,7 @@ const command = {
     async execute(message, args) {
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
-        if(!team) return message.channel.send("I couldn't find that team!");
+        if(!team) return message.channel.send("I couldn't find that team!").catch(console.error);
         let forbidden;
         if(message.guild){
             let guild = await getGuild(message.guild.id);
@@ -16,7 +16,7 @@ const command = {
         } else {
             forbidden = false;
         }        let teamCard = await generateTeamCard(team, forbidden);
-        await message.channel.send(String.fromCodePoint(team.emoji), teamCard);
+        await message.channel.send(String.fromCodePoint(team.emoji), teamCard).catch(console.error);
     },
 };
 

@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 const client = global.client;
 const NodeCache = require("node-cache");
 
+
 const DataStreamCache = new NodeCache();
 const GameCache = new NodeCache({stdTTL:300, checkperiod:30});
 const DayCache = new NodeCache({stdTTL:300, checkperiod:30});
@@ -39,7 +40,6 @@ function updateStreamData(value){
 }
 
 GameCache.on("expired",key=>console.debug("Expired game:",key));
-
 
 async function getGameByID(id){
     let game = GameCache.get(id);

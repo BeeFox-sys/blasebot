@@ -3,7 +3,7 @@ const command = {
     aliases: [],
     description: "pong!\nbb!ping",
     async execute(message, args) {
-        message.channel.send("Splortsmanship!");
+        message.channel.send("Splortsmanship!").catch(console.error);
     },
 };
 

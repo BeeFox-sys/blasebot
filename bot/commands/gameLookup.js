@@ -8,22 +8,22 @@ const command = {
     async execute(message, args) {
         if(args.length == 1){
             let game = await getGameByID(args[0]);
-            if(!game) return message.channel.send("That game doesn't exist!");  
+            if(!game) return message.channel.send("That game doesn't exist!").catch(console.error);  
             let gameCard = await generateGameCard(game);
-            await message.channel.send(gameCard);          
+            await message.channel.send(gameCard).catch(console.error);          
             return;
         }
-        if(args.length < 3) return message.channel.send("You must specify a season, day, and team!");
+        if(args.length < 3) return message.channel.send("You must specify a season, day, and team!").catch(console.error);
         let season = args.shift()-1;
         let day = args.shift()-1;
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
-        if(!team) return message.channel.send("I can't find that team!");
+        if(!team) return message.channel.send("I can't find that team!").catch(console.error);
         let games = await getGames(season,day);
         let game = games.filter(g=> (g.awayTeam == team.id || g.homeTeam == team.id))[0];
-        if(!game) return message.channel.send("That game doesn't exist!");
+        if(!game) return message.channel.send("That game doesn't exist!").catch(console.error);
         let gameCard = await generateGameCard(game);
-        await message.channel.send(gameCard);
+        await message.channel.send(gameCard).catch(console.error);
     },
 };
 
