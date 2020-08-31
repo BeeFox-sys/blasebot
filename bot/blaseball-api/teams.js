@@ -17,7 +17,7 @@ async function getAllTeams(){
 const TeamNames = new Collection();
 const TeamCache = new NodeCache();
 
-let updateCache = setInterval(updateTeamCache, 30*60*1000);
+setInterval(updateTeamCache, 30*60*1000);
 
 
 async function updateTeamCache(){

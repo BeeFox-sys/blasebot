@@ -3,48 +3,69 @@ const fetch = require("node-fetch");
 const client = global.client;
 const NodeCache = require("node-cache");
 
+const DataStreamCache = new NodeCache();
+const GameCache = new NodeCache({stdTTL:300, checkperiod:30});
+const DayCache = new NodeCache({stdTTL:300, checkperiod:30});
 
-async function getPlayoff(season){
-    return await fetch(client.config.apiUrl+"/playoffs?number="+season)
-        .then(res => {
-            if(!res.ok) throw new Error(res.statusText);
-            return res.json();
-        })
-        .catch(e => console.error("Error at endpoint /playoffs:",e.message));
-}
+DayCache.on("expired",key=>console.log("Expired day:",key));
 
 async function getGames(season,day){
+    let dayData = DayCache.get(`${season}:${day}`);
+    if(dayData) return dayData;
+    console.log(`Caching day: ${season}:${day}`);
     return await fetch(client.config.apiUrl+"/games?season="+season+"&day="+day)
-        .then(res => {
+        .then(async res => {
             if(!res.ok) throw new Error(res.statusText);
-            return res.json();
+            let dayData = await res.json();
+            if(!dayData.length) return dayData;
+            let currentDay = DataStreamCache.get("games").sim.day;
+            let currentSeason = DataStreamCache.get("games").sim.season;
+            let ttl;
+            if(dayData[0].season == currentSeason 
+                && dayData[0].day == currentDay) ttl = 60;
+            else ttl = 600;
+            DayCache.set(`${season}:${day}`, dayData, ttl);
+            console.log(`Cached day: ${season}:${day}`);
+            return dayData;
         })
-        .catch(e => console.error("Error at endpoint /playoffs:",e.message));
+        .catch(e => console.error("Error at endpoint /games:",e.message));
 }
 
-const GameCache = new NodeCache({stdTTL:300,checkperiod:150});
-
-function updateGameCache(value){
-    GameCache.set("games",value.games);
-    GameCache.set("leagues",value.leagues);
-    GameCache.set("temporal",value.temporal);
+function updateStreamData(value){
+    console.log("Updating Stream Data");
+    DataStreamCache.set("games",value.games);
+    DataStreamCache.set("leagues",value.leagues);
+    DataStreamCache.set("temporal",value.temporal);
 }
+
+GameCache.on("expired",key=>console.log("Expired game:",key));
+
 
 async function getGameByID(id){
+    let game = GameCache.get(id);
+    if(game) return game;
+    console.log(`Caching game: ${id}`);
     return await fetch(client.config.apiUrl+"/gameById/"+id)
-        .then(res => {
+        .then(async res => {
             if(res.status == 400) return null;
             if(!res.ok) throw new Error(res.statusText);
-            // console.log(res.json());
-            return res.json();
+            let gameData = await res.json();
+            let currentDay = DataStreamCache.get("games").sim.day;
+            let currentSeason = DataStreamCache.get("games").sim.season;
+            let ttl;
+            if(gameData.season == currentSeason 
+                && gameData.day == currentDay) ttl = 60;
+            else ttl = 600;
+            GameCache.set(id, gameData, ttl);
+            console.log(`Cached Game: ${gameData.id}`);
+            return gameData;
         })
         .catch(e => console.error("Error at endpoint /gameByID:",e.message));
 }
 
 module.exports = {
-    getPlayoff: getPlayoff,
     getGames: getGames,
     getGameByID: getGameByID,
-    GameCache: GameCache,
-    updateGameCache: updateGameCache
+    GameCache: DataStreamCache,
+    updateStreamData: updateStreamData
 };

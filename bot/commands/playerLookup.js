@@ -1,4 +1,5 @@
-const {getPlayer, generatePlayerCard} = require("../util/playerUtils");
+const {generatePlayerCard} = require("../util/playerUtils");
+const {getPlayer} = require("../blaseball-api/players");
 
 const command = {
     name: "player",

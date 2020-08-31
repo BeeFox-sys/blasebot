@@ -2,13 +2,13 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateGameCache } = require("./blaseball-api/game");
+const { updateStreamData } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
 source.on("message",(message)=>{
     let data = JSON.parse(message.data).value;
-    updateGameCache(data);
+    updateStreamData(data);
     if(data.games) broadcastGames(data.games.schedule);
 
 });

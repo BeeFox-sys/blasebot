@@ -21,7 +21,7 @@ const PlayerNames = new Collection();
 const PlayerTeams = new Collection();
 const PlayerCache = new NodeCache();
 
-let updateCache = setInterval(updatePlayerCache, 15*60*1000);
+setInterval(updatePlayerCache, 15*60*1000);
 
 async function updatePlayerCache(){
     console.log("Caching Players...");
@@ -61,8 +61,19 @@ async function updatePlayerCache(){
 
 }
 
+async function getPlayer(name){
+    let player = PlayerCache.get(name);
+    if(!player){
+        let playerName = PlayerNames.get(name.toLowerCase());
+        if(!playerName) return null;
+        player = PlayerCache.get(playerName);
+    }
+    if(!player) return null;
+    else return player;
+}
+
 module.exports = {
-    getPlayers: getPlayers,
+    getPlayer: getPlayer,
     PlayerCache: PlayerCache,
     PlayerTeams: PlayerTeams,
     PlayerNames: PlayerNames,
