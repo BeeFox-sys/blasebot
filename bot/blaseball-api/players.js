@@ -36,7 +36,11 @@ async function updatePlayerCache(){
     let requests = 0;
     for (let index = 0; index < teams.length; index++) {
         const team = TeamCache.get(teams[index]);
-        playerIDs = playerIDs.concat(team.lineup, team.rotation, team.bullpen, team.bench);
+        let teamIDs = team.lineup.concat( team.rotation, team.bullpen, team.bench );
+        teamIDs.forEach(playerID => {
+            PlayerTeams.set(playerID, team.id);
+        });
+        playerIDs = playerIDs.concat(teamIDs);
         if(playerIDs.length >= 200 || index == teams.length-1){
             requests++;
             playerPromises.push(
@@ -45,7 +49,6 @@ async function updatePlayerCache(){
                     PlayerCache.mset(playerObjects);
                     players.forEach(player => {
                         PlayerNames.set(player.name.toLowerCase(), player.id);
-                        PlayerTeams.set(player.id, team.id);
                     });
                 })
             );
