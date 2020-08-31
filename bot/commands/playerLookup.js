@@ -1,5 +1,6 @@
 const {generatePlayerCard} = require("../util/playerUtils");
 const {getPlayer} = require("../blaseball-api/players");
+const {getGuild} = require("../util/guildUtils");
 
 const command = {
     name: "player",
@@ -9,7 +10,14 @@ const command = {
         let playerName = args.join(" ");
         let player = await getPlayer(playerName);
         if(!player) return message.channel.send("I couldn't find that player!");
-        let playerCard = await generatePlayerCard(player);
+        let forbidden;
+        if(message.guild){
+            let guild = await getGuild(message.guild.id);
+            forbidden = guild.forbidden;
+        } else {
+            forbidden = false;
+        }
+        let playerCard = await generatePlayerCard(player, forbidden);
         await message.channel.send(playerCard);
     },
 };

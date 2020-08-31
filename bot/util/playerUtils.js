@@ -5,15 +5,15 @@ const {MessageEmbed } = require("discord.js");
 
 
 
-async function generatePlayerCard(player){
+async function generatePlayerCard(player, forbidden){
     let team = await getTeam(PlayerTeams.get(player.id));
     let playerCard = new MessageEmbed()
         .setTitle(String.fromCodePoint(team.emoji) + " " + player.name)
         .setColor(team.mainColor)
         .addField("Team",team.fullName, true)
-        .addField("Fingers","||"+player.totalFingers+" Fingers||",true)
-        .addField("Allergic to peanuts?",player.peanutAllergy?"||Yes||":"||No ||",true)
-        .addField("Fate",player.fate,true)
+    if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
+    if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||Yes||":"||No ||",true);
+    playerCard.addField("Fate",player.fate,true)
         .addField("Coffee",coffeeStyles[player.coffee]??"Coffee",true)
         .addField("Vibes",vibeString(vibes(player)), true)
         .addField("Item",items[player.bat]??"None",true) 
@@ -76,6 +76,7 @@ function stars(rating){
 }
 
 const {GameCache} = require("../blaseball-api/game");
+const { getGuild } = require("./guildUtils");
 function vibes(player){
     let currentDay = GameCache.get("games").sim.day;
     let vibes = 0.5 * (player.pressurization+player.cinnamon) * 

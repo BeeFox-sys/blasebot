@@ -16,15 +16,15 @@ async function getTeam(name){
     else return team;
 }
 
-async function generateTeamCard(team){
+async function generateTeamCard(team, forbidden){
     let teamCard = new MessageEmbed()
         .setTitle(String.fromCodePoint(team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
         .addField("Lineup",playerList(team.lineup),true)
-        .addField("Rotation",playerList(team.rotation),true)
-        .addField("Bullpen", "||"+playerList(team.bullpen)+"||",true)
-        .addField("Bench", "||"+playerList(team.bench)+"||", true)
-        .addField("Championships",team.championships, true)
+        .addField("Rotation",playerList(team.rotation),true);
+    if(forbidden) teamCard.addField("Bullpen", "||"+playerList(team.bullpen)+"||",true)
+        .addField("Bench", "||"+playerList(team.bench)+"||", true);
+    teamCard.addField("Championships",team.championships, true)
         .addField("Attributes", attributes(team)||"None",true)
         .addField("Been Shamed",team.totalShames, true)
         .addField("Shamed Others",team.totalShamings,true)
