@@ -32,7 +32,7 @@ async function getGames(season,day){
 }
 
 function updateStreamData(value){
-    console.debug("Updating Stream Data");
+    // console.debug("Updating Stream Data");
     DataStreamCache.set("games",value.games);
     DataStreamCache.set("leagues",value.leagues);
     DataStreamCache.set("temporal",value.temporal);
