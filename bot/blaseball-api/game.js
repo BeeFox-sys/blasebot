@@ -7,12 +7,12 @@ const DataStreamCache = new NodeCache();
 const GameCache = new NodeCache({stdTTL:300, checkperiod:30});
 const DayCache = new NodeCache({stdTTL:300, checkperiod:30});
 
-DayCache.on("expired",key=>console.log("Expired day:",key));
+DayCache.on("expired",key=>console.debug("Expired day:",key));
 
 async function getGames(season,day){
     let dayData = DayCache.get(`${season}:${day}`);
     if(dayData) return dayData;
-    console.log(`Caching day: ${season}:${day}`);
+    console.debug(`Caching day: ${season}:${day}`);
     return await fetch(client.config.apiUrl+"/games?season="+season+"&day="+day)
         .then(async res => {
             if(!res.ok) throw new Error(res.statusText);
@@ -25,26 +25,26 @@ async function getGames(season,day){
                 && dayData[0].day == currentDay) ttl = 60;
             else ttl = 600;
             DayCache.set(`${season}:${day}`, dayData, ttl);
-            console.log(`Cached day: ${season}:${day}`);
+            console.debug(`Cached day: ${season}:${day}`);
             return dayData;
         })
         .catch(e => console.error("Error at endpoint /games:",e.message));
 }
 
 function updateStreamData(value){
-    console.log("Updating Stream Data");
+    console.debug("Updating Stream Data");
     DataStreamCache.set("games",value.games);
     DataStreamCache.set("leagues",value.leagues);
     DataStreamCache.set("temporal",value.temporal);
 }
 
-GameCache.on("expired",key=>console.log("Expired game:",key));
+GameCache.on("expired",key=>console.debug("Expired game:",key));
 
 
 async function getGameByID(id){
     let game = GameCache.get(id);
     if(game) return game;
-    console.log(`Caching game: ${id}`);
+    console.debug(`Caching game: ${id}`);
     return await fetch(client.config.apiUrl+"/gameById/"+id)
         .then(async res => {
             if(res.status == 400) return null;
@@ -57,7 +57,7 @@ async function getGameByID(id){
                 && gameData.day == currentDay) ttl = 60;
             else ttl = 600;
             GameCache.set(id, gameData, ttl);
-            console.log(`Cached Game: ${gameData.id}`);
+            console.debug(`Cached Game: ${gameData.id}`);
             return gameData;
         })
         .catch(e => console.error("Error at endpoint /gameByID:",e.message));

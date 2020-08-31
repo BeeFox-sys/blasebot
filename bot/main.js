@@ -100,7 +100,7 @@ client.on("message", async (message) => {
         command.execute(message, args);
     } catch (error) {
         message.channel.send("Error! Something went wrong!");
-        console.log(error);
+        console.error(error);
         return;
     }
 

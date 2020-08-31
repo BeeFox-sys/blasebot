@@ -13,7 +13,7 @@ const command = {
             await message.channel.send(gameCard);          
             return;
         }
-        if(args.length < 3) return message.send("You must specify a season, day, and team!");
+        if(args.length < 3) return message.channel.send("You must specify a season, day, and team!");
         let season = args.shift()-1;
         let day = args.shift()-1;
         let teamName = args.join(" ");
