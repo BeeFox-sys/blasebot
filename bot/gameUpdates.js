@@ -27,6 +27,7 @@ async function broadcastGames(games){
     for (const game of games) {
         
         if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
+        if(!game.gameStarted) continue;
 
         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]});
         if(err) throw err;
