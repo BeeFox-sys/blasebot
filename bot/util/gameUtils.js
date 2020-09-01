@@ -22,14 +22,20 @@ const Weather = {
 };
 
 async function generateGameCard(game){
-    let winner = "";
+    let winner, loser;
     if(game.gameComplete){
-        if(game.homeScore>game.awayScore) winner = game.homeTeamNickname;
-        else winner = game.awayTeamNickname;
+        if(game.homeScore>game.awayScore) {
+            winner = game.homeTeamNickname;
+            loser = game.awayTeamNickname;
+        }
+        else {
+            winner = game.awayTeamNickname;
+            loser = game.homeTeamNickname;
+        }
     } else if(game.gameStart) winner = "[*Game in progress*](https://www.blaseball.com/)";
     else winner = "[*Game yet to start*](https://www.blaseball.com/upcoming)";
     let gameCard = new MessageEmbed()
-        .setTitle(`${String.fromCodePoint(game.homeTeamEmoji)} __${game.homeTeamName}__ vs __${game.awayTeamName}__ ${String.fromCodePoint(game.awayTeamEmoji)}`)
+        .setTitle(`${String.fromCodePoint(game.homeTeamEmoji)} __${game.homeTeamName}__ vs __${game.awayTeamName}__ ${String.fromCodePoint(game.awayTeamEmoji)}\nSeason ${game.season+1} Day ${game.day+1}`)
         .setColor(game.homeTeamColor)
         .setFooter(`Season: ${game.season+1} | Day: ${game.day+1}`)
         .addField(`${game.homeTeamNickname} Odds`, Math.floor(game.homeOdds*100)+"%",true)
@@ -40,10 +46,11 @@ async function generateGameCard(game){
         .addField(`${game.awayTeamNickname} Score`, game.awayScore, true)
         .addField("Inning", game.gameStart?`${game.topOfInning?"Top":"Bottom"} of inning ${game.inning+1}`:"*Game yet to start*")
         .addField("Weather", Weather[game.weather], true)
-        .addField("Loser Shamed?",game.shame?"Yes":"No",true)
         .setFooter(`ID: ${game.id}`);
 
-    if(game.outcomes.length) gameCard.addField("Events:",game.outcomes.join("\n"));
+    if(game.shame) game.outcomes.push(`The ${loser} were shamed!`);
+
+    if(game.outcomes.length) gameCard.addField("Events",game.outcomes.join("\n"));
 
     return gameCard;
 }
