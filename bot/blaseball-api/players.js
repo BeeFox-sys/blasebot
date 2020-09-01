@@ -12,7 +12,10 @@ async function getPlayers(players){
             if(!res.ok) throw new Error(res.statusText);
             return res.json();
         })
-        .catch(e => console.error("Error at endpoint /players:",e.message));
+        .catch(e => {
+            console.log(e.code);
+            console.error("Error at endpoint /players:",e.message);
+        });
 }
 
 

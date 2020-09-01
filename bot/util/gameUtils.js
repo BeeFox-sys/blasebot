@@ -42,6 +42,9 @@ async function generateGameCard(game){
         .addField("Weather", Weather[game.weather], true)
         .addField("Loser Shamed?",game.shame?"Yes":"No",true)
         .setFooter(`ID: ${game.id}`);
+
+    if(game.outcomes) gameCard.addField("Events:",game.outcomes.join("\n"));
+
     return gameCard;
 }
 
