@@ -22,7 +22,6 @@ for (const file of commandFiles) {
 }
 let commandLoadEnd = performance.now();
 console.log(`Loaded ${loadedCommands} commands in ${Math.ceil(commandLoadEnd-commandLoadStart)}ms!`);
-console.log("Initaliszing Caches");
 const {updateTeamCache} = require("./blaseball-api/teams");
 const { updatePlayerCache } = require("./blaseball-api/players");
 async function initCaches(){
@@ -30,14 +29,11 @@ async function initCaches(){
     await updatePlayerCache();
 }
 require("./gameUpdates");
-initCaches().then(()=>{
-    console.log("Connecting to discord...");
-    client.login(client.config.discordToken);
-});
 
 //setup Mongoose
 const Mongoose = require.main.require("mongoose");
 const process = require("process");
+const { scores, subscriptions, summaries } = require("./schemas/subscription");
 Mongoose.connect(process.env.DB_URL || client.config.dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -48,6 +44,11 @@ Mongoose.connection
     .on("error",(error)=>{console.error(error);})
     .once("open", function () {
         console.log("Connected to database");
+        console.log("Initaliszing Caches");
+        initCaches().then(()=>{
+            console.log("Connecting to discord...");
+            client.login(client.config.discordToken);
+        });        
     });
 
 // Client Ready
@@ -106,4 +107,10 @@ client.on("message", async (message) => {
 
 });
 
-
+//Handle channel deletions
+client.on("channelDelete", channel =>{
+    let id = channel.id;
+    scores.deleteMany({channel_id:id}).catch(console.error);
+    subscriptions.deleteMany({channel_id:id}).catch(console.error);
+    summaries.deleteMany({channel_id:id}).catch(console.error);
+});
