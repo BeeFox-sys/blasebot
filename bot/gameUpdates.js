@@ -25,7 +25,7 @@ const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 async function broadcastGames(games){
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
-        
+        //play by play        
         if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
         if(!game.gameStart) continue;
 
@@ -49,6 +49,7 @@ async function broadcastGames(games){
         }
     }
     for(const game of games){
+        //Summaries
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
         if(lastupdate.gameComplete == false && game.gameComplete == true){
@@ -64,6 +65,7 @@ async function broadcastGames(games){
         }
     }
     for(const game of games){
+        //Score recap
         let lastUpdate = gameCache.get(game.id);
         if(!lastUpdate) continue;
         if(lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore){
@@ -75,7 +77,7 @@ async function broadcastGames(games){
                 let hometeamscore;
                 if(lastUpdate.homeScore != game.homeScore) hometeamscore = true;
                 if(lastUpdate.awayScore != game.awayScore) hometeamscore = false;
-                client.channels.fetch(scoreSubscription.channel_id).then(c=>c.send(`**__${game.homeTeamName}__ v. __${game.awayTeamName}__, Game ${game.seriesIndex} of ${game.seriesLength} update!**\n${String.fromCodePoint(game.homeTeamEmoji)} ${hometeamscore?"**":""}${game.homeTeamNickname}${hometeamscore?"**":""}: ${game.homeScore}\n${String.fromCodePoint(game.awayTeamEmoji)} ${!hometeamscore?"**":""}${game.awayTeamNickname}${!hometeamscore?"**":""}: ${game.awayScore}\n> ${game.lastUpdate}`)).catch(console.error);
+                client.channels.fetch(scoreSubscription.channel_id).then(c=>c.send(`**__${game.homeTeamName}__ v. __${game.awayTeamName}__, Game ${game.seriesIndex} of ${game.seriesLength} update!**\n${game.topOfInning?"Top":"Bottom"} of ${game.inning+1}\n${String.fromCodePoint(game.homeTeamEmoji)} ${hometeamscore?"**":""}${game.homeTeamNickname}${hometeamscore?"**":""}: ${game.homeScore}\n${String.fromCodePoint(game.awayTeamEmoji)} ${!hometeamscore?"**":""}${game.awayTeamNickname}${!hometeamscore?"**":""}: ${game.awayScore}\n> ${game.lastUpdate}`)).catch(console.error);
             }
         }
     }
