@@ -1,6 +1,7 @@
-const { getGames, getGameByID } = require("../blaseball-api/game");
+const { getGames, getGameByID, DataStreamCache } = require("../blaseball-api/game");
 const { getTeam } = require("../util/teamUtils");
 const { generateGameCard } = require("../util/gameUtils");
+const { getGuild } = require("../util/guildUtils");
 const command = {
     name: "game",
     aliases: [],
@@ -14,8 +15,12 @@ const command = {
             return;
         }
         if(args.length < 3) return message.channel.send("You must specify a season, day, and team!").catch(console.error);
+        let guild = await getGuild(message.guild.id);
         let season = args.shift()-1;
         let day = args.shift()-1;
+        let currentSeason = DataStreamCache.get("games").sim.season;
+        let currentDay = DataStreamCache.get("games").sim.day;
+        if(!guild || (!guild.forbidden && (season>currentSeason || day>currentDay+1))) return message.channel.send("Game does not exist!");
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
         if(!team) return message.channel.send("I can't find that team!").catch(console.error);
