@@ -1,5 +1,6 @@
 const {TeamCache, TeamNames} = require("../blaseball-api/teams");
 const {PlayerCache} = require("../blaseball-api/players");
+const {DataStreamCache} = require("../blaseball-api/game");
 const { MessageEmbed } = require("discord.js");
 
 
@@ -17,6 +18,9 @@ async function getTeam(name){
 }
 
 async function generateTeamCard(team, forbidden){
+    let standings = DataStreamCache.get("games").standings;
+    let wins = standings.wins[team.id];
+    let losses = standings.losses[team.id];
     let teamCard = new MessageEmbed()
         .setTitle(String.fromCodePoint(team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
@@ -30,6 +34,7 @@ async function generateTeamCard(team, forbidden){
         .addField("Shamed Others",team.totalShamings,true)
         .addField("Been Shamed This Season", team.seasonShames, true)
         .addField("Shamed Others This Season", team.seasonShamings, true)
+        .addField("Win-Loss",`${wins}-${losses}`)
         .setFooter(`${team.slogan} | ID: ${team.id}`);
     return teamCard;
 }

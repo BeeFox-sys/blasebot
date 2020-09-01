@@ -66,6 +66,6 @@ async function getGameByID(id){
 module.exports = {
     getGames: getGames,
     getGameByID: getGameByID,
-    GameCache: DataStreamCache,
+    DataStreamCache: DataStreamCache,
     updateStreamData: updateStreamData
 };

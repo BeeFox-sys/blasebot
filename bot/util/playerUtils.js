@@ -75,10 +75,10 @@ function stars(rating){
     return starsString;
 }
 
-const {GameCache} = require("../blaseball-api/game");
+const {DataStreamCache} = require("../blaseball-api/game");
 
 function vibes(player){
-    let currentDay = GameCache.get("games").sim.day;
+    let currentDay = DataStreamCache.get("games").sim.day;
     let vibes = 0.5 * (player.pressurization+player.cinnamon) * 
     Math.sin(Math.PI * (2 / (6 + Math.round(10 * player.buoyancy))
      * currentDay + .5)) - 0.5 * player.pressurization + 0.5 * player.cinnamon;
