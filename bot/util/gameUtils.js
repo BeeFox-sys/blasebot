@@ -43,7 +43,7 @@ async function generateGameCard(game){
         .addField("Loser Shamed?",game.shame?"Yes":"No",true)
         .setFooter(`ID: ${game.id}`);
 
-    if(game.outcomes) gameCard.addField("Events:",game.outcomes.join("\n"));
+    if(game.outcomes.length) gameCard.addField("Events:",game.outcomes.join("\n"));
 
     return gameCard;
 }
