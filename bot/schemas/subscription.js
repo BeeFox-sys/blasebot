@@ -13,9 +13,16 @@ let summary = new Mongoose.Schema({
     team: String
 });
 
+let score = new Mongoose.Schema({
+    channel_id: String,
+    guild_id: String,
+    team: String
+});
+
 subscription.index("team");
 
 module.exports = {
     subscriptions: Mongoose.model("subscriptions",subscription),
-    summaries: Mongoose.model("summaries", summary)
+    summaries: Mongoose.model("summaries", summary),
+    scores: Mongoose.model("scores",score)
 };

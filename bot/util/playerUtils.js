@@ -10,7 +10,7 @@ async function generatePlayerCard(player, forbidden){
     let playerCard = new MessageEmbed()
         .setTitle(String.fromCodePoint(team.emoji) + " " + player.name)
         .setColor(team.mainColor)
-        .addField("Team",team.fullName, true)
+        .addField("Team",team.fullName, true);
     if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
     if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||Yes||":"||No ||",true);
     playerCard.addField("Fate",player.fate,true)
@@ -76,7 +76,7 @@ function stars(rating){
 }
 
 const {GameCache} = require("../blaseball-api/game");
-const { getGuild } = require("./guildUtils");
+
 function vibes(player){
     let currentDay = GameCache.get("games").sim.day;
     let vibes = 0.5 * (player.pressurization+player.cinnamon) * 

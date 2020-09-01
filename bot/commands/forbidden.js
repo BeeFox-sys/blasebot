@@ -1,5 +1,3 @@
-const guildUtils = require("../util/guildUtils");
-
 const {getGuild, saveGuild} = require("../util/guildUtils");
 
 const command = {

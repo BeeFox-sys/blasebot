@@ -17,7 +17,7 @@ source.once("open", (event)=>{
 });
 source.on("error",(error)=>console.error);
 
-const {subscriptions, summaries} = require("./schemas/subscription");
+const {subscriptions, summaries, scores} = require("./schemas/subscription");
 const NodeCache = require("node-cache");
 
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
@@ -60,6 +60,22 @@ async function broadcastGames(games){
             for (const summarySubscription of docs) {
                 if(summarySubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==summarySubscription.channel_id)) continue;
                 client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} finished!`,summary)).catch(console.error);
+            }
+        }
+    }
+    for(const game of games){
+        let lastUpdate = gameCache.get(game.id);
+        if(!lastUpdate) continue;
+        if(lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore){
+            let err, docs = await scores.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]});
+            if(err) throw err;
+            if(docs.length == 0) continue;
+            for (const scoreSubscription of docs) {
+                if(scoreSubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==scoreSubscription.channel_id)) continue; //anti double posting
+                let hometeamscore;
+                if(lastUpdate.homeScore != game.homeScore) hometeamscore = true;
+                if(lastUpdate.awayScore != game.awayScore) hometeamscore = false;
+                client.channels.fetch(scoreSubscription.channel_id).then(c=>c.send(`**__${game.homeTeamName}__ v. __${game.awayTeamName}__ update!**\n${String.fromCodePoint(game.homeTeamEmoji)} ${hometeamscore?"**":""}${game.homeTeamNickname}${hometeamscore?"**":""}: ${game.homeScore}\n${String.fromCodePoint(game.awayTeamEmoji)} ${!hometeamscore?"**":""}${game.awayTeamNickname}${!hometeamscore?"**":""}: ${game.awayScore}\n> ${game.lastUpdate}`)).catch(console.error);
             }
         }
     }

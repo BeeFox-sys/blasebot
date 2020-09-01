@@ -25,4 +25,4 @@ async function saveGuild(guild){
 module.exports = {
     getGuild: getGuild,
     saveGuild: saveGuild,
-}
+};
