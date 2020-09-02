@@ -15,7 +15,7 @@ const command = {
             return;
         }
         if(args.length < 3) return message.channel.send("You must specify a season, day, and team!").catch(console.error);
-        let guild = await getGuild(message.guild.id);
+        let guild = await getGuild(message.guild?.id??message.channel.id);
         let season = args.shift()-1;
         let day = args.shift()-1;
         let currentSeason = DataStreamCache.get("games").sim.season;

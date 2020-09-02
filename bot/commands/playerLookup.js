@@ -10,14 +10,8 @@ const command = {
         let playerName = args.join(" ");
         let player = await getPlayer(playerName);
         if(!player) return message.channel.send("I couldn't find that player!").catch(console.error);
-        let forbidden;
-        if(message.guild){
-            let guild = await getGuild(message.guild.id);
-            forbidden = guild.forbidden;
-        } else {
-            forbidden = false;
-        }
-        let playerCard = await generatePlayerCard(player, forbidden);
+        let guild = await getGuild(message.guild?.id??message.channel.id);
+        let playerCard = await generatePlayerCard(player, guild.forbidden);
         await message.channel.send(playerCard).catch(console.error);
     },
 };

@@ -9,13 +9,8 @@ const command = {
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
         if(!team) return message.channel.send("I couldn't find that team!").catch(console.error);
-        let forbidden;
-        if(message.guild){
-            let guild = await getGuild(message.guild.id);
-            forbidden = guild.forbidden;
-        } else {
-            forbidden = false;
-        }        let teamCard = await generateTeamCard(team, forbidden);
+        let guild = await getGuild(message.guild?.id??message.channel.id);
+        let teamCard = await generateTeamCard(team, guild.forbidden);
         await message.channel.send(String.fromCodePoint(team.emoji), teamCard).catch(console.error);
     },
 };
