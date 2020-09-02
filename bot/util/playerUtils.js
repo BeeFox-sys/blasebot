@@ -92,8 +92,8 @@ function vibeString(vibe){
     else if(vibe > 0.4) return "🟩 🟩 Excellent";
     else if(vibe > 0.1) return "🟩 Quality";
     else if(vibe > -0.1) return "⬜ Neutral";
-    else if(vibe > -0.4) return "🟥 Less Then Ideal";
-    else if(vibe > -0.8) return "🟥 🟥 Far Less Then Ideal";
+    else if(vibe > -0.4) return "🟥 Less Than Ideal";
+    else if(vibe > -0.8) return "🟥 🟥 Far Less Than Ideal";
     else return "🟥 🟥 🟥 Honestly Terrible";
 }
 
