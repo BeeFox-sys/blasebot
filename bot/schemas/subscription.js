@@ -19,10 +19,15 @@ let score = new Mongoose.Schema({
     team: String
 });
 
+let bet = new Mongoose.Schema({
+    channel_id: String
+});
+
 subscription.index("team");
 
 module.exports = {
     subscriptions: Mongoose.model("subscriptions",subscription),
     summaries: Mongoose.model("summaries", summary),
-    scores: Mongoose.model("scores",score)
+    scores: Mongoose.model("scores",score),
+    betReminders: Mongoose.model("bets",bet)
 };

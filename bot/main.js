@@ -106,11 +106,3 @@ client.on("message", async (message) => {
     }
 
 });
-
-//Handle channel deletions
-client.on("channelDelete", channel =>{
-    let id = channel.id;
-    scores.deleteMany({channel_id:id}).catch(console.error);
-    subscriptions.deleteMany({channel_id:id}).catch(console.error);
-    summaries.deleteMany({channel_id:id}).catch(console.error);
-});

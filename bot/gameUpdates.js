@@ -17,7 +17,7 @@ source.once("open", (event)=>{
 });
 source.on("error",(error)=>console.error);
 
-const {subscriptions, summaries, scores} = require("./schemas/subscription");
+const {subscriptions, summaries, scores, betReminders} = require("./schemas/subscription");
 const NodeCache = require("node-cache");
 
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
@@ -81,6 +81,12 @@ async function broadcastGames(games){
             }
         }
     }
+    if(Object.values(games).every(game=>game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false){
+        let err, docs = await betReminders.find({}).catch(console.error);
+        for(const channel of docs){
+            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete! Go Bet!`)).catch(console.error);
+        }
+    }
     for(const game of games){
         gameCache.set(game.id, game);        
     }
@@ -107,3 +113,12 @@ function generatePlay(game){
 
     return play;
 }
+
+//Handle channel deletions
+client.on("channelDelete", channel =>{
+    let id = channel.id;
+    scores.deleteMany({channel_id:id}).catch(console.error);
+    subscriptions.deleteMany({channel_id:id}).catch(console.error);
+    summaries.deleteMany({channel_id:id}).catch(console.error);
+    betReminders.deleteMany({channel_id:id}).catch(console.error);
+});
