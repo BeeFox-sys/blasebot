@@ -18,7 +18,7 @@ async function generatePlayerCard(player, forbidden){
         .addField("Vibes",vibeString(vibes(player)), true)
         .addField("Item",items[player.bat]??"None",true) 
         .addField("Blood",bloodTypes[player.blood]??"Blood?",true)
-        .addField("Pregame Ritual",player.ritual,true)
+        .addField("Pregame Ritual",player.ritual||"** **",true)
         .addField("Attributes", attributes(player),true)
         .addField("Soul Scream",soulscream(player),true)
         .addField("**--Stars--**","** **",false)
