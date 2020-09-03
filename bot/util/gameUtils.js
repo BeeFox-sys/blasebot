@@ -35,17 +35,17 @@ async function generateGameCard(game){
     } else if(game.gameStart) winner = "[*Game in progress*](https://www.blaseball.com/)";
     else winner = "[*Game yet to start*](https://www.blaseball.com/upcoming)";
     let gameCard = new MessageEmbed()
-        .setTitle(`${String.fromCodePoint(game.homeTeamEmoji)} __${game.homeTeamName}__ vs __${game.awayTeamName}__ ${String.fromCodePoint(game.awayTeamEmoji)}\nSeason ${game.season+1} Day ${game.day+1}`)
+        .setTitle(`${String.fromCodePoint(game.awayTeamEmoji)} __${game.awayTeamName}__ vs __${game.homeTeamName}__ ${String.fromCodePoint(game.homeTeamEmoji)}\nSeason ${game.season+1} Day ${game.day+1}`)
         .setColor(game.homeTeamColor)
         .setFooter(`Season: ${game.season+1} | Day: ${game.day+1}`)
-        .addField(`${game.homeTeamNickname} Odds`, Math.floor(game.homeOdds*100)+"%",true)
         .addField(`${game.awayTeamNickname} Odds`, Math.floor(game.awayOdds*100)+"%",true)
+        .addField(`${game.homeTeamNickname} Odds`, Math.floor(game.homeOdds*100)+"%",true)
         .addField("Game",`${game.seriesIndex} of ${game.seriesLength}`,true)
-        .addField(`${game.homeTeamNickname} Pitcher`,game.homePitcherName||"Undecided", true)
         .addField(`${game.awayTeamNickname} Pitcher`,game.awayPitcherName||"Undecided", true)
+        .addField(`${game.homeTeamNickname} Pitcher`,game.homePitcherName||"Undecided", true)
         .addField("Winner",winner,true)
-        .addField(`${game.homeTeamNickname} Score`, game.homeScore, true)
         .addField(`${game.awayTeamNickname} Score`, game.awayScore, true)
+        .addField(`${game.homeTeamNickname} Score`, game.homeScore, true)
         .addField("Inning", game.gameStart?`${game.topOfInning?"Top":"Bottom"} of inning ${game.inning+1}`:"*Game yet to start*")
         .addField("Weather", Weather[game.weather], true)
         .setFooter(`ID: ${game.id}`);
