@@ -98,6 +98,7 @@ client.on("message", async (message) => {
 
     //Run Command
     try {
+        global.stats.commandFreq.mark();
         command.execute(message, args);
     } catch (error) {
         message.channel.send("Error! Something went wrong!").catch(messageError);

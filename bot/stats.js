@@ -9,4 +9,12 @@ global.stats.dbQueryFreq = io.meter({
     name: "query/sec",
     type: "meter"
 });
-
+global.stats.guildCount = io.metric({
+    name: "guilds",
+    value: () => {return global.client.guilds.cache.size;}
+});
+global.stats.commandFreq = io.meter({
+    name: "commands/15min",
+    samples: 60,
+    timeframe: 900
+});
