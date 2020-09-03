@@ -82,6 +82,7 @@ async function broadcastGames(games){
         }
     }
     if(Object.values(games).every(game=>game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false){
+        console.log("All games finished!");
         // eslint-disable-next-line no-unused-vars
         let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
         for(const channel of docs){
