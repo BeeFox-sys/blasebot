@@ -60,7 +60,7 @@ async function broadcastGames(games){
             if(docs.length == 0) continue;
             for (const summarySubscription of docs) {
                 if(summarySubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==summarySubscription.channel_id)) continue;
-                client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} Game ${game.seriesIndex} of ${game.seriesLength} finished!`,summary).then(client.messageFreq.mark())).catch(console.error);
+                client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.homeTeamName} v. ${game.awayTeamName} Game ${game.seriesIndex} of ${game.seriesLength} finished!`,summary).then(global.stats.messageFreq.mark())).catch(console.error);
             }
         }
     }
@@ -85,7 +85,7 @@ async function broadcastGames(games){
         // eslint-disable-next-line no-unused-vars
         let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
         for(const channel of docs){
-            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete! Go Bet!`).then(client.messageFreq.mark())).catch(console.error);
+            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete! Go Bet!`).then(global.stats.messageFreq.mark())).catch(console.error);
         }
     }
     for(const game of games){
