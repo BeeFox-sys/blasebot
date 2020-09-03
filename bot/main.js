@@ -6,6 +6,7 @@ client.config = require("../config.json");
 client.mode = 0;
 require("./stats");
 global.client = client;
+const { messageError } = require("./util/miscUtils");
 
 console.log("Loading commands...");
 let commandLoadStart = performance.now();
@@ -84,8 +85,8 @@ client.on("message", async (message) => {
         if(!messageContent.length) return;
     } else return;
 
-    if(client.mode == 1) return message.channel.send("I can't reach blaseball right now :c").catch(console.error);
-    if(client.mode == 3) return message.channel.send("I am currently doing some Blaseball research, try again in a minute c:").catch(console.error);
+    if(client.mode == 1) return message.channel.send("I can't reach blaseball right now :c").catch(messageError);
+    if(client.mode == 3) return message.channel.send("I am currently doing some Blaseball research, try again in a minute c:").catch(messageError);
 
     //Get args
     let args = messageContent.split(/\s/);
@@ -93,13 +94,13 @@ client.on("message", async (message) => {
 
     //Get Command
     let command = client.commands.get(commandName);
-    if(!command) return message.channel.send("That is not a command!").catch(console.error);
+    if(!command) return message.channel.send("That is not a command!").catch(messageError);
 
     //Run Command
     try {
         command.execute(message, args);
     } catch (error) {
-        message.channel.send("Error! Something went wrong!").catch(console.error);
+        message.channel.send("Error! Something went wrong!").catch(messageError);
         console.error(error);
         return;
     }

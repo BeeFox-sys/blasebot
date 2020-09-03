@@ -45,7 +45,7 @@ async function broadcastGames(games){
         if(!play) continue;
 
         for (const subscription of docs) {
-            client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(console.error));
+            client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
         }
     }
     for(const game of games){
@@ -77,7 +77,7 @@ async function broadcastGames(games){
                 let hometeamscore;
                 if(lastUpdate.homeScore != game.homeScore) hometeamscore = true;
                 if(lastUpdate.awayScore != game.awayScore) hometeamscore = false;
-                client.channels.fetch(scoreSubscription.channel_id).then(c=>c.send(`**__${game.homeTeamName}__ v. __${game.awayTeamName}__\nSeason ${game.season+1} Day ${game.day+1}, Game ${game.seriesIndex} of ${game.seriesLength} update!**\n${game.topOfInning?"Top":"Bottom"} of ${game.inning+1}\n${String.fromCodePoint(game.homeTeamEmoji)} ${hometeamscore?"**":""}${game.homeTeamNickname}${hometeamscore?"**":""}: ${game.homeScore}\n${String.fromCodePoint(game.awayTeamEmoji)} ${!hometeamscore?"**":""}${game.awayTeamNickname}${!hometeamscore?"**":""}: ${game.awayScore}\n> ${game.lastUpdate}`).then(global.stats.messageFreq.mark())).catch(console.error);
+                client.channels.fetch(scoreSubscription.channel_id).then(c=>c.send(`**__${game.homeTeamName}__ v. __${game.awayTeamName}__\nSeason ${game.season+1} Day ${game.day+1}, Game ${game.seriesIndex} of ${game.seriesLength} update!**\n${game.topOfInning?"Top":"Bottom"} of ${game.inning+1}\n${String.fromCodePoint(game.homeTeamEmoji)} ${hometeamscore?"**":""}${game.homeTeamNickname}${hometeamscore?"**":""}: ${game.homeScore}\n${String.fromCodePoint(game.awayTeamEmoji)} ${!hometeamscore?"**":""}${game.awayTeamNickname}${!hometeamscore?"**":""}: ${game.awayScore}\n> ${game.lastUpdate}`).then(global.stats.messageFreq.mark())).catch(messageError);
             }
         }
     }
@@ -85,7 +85,7 @@ async function broadcastGames(games){
         // eslint-disable-next-line no-unused-vars
         let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
         for(const channel of docs){
-            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete! Go Bet!`).then(global.stats.messageFreq.mark())).catch(console.error);
+            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete! Go Bet!`).then(global.stats.messageFreq.mark())).catch(messageError);
         }
     }
     for(const game of games){
@@ -95,6 +95,7 @@ async function broadcastGames(games){
 
 const lastPlay = new NodeCache({stdTTL:60, checkperiod:300});
 const { Weather } = require("./util/gameUtils");
+const { messageError } = require("./util/miscUtils");
 
 function generatePlay(game){
 

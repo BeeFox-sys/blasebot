@@ -1,4 +1,5 @@
 const { betReminders } = require("../schemas/subscription");
+const { messageError } = require("./util/miscUtils");
 
 const command = {
     name: "bet",
@@ -6,7 +7,7 @@ const command = {
     description: "Toggles bet reminders for this channel\nbb!bet",
     async execute(message, args) {
 
-        if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!").then(global.stats.messageFreq.mark()).catch(console.error);
+        if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);
 
 
         let bet = await betReminders.findOne({channel_id:message.channel.id});

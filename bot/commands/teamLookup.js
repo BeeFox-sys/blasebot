@@ -1,5 +1,6 @@
 const { getTeam, generateTeamCard } = require("../util/teamUtils");
 const { getGuild } = require("../util/guildUtils");
+const { messageError } = require("./util/miscUtils");
 
 const command = {
     name: "team",
@@ -8,10 +9,10 @@ const command = {
     async execute(message, args) {
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
-        if(!team) return message.channel.send("I couldn't find that team!").then(global.stats.messageFreq.mark()).catch(console.error);
+        if(!team) return message.channel.send("I couldn't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);
         let guild = await getGuild(message.guild?.id??message.channel.id);
         let teamCard = await generateTeamCard(team, guild.forbidden);
-        await message.channel.send(String.fromCodePoint(team.emoji), teamCard).then(global.stats.messageFreq.mark()).catch(console.error);
+        await message.channel.send(String.fromCodePoint(team.emoji), teamCard).then(global.stats.messageFreq.mark()).catch(messageError);
     },
 };
 
