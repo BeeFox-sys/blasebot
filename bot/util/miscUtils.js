@@ -12,6 +12,26 @@ function msgError(error){
             console.error(`Couldn't find channel ${id}, deleted from collections`);
         }
         break;
+    case 50001:
+        {
+            let id = error.path.split("/")[2];
+            scores.deleteMany({channel_id:id}).catch(console.error);
+            subscriptions.deleteMany({channel_id:id}).catch(console.error);
+            summaries.deleteMany({channel_id:id}).catch(console.error);
+            betReminders.deleteMany({channel_id:id}).catch(console.error);
+            console.error(`Missing read messages permission for channel ${id}, removed from collections`);
+        }
+        break;
+    case 50013:
+        {
+            let id = error.path.split("/")[2];
+            scores.deleteMany({channel_id:id}).catch(console.error);
+            subscriptions.deleteMany({channel_id:id}).catch(console.error);
+            summaries.deleteMany({channel_id:id}).catch(console.error);
+            betReminders.deleteMany({channel_id:id}).catch(console.error);
+            console.error(`Missing unknown permissions for channel ${id} removed from collections`);
+        }
+        break;
 
     default:
         console.error(error);
