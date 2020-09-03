@@ -1,9 +1,14 @@
+const io = require("@pm2/io");
 const fs = require("fs");
 const Discord = require("discord.js");
 const { performance } = require("perf_hooks");
 const client = new Discord.Client();
 client.config = require("../config.json");
 client.mode = 0;
+client.messageFreq = io.meter({
+    name: "messages/sec",
+    type: "meter",
+});
 global.client = client;
 
 console.log("Loading commands...");
@@ -33,7 +38,6 @@ require("./gameUpdates");
 //setup Mongoose
 const Mongoose = require.main.require("mongoose");
 const process = require("process");
-const { scores, subscriptions, summaries } = require("./schemas/subscription");
 Mongoose.connect(process.env.DB_URL || client.config.dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
