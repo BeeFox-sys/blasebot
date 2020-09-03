@@ -14,7 +14,7 @@ global.stats.guildCount = io.metric({
     value: () => {return global.client.guilds.cache.size;}
 });
 global.stats.commandFreq = io.meter({
-    name: "commands/15min",
+    name: "commands/5min",
     samples: 60,
-    timeframe: 900
+    timeframe: 300
 });
