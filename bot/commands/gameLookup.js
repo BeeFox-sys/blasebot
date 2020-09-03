@@ -9,26 +9,26 @@ const command = {
     async execute(message, args) {
         if(args.length == 1){
             let game = await getGameByID(args[0]);
-            if(!game) return message.channel.send("That game doesn't exist!").then(global.client.messageFreq.mark()).catch(console.error);  
+            if(!game) return message.channel.send("That game doesn't exist!").then(global.stats.messageFreq.mark()).catch(console.error);  
             let gameCard = await generateGameCard(game);
-            await message.channel.send(gameCard).then(global.client.messageFreq.mark()).catch(console.error);          
+            await message.channel.send(gameCard).then(global.stats.messageFreq.mark()).catch(console.error);          
             return;
         }
-        if(args.length < 3) return message.channel.send("You must specify a season, day, and team!").then(global.client.messageFreq.mark()).catch(console.error);
+        if(args.length < 3) return message.channel.send("You must specify a season, day, and team!").then(global.stats.messageFreq.mark()).catch(console.error);
         let guild = await getGuild(message.guild?.id??message.channel.id);
         let season = args.shift()-1;
         let day = args.shift()-1;
         let currentSeason = DataStreamCache.get("games").sim.season;
         let currentDay = DataStreamCache.get("games").sim.day;
-        if(!guild || (!guild.forbidden && (season>currentSeason || day>currentDay+1))) return message.channel.send("Game does not exist!").then(global.client.messageFreq.mark());
+        if(!guild || (!guild.forbidden && (season>currentSeason || day>currentDay+1))) return message.channel.send("Game does not exist!").then(global.stats.messageFreq.mark());
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
-        if(!team) return message.channel.send("I can't find that team!").then(global.client.messageFreq.mark()).catch(console.error);
+        if(!team) return message.channel.send("I can't find that team!").then(global.stats.messageFreq.mark()).catch(console.error);
         let games = await getGames(season,day);
         let game = games.filter(g=> (g.awayTeam == team.id || g.homeTeam == team.id))[0];
-        if(!game) return message.channel.send("That game doesn't exist!").then(global.client.messageFreq.mark()).catch(console.error);
+        if(!game) return message.channel.send("That game doesn't exist!").then(global.stats.messageFreq.mark()).catch(console.error);
         let gameCard = await generateGameCard(game);
-        await message.channel.send(gameCard).then(global.client.messageFreq.mark()).catch(console.error);
+        await message.channel.send(gameCard).then(global.stats.messageFreq.mark()).catch(console.error);
     },
 };
 

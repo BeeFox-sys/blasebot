@@ -5,11 +5,12 @@ const { performance } = require("perf_hooks");
 const client = new Discord.Client();
 client.config = require("../config.json");
 client.mode = 0;
-client.messageFreq = io.meter({
+global.stats = {};
+global.stats.messageFreq = io.meter({
     name: "messages/sec",
     type: "meter",
 });
-client.dbQueryFreq = io.meter({
+global.stats.dbQueryFreq = io.meter({
     name: "query/sec",
     type: "meter"
 });

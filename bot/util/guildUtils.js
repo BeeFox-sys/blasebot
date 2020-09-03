@@ -5,7 +5,7 @@ let guildCache = new NodeCache({stdTTL:60*60});
 
 async function getGuild(id){
     if(guildCache.has(id)) return guildCache.get(id);
-    let err, guild = await guilds.findOne({guild_id:id}).then(global.client.dbQueryFreq.mark());
+    let err, guild = await guilds.findOne({guild_id:id}).then(global.stats.dbQueryFreq.mark());
     if(err) throw err;
     if(!guild) guild = new guilds({
         guild_id: id,
