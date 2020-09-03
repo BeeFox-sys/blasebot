@@ -1,19 +1,10 @@
-const io = require("@pm2/io");
 const fs = require("fs");
 const Discord = require("discord.js");
 const { performance } = require("perf_hooks");
 const client = new Discord.Client();
 client.config = require("../config.json");
 client.mode = 0;
-global.stats = {};
-global.stats.messageFreq = io.meter({
-    name: "messages/sec",
-    type: "meter",
-});
-global.stats.dbQueryFreq = io.meter({
-    name: "query/sec",
-    type: "meter"
-});
+require("./stats");
 global.client = client;
 
 console.log("Loading commands...");
