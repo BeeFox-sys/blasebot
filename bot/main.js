@@ -9,6 +9,10 @@ client.messageFreq = io.meter({
     name: "messages/sec",
     type: "meter",
 });
+client.dbQueryFreq = io.meter({
+    name: "query/sec",
+    type: "meter"
+});
 global.client = client;
 
 console.log("Loading commands...");
@@ -54,7 +58,6 @@ Mongoose.connection
             client.login(client.config.discordToken);
         });        
     });
-
 // Client Ready
 client.once("ready", () => {
     console.log(`Ready! Serving ${client.guilds.cache.size} blaseball communities!`);

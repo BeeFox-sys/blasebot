@@ -29,7 +29,7 @@ async function broadcastGames(games){
         if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
         if(!game.gameStart) continue;
 
-        let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]});
+        let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.client.dbQueryFreq.mark());
         if(err) throw err;
         if(docs.length == 0) continue;
 
@@ -55,7 +55,7 @@ async function broadcastGames(games){
         if(lastupdate.gameComplete == false && game.gameComplete == true){
             console.log(game.id," finished!");
             let summary = await generateGameCard(game);
-            let err, docs = await summaries.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]});
+            let err, docs = await summaries.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]}).then(global.client.dbQueryFreq.mark());
             if(err) throw err;
             if(docs.length == 0) continue;
             for (const summarySubscription of docs) {
@@ -69,7 +69,7 @@ async function broadcastGames(games){
         let lastUpdate = gameCache.get(game.id);
         if(!lastUpdate) continue;
         if(lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore){
-            let err, docs = await scores.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]});
+            let err, docs = await scores.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]}).then(global.client.dbQueryFreq.mark());
             if(err) throw err;
             if(docs.length == 0) continue;
             for (const scoreSubscription of docs) {
@@ -83,7 +83,7 @@ async function broadcastGames(games){
     }
     if(Object.values(games).every(game=>game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false){
         // eslint-disable-next-line no-unused-vars
-        let err, docs = await betReminders.find({}).catch(console.error);
+        let err, docs = await betReminders.find({}).then(global.client.dbQueryFreq.mark()).catch(console.error);
         for(const channel of docs){
             client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete! Go Bet!`).then(client.messageFreq.mark())).catch(console.error);
         }
