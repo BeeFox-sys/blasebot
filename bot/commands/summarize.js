@@ -1,6 +1,6 @@
 const { getTeam } = require("../util/teamUtils");
 const {summaries} = require("../schemas/subscription");
-const { messageError } = require("./util/miscUtils");
+const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "summarize",

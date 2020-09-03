@@ -1,4 +1,4 @@
-const { messageError } = require("./util/miscUtils");
+const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "ping",

@@ -1,6 +1,6 @@
 const { getTeam, generateTeamCard } = require("../util/teamUtils");
 const { getGuild } = require("../util/guildUtils");
-const { messageError } = require("./util/miscUtils");
+const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "team",

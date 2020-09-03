@@ -1,5 +1,5 @@
 const {getGuild, saveGuild} = require("../util/guildUtils");
-const { messageError } = require("./util/miscUtils");
+const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "forbidden",

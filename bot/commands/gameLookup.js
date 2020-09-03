@@ -2,7 +2,7 @@ const { getGames, getGameByID, DataStreamCache } = require("../blaseball-api/gam
 const { getTeam } = require("../util/teamUtils");
 const { generateGameCard } = require("../util/gameUtils");
 const { getGuild } = require("../util/guildUtils");
-const { messageError } = require("./util/miscUtils");
+const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "game",
