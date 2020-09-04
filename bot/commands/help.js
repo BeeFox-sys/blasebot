@@ -10,7 +10,9 @@ const command = {
             //Looking up a command
             let command = message.client.commands.get(args[0].replace("bb!",""));
             if(!command) return message.channel.send("There is no command with the name "+args[0]).then(global.stats.messageFreq.mark()).catch(messageError);
-            return message.channel.send(command.description).then(global.stats.messageFreq.mark()).catch(messageError);
+            let aliases = Array.from(command.aliases);
+            aliases.unshift(command.name);
+            return message.channel.send(`Aliases: ${aliases.join(", ")}\n`+command.description).then(global.stats.messageFreq.mark()).catch(messageError);
 
         } else {
             //Listing commands
