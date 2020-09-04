@@ -2,7 +2,7 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateStreamData } = require("./blaseball-api/game");
+const { updateStreamData, getGames } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -85,8 +85,18 @@ async function broadcastGames(games){
         console.log("All games finished!");
         // eslint-disable-next-line no-unused-vars
         let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
+        let oddsEmbed;
+        let nextGames = null;//await getGames(games[0].season,games[0].day+1);
+        if(nextGames){
+            oddsEmbed = new MessageEmbed()
+                .setTitle(`Season ${nextGames[0].season+1} Day ${nextGames[0].day+1} Odds:`);
+            for(const game of nextGames){
+                let underlineHome = Math.round(game.awayOdds*100) < Math.round(game.homeOdds*100);
+                oddsEmbed.addField(`${String.fromCodePoint(game.awayTeamEmoji)} v. ${String.fromCodePoint(game.homeTeamEmoji)}`, `${!underlineHome?"__":""}**${Math.round(game.awayOdds*100)}%**${!underlineHome?"__":""} | ${underlineHome?"__":""}**${Math.round(game.homeOdds*100)}%**${underlineHome?"__":""}`,true);
+            }
+        }
         for(const channel of docs){
-            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete! Go Bet!`).then(global.stats.messageFreq.mark())).catch(messageError);
+            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete!${nextGames?"Go Bet!":""}`,oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
         }
     }
     for(const game of games){
@@ -97,6 +107,7 @@ async function broadcastGames(games){
 const lastPlay = new NodeCache({stdTTL:60, checkperiod:300});
 const { Weather } = require("./util/gameUtils");
 const { messageError } = require("./util/miscUtils");
+const { MessageEmbed } = require("discord.js");
 
 function generatePlay(game){
 
