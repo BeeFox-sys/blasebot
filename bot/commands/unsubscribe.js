@@ -3,7 +3,7 @@ const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "unsubscribe",
-    aliases: [],
+    aliases: ["unsub"],
     description: "Unsubscribes from the game of a channel\nbb!unsubscribe",
     async execute(message, args) {
 

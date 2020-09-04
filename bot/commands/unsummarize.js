@@ -4,7 +4,7 @@ const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "unsummarize",
-    aliases: [],
+    aliases: ["unsum"],
     description: "Unsubscribes from the summaries game of a channel\nbb!unsummarize [team]",
     async execute(message, args) {
 
