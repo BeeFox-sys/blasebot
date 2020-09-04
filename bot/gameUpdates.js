@@ -2,7 +2,7 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateStreamData } = require("./blaseball-api/game");
+const { updateStreamData, getGames } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -86,7 +86,7 @@ async function broadcastGames(games){
         // eslint-disable-next-line no-unused-vars
         let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
         let oddsEmbed;
-        let nextGames = null;//await getGames(games[0].season,games[0].day+1);
+        let nextGames = await getGames(games[0].season,games[0].day+1);
         if(nextGames){
             oddsEmbed = new MessageEmbed()
                 .setTitle(`Season ${nextGames[0].season+1} Day ${nextGames[0].day+1} Odds:`);
