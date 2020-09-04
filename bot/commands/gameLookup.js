@@ -22,7 +22,7 @@ const command = {
         let day = args.shift()-1;
         let currentSeason = DataStreamCache.get("games").sim.season;
         let currentDay = DataStreamCache.get("games").sim.day;
-        if(!guild || (!guild.forbidden && (season>currentSeason || day>currentDay+1))) return message.channel.send("Game does not exist!").then(global.stats.messageFreq.mark());
+        if(!guild || (!guild.forbidden && (season>currentSeason || day>currentDay+1))) return message.channel.send("Game does not exist!").catch(messageError).then(global.stats.messageFreq.mark());
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
         if(!team) return message.channel.send("I can't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);

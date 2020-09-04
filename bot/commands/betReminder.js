@@ -18,13 +18,13 @@ const command = {
             // eslint-disable-next-line no-unused-vars
             let err, save = await bet.save();
             if(err) throw err;
-            return message.channel.send("Enabled bet reminders in this channel!").then(global.stats.messageFreq.mark());
+            return message.channel.send("Enabled bet reminders in this channel!").then(global.stats.messageFreq.mark()).catch(messageError);
         }
 
         // eslint-disable-next-line no-unused-vars
         let err, del = bet.deleteOne();
         if(err) throw err;
-        return message.channel.send("Disabled bet reminders in this channel").then(global.stats.messageFreq.mark());
+        return message.channel.send("Disabled bet reminders in this channel").then(global.stats.messageFreq.mark()).catch(messageError);
     },
 };
 

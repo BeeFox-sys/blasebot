@@ -12,7 +12,7 @@ const command = {
 
         let games;
         games = await getGames(args[0]-1, args[1]-1);
-        if(!(Object.values(games).every(game=>game.gameStart) === true)) return message.channel.send("Day does not exist, or has yet to begin!");
+        if(!(Object.values(games).every(game=>game.gameStart) === true)) return message.channel.send("Day does not exist, or has yet to begin!").catch(messageError);
         let result = results(games);
         message.channel.send(result).then(global.stats.messageFreq.mark()).catch(messageError);
     },

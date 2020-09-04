@@ -32,6 +32,11 @@ function msgError(error){
             console.error(`Missing unknown permissions for channel ${id} removed from collections`);
         }
         break;
+    case 500:
+        {
+            console.error(`Discord Internal Server Error At ${error.path}`)
+        }
+        break;
 
     default:
         console.error(error);
