@@ -16,7 +16,6 @@ const command = {
 
         } else {
             //Listing commands
-            console.log(io);
             let commands = message.client.commands.map(c => c.name);
             let commandList = `Command list:\n${message.client.config.prefix}`+commands.join(`\n${message.client.config.prefix}`)+"\n*You can use bb!help [command name] to see the description of a command";
             return message.channel.send(commandList).then(global.stats.messageFreq.mark()).catch(messageError);
