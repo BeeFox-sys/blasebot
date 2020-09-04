@@ -4,7 +4,7 @@ const { getGames } = require("../blaseball-api/game");
 
 const command = {
     name: "results",
-    aliases: [],
+    aliases: ["scores"],
     description: "Returns the results for a day\nbb!results [season] [day]",
     async execute(message, args) {
 

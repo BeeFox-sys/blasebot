@@ -17,7 +17,7 @@ let loadedCommands = 0;
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
-    for(const alias in command.aliases){
+    for(const alias of command.aliases){
         client.commands.set(alias, command);
     }
     loadedCommands++;

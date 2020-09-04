@@ -23,7 +23,7 @@ async function getGames(season,day){
             let currentSeason = DataStreamCache.get("games").sim.season;
             let ttl;
             if(dayData[0].season == currentSeason 
-                && dayData[0].day == currentDay) ttl = 60;
+                && dayData[0].day == currentDay) ttl = 15;
             else ttl = 600;
             DayCache.set(`${season}:${day}`, dayData, ttl);
             console.debug(`Cached day: ${season}:${day}`);
