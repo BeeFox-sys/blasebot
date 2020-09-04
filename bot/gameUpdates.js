@@ -112,17 +112,31 @@ const { MessageEmbed } = require("discord.js");
 
 function generatePlay(game){
 
-    let lastupdate = gameCache.get(game.id);
+    let lastUpdate = gameCache.get(game.id);
+
+    if(game.lastUpdate == lastPlay.get(game.id)) return;
+
 
     let play = "";
 
-    if(!lastupdate) play += `> **${game.awayTeamNickname} v ${game.homeTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n> Game ${game.seriesIndex} of ${game.seriesLength}\n> Weather: ${Weather[game.weather]}\n`;
 
-    if(!lastupdate || lastupdate.homeScore != game.homeScore || lastupdate.awayScore != game.awayScore) play += `> ${String.fromCodePoint(game.awayTeamEmoji)}: ${game.awayScore} | ${String.fromCodePoint(game.homeTeamEmoji)}: ${game.homeScore}\n`;
+    if(!lastUpdate) play += `> **${game.awayTeamNickname} v ${game.homeTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n> Game ${game.seriesIndex} of ${game.seriesLength}\n> Weather: ${Weather[game.weather]}\n`;
 
-    play += `${game.lastUpdate}`;
+    if(!lastUpdate || lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore) play += `> ${String.fromCodePoint(game.awayTeamEmoji)}: ${game.awayScore} | ${String.fromCodePoint(game.homeTeamEmoji)}: ${game.homeScore}\n`;
 
-    if(game.lastUpdate == lastPlay.get(game.id)) return;
+    play += `${game.lastUpdate}\n`;
+
+    if(lastUpdate && lastUpdate.baserunnerCount < game.baserunnerCount){
+        play += `${game.baserunnerCount} bases\n`;
+    }
+
+    if(lastUpdate && lastUpdate.halfInningOuts < game.halfInningOuts){
+        play += `${game.halfInningOuts} outs\n`;
+    }
+
+    if(!lastUpdate || lastUpdate.inning < game.inning || game.topOfInning != lastUpdate.topOfInning){
+        play += `${game.topOfInning?game.homePitcherName:game.awayPitcherName} pitching.`;
+    }
 
     lastPlay.set(game.id, game.lastUpdate);
 
