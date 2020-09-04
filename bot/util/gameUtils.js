@@ -34,10 +34,11 @@ async function generateGameCard(game){
         }
     } else if(game.gameStart) winner = "[*Game in progress*](https://www.blaseball.com/)";
     else winner = "[*Game yet to start*](https://www.blaseball.com/upcoming)";
+    let shame = `SH${"A".repeat((Math.random()*5)+1)}${"M".repeat((Math.random()*5)+1)}${"E".repeat((Math.random()*5)+1)}${"!".repeat((Math.random()*5)+1)}`;
     let gameCard = new MessageEmbed()
         .setTitle(`${String.fromCodePoint(game.awayTeamEmoji)} __${game.awayTeamName}__ vs __${game.homeTeamName}__ ${String.fromCodePoint(game.homeTeamEmoji)}\nSeason ${game.season+1} Day ${game.day+1}`)
         .setColor(game.homeTeamColor)
-        .setFooter(`Season: ${game.season+1} | Day: ${game.day+1}`)
+        .setFooter(`Season: ${game.season+1} | Day: ${game.day+1}${game.shame?"\n"+shame:""}\nID: ${game.id}`)
         .addField(`${game.awayTeamNickname} Odds`, Math.round(game.awayOdds*100)+"%",true)
         .addField(`${game.homeTeamNickname} Odds`, Math.round(game.homeOdds*100)+"%",true)
         .addField("Game",`${game.seriesIndex} of ${game.seriesLength}`,true)
@@ -47,8 +48,7 @@ async function generateGameCard(game){
         .addField(`${game.awayTeamNickname} Score`, game.awayScore, true)
         .addField(`${game.homeTeamNickname} Score`, game.homeScore, true)
         .addField("Inning", game.gameStart?`${game.topOfInning?"Top":"Bottom"} of inning ${game.inning+1}`:"*Game yet to start*")
-        .addField("Weather", Weather[game.weather], true)
-        .setFooter(`ID: ${game.id}`);
+        .addField("Weather", Weather[game.weather], true);
 
     if(game.shame) game.outcomes.push(`The ${loser} were shamed!`);
 
