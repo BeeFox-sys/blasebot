@@ -1,5 +1,15 @@
 const io = require("@pm2/io");
 
+io.init({
+    metrics: {
+        eventLoop: false,
+        network: false,
+        http: false,
+        gc: false,
+        v8: false
+    }
+});
+
 global.stats = {};
 global.stats.messageFreq = io.meter({
     name: "messages/sec",
@@ -15,6 +25,11 @@ global.stats.guildCount = io.metric({
 });
 global.stats.commandFreq = io.meter({
     name: "commands/5min",
+    samples: 60,
+    timeframe: 300
+});
+global.stats.gameEvents = io.meter({
+    name: "game-events/5min",
     samples: 60,
     timeframe: 300
 });

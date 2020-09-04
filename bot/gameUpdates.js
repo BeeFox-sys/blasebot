@@ -23,6 +23,7 @@ const NodeCache = require("node-cache");
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 
 async function broadcastGames(games){
+    global.stats.gameEvents.mark();
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
         //play by play        

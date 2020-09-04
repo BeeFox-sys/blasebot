@@ -34,7 +34,7 @@ function msgError(error){
         break;
     case 500:
         {
-            console.error(`Discord Internal Server Error At ${error.path}`)
+            console.error(`Discord Internal Server Error At ${error.path}`);
         }
         break;
 
