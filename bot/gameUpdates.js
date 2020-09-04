@@ -9,7 +9,7 @@ var source = new EventSource(client.config.apiUrlEvents+"/streamData");
 source.on("message",(message)=>{
     let data = JSON.parse(message.data).value;
     updateStreamData(data);
-    if(data.games) broadcastGames(data.games.schedule);
+    if(data.games) broadcastGames(data.games);
 
 });
 source.once("open", (event)=>{
@@ -22,8 +22,9 @@ const NodeCache = require("node-cache");
 
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 
-async function broadcastGames(games){
+async function broadcastGames(gameData){
     global.stats.gameEvents.mark();
+    let games = gameData.schedule;
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
         //play by play        
@@ -87,7 +88,7 @@ async function broadcastGames(games){
         // eslint-disable-next-line no-unused-vars
         let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
         let oddsEmbed;
-        let nextGames = await getGames(games[0].season,games[0].day+1);
+        let nextGames = await getGames(gameData.sim.season,gameData.sim.day+1);
         if(nextGames){
             oddsEmbed = new MessageEmbed()
                 .setTitle(`Season ${nextGames[0].season+1} Day ${nextGames[0].day+1} Odds:`);
@@ -97,7 +98,7 @@ async function broadcastGames(games){
             }
         }
         for(const channel of docs){
-            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${games[0].season+1} Day ${games[0].day+1} Games Complete!${nextGames?"Go Bet!":""}`,oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
+            client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${gameData.simseason+1} Day ${gameData.sim.day+1} Games Complete!${nextGames?"Go Bet!":""}`,oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
         }
     }
     for(const game of games){
