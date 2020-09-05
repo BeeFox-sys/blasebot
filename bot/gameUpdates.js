@@ -102,14 +102,14 @@ async function broadcastGames(gameData){
             let nextGames = await getGames(gameData.sim.season,gameData.sim.day+1);
             if(nextGames){
                 oddsEmbed = new MessageEmbed()
-                    .setTitle(`Season ${nextGames[0].season+1} Day ${nextGames[0].day+1} Odds:`);
+                    .setTitle(`Season ${gameData.sim.season+1} Day ${gameData.sim.day+1} Odds:`);
                 for(const game of nextGames){
                     let underlineHome = Math.round(game.awayOdds*100) < Math.round(game.homeOdds*100);
                     oddsEmbed.addField(`${String.fromCodePoint(game.awayTeamEmoji)} v. ${String.fromCodePoint(game.homeTeamEmoji)}`, `${!underlineHome?"__":""}**${Math.round(game.awayOdds*100)}%**${!underlineHome?"__":""} | ${underlineHome?"__":""}**${Math.round(game.homeOdds*100)}%**${underlineHome?"__":""}`,true);
                 }
             }
             for(const channel of docs){
-                client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${gameData.simseason+1} Day ${gameData.sim.day+1} Games Complete!${nextGames?"Go Bet!":""}`,oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
+                client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${gameData.sim.season+1} Day ${gameData.sim.day+1} Games Complete!${nextGames?" Go Bet!":""}`,oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
             }
         }
         catch(e){console.error(e);}
