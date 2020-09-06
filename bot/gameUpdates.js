@@ -109,7 +109,7 @@ async function broadcastGames(gameData){
                 }
             }
             for(const channel of docs){
-                client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${gameData.sim.season+1} Day ${gameData.sim.day+1} Games Complete!${nextGames?" Go Bet!":""}`,oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
+                client.channels.fetch(channel.channel_id).then(c=>c.send(`All Season ${gameData.sim.season+1} Day ${gameData.sim.day+1} Games Complete!${nextGames?" Go Bet!":" Go catch up on some sleep!"}`,oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
             }
         }
         catch(e){console.error(e);}
