@@ -100,7 +100,7 @@ async function broadcastGames(gameData){
             let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
             let oddsEmbed;
             let nextGames = await getGames(gameData.sim.season,gameData.sim.day+1);
-            if(nextGames){
+            if(nextGames.length > 0){
                 oddsEmbed = new MessageEmbed()
                     .setTitle(`Season ${gameData.sim.season+1} Day ${gameData.sim.day+1} Odds:`);
                 for(const game of nextGames){
