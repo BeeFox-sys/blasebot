@@ -14,7 +14,7 @@ const Weather = {
     6: "Acidic",
     7: "Eclipse",
     8: "Glitter",
-    9: "Bloodwind",
+    9: "Blooddrain",
     10: "Peanuts",
     11: "Bird",
     12: "Feedback",

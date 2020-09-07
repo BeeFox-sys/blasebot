@@ -17,6 +17,7 @@ async function generatePlayerCard(player, forbidden){
         .addField("Coffee",coffeeStyles[player.coffee]??"Coffee",true)
         .addField("Vibes",vibeString(vibes(player)), true)
         .addField("Item",items[player.bat]??"None",true) 
+        .addField("Armor",items[player.armor]??"None",true)
         .addField("Blood",bloodTypes[player.blood]??"Blood?",true)
         .addField("Pregame Ritual",player.ritual||"** **",true)
         .addField("Attributes", attributes(player),true)
@@ -122,16 +123,7 @@ const items = {
     ARM_CANNON: "Literal Arm Cannon"
 };
 
-const attributesList = {
-    EXTRA_STRIKE: "The Fourth Strike",
-    SHAME_PIT: "Targeted Shame",
-    HOME_FIELD: "Home Field Advantage",
-    FIREPROOF: "Fireproof",
-    ALTERNATE: "Alternate",
-    SOUNDPROOF: "Soundproof",
-    SHELLED: "Shelled",
-    REVERBERATING: "Reverberating"
-};
+const {attributesList} = require("./miscUtils");
 
 function attributes(player){
     let attrString = "";

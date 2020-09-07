@@ -39,17 +39,7 @@ async function generateTeamCard(team, forbidden){
     return teamCard;
 }
 
-const attributesList = {
-    EXTRA_STRIKE: "The Fourth Strike",
-    SHAME_PIT: "Targeted Shame",
-    HOME_FIELD: "Home Field Advantage",
-    FIREPROOF: "Fireproof",
-    ALTERNATE: "Alternate",
-    SOUNDPROOF: "Soundproof",
-    SHELLED: "Shelled",
-    REVERBERATING: "Reverberating"
-};
-
+const {attributesList} = require("./miscUtils");
 function attributes(team){
     let attrString = "";
     for(const attribute of team.permAttr){
