@@ -9,6 +9,8 @@ A discord bot for blaseball
 * Team lookup (`bb!team [team name, nickname, or emoji]`)
 * Game subscription (`bb!subscribe [team]`)
 * Game summaries (`bb!summarize [team]`)
+* Game score updates (`bb!scores [team]`)
+* Game score updates compact mode (`bb!compact [team]`)
 
 ## Game Subscription
 
@@ -17,6 +19,10 @@ Game subscription allows you to have plays and score for all games a team play s
 ## Game Summaries
 
 Game summaries are similar to subscriptions. When a game ends, a score card will be sent to the selected channel, this is the same card generated with game lookups. Unlike subscriptions, you may have multiple teams summaries sent to the same channel. You can subscribe to summaries using `bb!summarize [team]` and unsubscribe with `bb!unsummarize [team]`.
+
+## Game Scores
+
+Game scores are also similar to subscriptions, only giving updates on scoring plays. You can subscribe to score updates using `bb!scores [team]` and unsubscribe with `bb!unscores [team]`. If you want a more compact version, use `bb!compact[team]` and `bb!uncompact[team]`.
 
 ## Privacy
 
