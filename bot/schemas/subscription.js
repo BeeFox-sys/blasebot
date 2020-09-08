@@ -19,6 +19,12 @@ let score = new Mongoose.Schema({
     team: String
 });
 
+let compact = new Mongoose.Schema({
+    channel_id: String,
+    guild_id: String,
+    team: String
+});
+
 let bet = new Mongoose.Schema({
     channel_id: String
 });
@@ -29,5 +35,6 @@ module.exports = {
     subscriptions: Mongoose.model("subscriptions",subscription),
     summaries: Mongoose.model("summaries", summary),
     scores: Mongoose.model("scores",score),
+    compacts: Mongoose.model("compacts", compact),
     betReminders: Mongoose.model("bets",bet)
 };

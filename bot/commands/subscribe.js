@@ -4,7 +4,7 @@ const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "subscribe",
-    aliases: ["play-by-play","sub"],
+    aliases: ["play-by-play","sub","pbp"],
     description: "Subscribes a channel to a teams games\nA guild can only have one channel per team at max, and one team per channel.\nbb!subscribe [team name]",
     async execute(message, args) {
 
@@ -15,7 +15,7 @@ const command = {
 
         let err, docs = await subscriptions.find({$or: [{channel_id: message.channel.id},{guild_id:message.guild?.id??message.channel.id, team:team.id}]});
         if(err) throw err;
-        if(docs.length > 0) return message.channel.send("You already have subscibed this channel to a team, or this team to a channel! use bb!unsubscibre to remove the subscription").then(global.stats.messageFreq.mark()).catch(messageError);
+        if(docs.length > 0) return message.channel.send("You already have subscibed this channel to a team, or this team to a channel! use bb!unsubscribe to remove the subscription").then(global.stats.messageFreq.mark()).catch(messageError);
 
         // eslint-disable-next-line no-unused-vars
         let savErr, doc = new subscriptions({

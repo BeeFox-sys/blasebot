@@ -1,5 +1,4 @@
 const { messageError } = require("../util/miscUtils");
-const io = require("@pm2/io");
 
 const command = {
     name: "help",

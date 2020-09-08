@@ -17,7 +17,7 @@ source.once("open", (event)=>{
 });
 source.on("error",(error)=>console.error);
 
-const {subscriptions, summaries, scores, betReminders} = require("./schemas/subscription");
+const {subscriptions, summaries, scores, betReminders, compacts} = require("./schemas/subscription");
 const NodeCache = require("node-cache");
 
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
@@ -88,6 +88,26 @@ async function broadcastGames(gameData){
                     if(lastUpdate.homeScore != game.homeScore) hometeamscore = true;
                     if(lastUpdate.awayScore != game.awayScore) hometeamscore = false;
                     client.channels.fetch(scoreSubscription.channel_id).then(c=>c.send(`**__${game.awayTeamName}__ v. __${game.homeTeamName}__\nSeason ${gameData.sim.season+1} Day ${gameData.sim.day+1}, Game ${game.seriesIndex} of ${game.seriesLength} update!**\n${game.topOfInning?"Top":"Bottom"} of ${game.inning+1}\n${String.fromCodePoint(game.awayTeamEmoji)} ${!hometeamscore?"**":""}${game.awayTeamNickname}${!hometeamscore?"**":""}: ${game.awayScore}\n${String.fromCodePoint(game.homeTeamEmoji)} ${hometeamscore?"**":""}${game.homeTeamNickname}${hometeamscore?"**":""}: ${game.homeScore}\n> ${game.lastUpdate}`).then(global.stats.messageFreq.mark())).catch(messageError);
+                }
+            }
+            catch(e){console.error(e); continue;}
+        }
+    }
+    for(const game of games){
+        //Compact score recap
+        let lastUpdate = gameCache.get(game.id);
+        if(!lastUpdate) continue;
+        if(lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore){
+            try{
+                let err, docs = await compacts.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
+                if(err) throw err;
+                if(docs.length == 0) continue;
+                for (const compactSubscription of docs) {
+                    if(compactSubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==compactSubscription.channel_id)) continue; //anti double posting
+                    let hometeamscore;
+                    if(lastUpdate.homeScore != game.homeScore) hometeamscore = true;
+                    if(lastUpdate.awayScore != game.awayScore) hometeamscore = false;
+                    client.channels.fetch(compactSubscription.channel_id).then(c=>c.send(`**${game.topOfInning?"Top":"Bottom"} of ${game.inning+1}** | ${String.fromCodePoint(game.awayTeamEmoji)} ${!hometeamscore?"**":""}${game.awayScore}${!hometeamscore?"**":""} ${String.fromCodePoint(game.homeTeamEmoji)} ${hometeamscore?"**":""}${game.homeScore}${hometeamscore?"**":""}\n> ${game.lastUpdate}`).then(global.stats.messageFreq.mark())).catch(messageError);
                 }
             }
             catch(e){console.error(e); continue;}

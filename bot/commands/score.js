@@ -4,7 +4,7 @@ const { messageError } = require("../util/miscUtils");
 
 const command = {
     name: "updates",
-    aliases: ["update"],
+    aliases: ["update","scores"],
     description: "Subscribes a channel to a teams game scores\nThe bot will update the channel whenever score changes\nA guild is only allowed one score tracking of each team, but unlike subscripitions they can share a channel\nbb!scores [team name]",
     async execute(message, args) {
 
