@@ -2,7 +2,7 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateStreamData, getGames } = require("./blaseball-api/game");
+const { updateStreamData } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -25,6 +25,7 @@ const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 async function broadcastGames(gameData){
     global.stats.gameEvents.mark();
     let games = gameData.schedule;
+    let tomorrowSchedule = gameData.tomorrowSchedule;
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     for (const game of games) {
         //play by play        
@@ -119,11 +120,10 @@ async function broadcastGames(gameData){
             // eslint-disable-next-line no-unused-vars
             let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
             let oddsEmbed;
-            let nextGames = await getGames(gameData.sim.season,gameData.sim.day+1);
-            if(nextGames.length > 0){
+            if(tomorrowSchedule.length > 0){
                 oddsEmbed = new MessageEmbed()
                     .setTitle(`Season ${gameData.sim.season+1} Day ${gameData.sim.day+1} Odds:`);
-                for(const game of nextGames){
+                for(const game of tomorrowSchedule){
                     let underlineHome = Math.round(game.awayOdds*100) < Math.round(game.homeOdds*100);
                     oddsEmbed.addField(`${String.fromCodePoint(game.awayTeamEmoji)} v. ${String.fromCodePoint(game.homeTeamEmoji)}`, `${!underlineHome?"__":""}**${Math.round(game.awayOdds*100)}%**${!underlineHome?"__":""} | ${underlineHome?"__":""}**${Math.round(game.homeOdds*100)}%**${underlineHome?"__":""}`,true);
                 }
