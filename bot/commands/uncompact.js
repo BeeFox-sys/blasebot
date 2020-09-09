@@ -6,6 +6,7 @@ const command = {
     name: "uncompact",
     aliases: [],
     description: "Unsubscribes from the score updates of a channel\nbb!uncompact [team]",
+    root: false,
     async execute(message, args) {
 
         if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);

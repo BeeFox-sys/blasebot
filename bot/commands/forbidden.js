@@ -5,6 +5,7 @@ const command = {
     name: "forbidden",
     aliases: [],
     description: "Toggles if forbidden knowledge is disabled in this guild\nDefault: Hide forbidden knowlage\nbb!subscribe [team name]",
+    root: false,
     async execute(message, args) {
 
         if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_GUILD")) return message.channel.send("You require the manage server permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);

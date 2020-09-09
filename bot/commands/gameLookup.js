@@ -8,6 +8,7 @@ const command = {
     name: "game",
     aliases: [],
     description: "Lookup a game by season, day, and team!\nbb!game [season] [day] [team]\n*Postseason is days 100+ of the previous season*",
+    root: false,
     async execute(message, args) {
         if(args.length == 1){
             let game = await getGameByID(args[0]);

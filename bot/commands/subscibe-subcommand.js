@@ -1,10 +1,10 @@
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "ping",
+    name: "subscribe",
     aliases: [],
-    description: "pong!\nbb!ping",
-    root: false,
+    description: "Subscribes to events from blaseball\nbb!subscibe",
+    root: true,
     async execute(message, args) {
         message.channel.send("Splortsmanship!").then(global.stats.messageFreq.mark()).catch(messageError);
     },

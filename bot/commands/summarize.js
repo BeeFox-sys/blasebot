@@ -3,9 +3,10 @@ const {summaries} = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "summarize",
+    name: "subscribe summaries",
     aliases: ["sum"],
     description: "Subscribes a channel to a teams game summaries\nA guild is only allowed one summary of each team, but unlike subscripitions they can share a channel\nbb!summarize [team name]",
+    root: false,
     async execute(message, args) {
 
         if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);

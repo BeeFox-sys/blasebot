@@ -3,9 +3,10 @@ const {compacts} = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "compact",
-    aliases: ["update-compact","score-compact","small"],
+    name: "subscribe compact",
+    aliases: ["update-compact","score-compact","subscribe small"],
     description: "Subscribes a channel to a teams compact game scores\nThe bot will update the channel whenever score changes\nA guild is only allowed one score tracking of each team, but unlike subscripitions they can share a channel\nbb!compact [team name]",
+    root: false,
     async execute(message, args) {
 
         if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 const { performance } = require("perf_hooks");
-const client = new Discord.Client();
+const client = new Discord.Client({disableMentions:"all"});
 client.config = require("../config.json");
 client.mode = 0;
 require("./stats");
@@ -94,7 +94,13 @@ client.on("message", async (message) => {
 
     //Get Command
     let command = client.commands.get(commandName);
-    if(!command) return message.channel.send("That is not a command!").catch(messageError);
+
+    if(command?.root && args.length > 0){
+        commandName += " "+args.shift();
+        command = client.commands.get(commandName);
+    }
+
+    if(!command) return message.channel.send(commandName+" is not a command!").catch(messageError);
 
     //Run Command
     try {

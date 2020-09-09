@@ -6,6 +6,7 @@ const command = {
     name: "results",
     aliases: ["scores"],
     description: "Returns the results for a day\nbb!results [season] [day]",
+    root: false,
     async execute(message, args) {
 
         if(args.length < 2) return message.channel.send("You must specify a season and day").then(global.stats.messageFreq.mark()).catch(messageError);

@@ -7,6 +7,7 @@ const command = {
     name: "player",
     aliases: [],
     description: "Looks up a player\nbb!player [player name]",
+    root: false,
     async execute(message, args) {
         let playerName = args.join(" ");
         let player = await getPlayer(playerName);

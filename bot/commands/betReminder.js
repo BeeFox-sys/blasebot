@@ -2,9 +2,10 @@ const { betReminders } = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "bet",
-    aliases: [],
+    name: "subscribe bet",
+    aliases: ["unsubscribe bet"],
     description: "Toggles bet reminders for this channel\nbb!bet",
+    root: false,
     async execute(message, args) {
 
         if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);

@@ -3,9 +3,10 @@ const {subscriptions} = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "subscribe",
-    aliases: ["play-by-play","sub","pbp"],
+    name: "subscribe plays",
+    aliases: ["play-by-play","subscribe pbp"],
     description: "Subscribes a channel to a teams games\nA guild can only have one channel per team at max, and one team per channel.\nbb!subscribe [team name]",
+    root: false,
     async execute(message, args) {
 
         if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_CHANNELS")) return message.channel.send("You require the manage channel permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);
