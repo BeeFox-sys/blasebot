@@ -5,7 +5,7 @@ const { messageError } = require("../util/miscUtils");
 const command = {
     name: "subscribe plays",
     aliases: ["play-by-play","subscribe pbp"],
-    description: "Subscribes a channel to a teams games\nA guild can only have one channel per team at max, and one team per channel.\nbb!subscribe [team name]",
+    description: "Subscribes a channel to a teams games\nA guild can only have one channel per team at max, and one team per channel.\nbb!subscribe plays [team name]",
     root: false,
     async execute(message, args) {
 

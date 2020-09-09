@@ -4,7 +4,7 @@ const { messageError } = require("../util/miscUtils");
 const command = {
     name: "subscribe bet",
     aliases: ["unsubscribe bet"],
-    description: "Toggles bet reminders for this channel\nbb!bet",
+    description: "Toggles bet reminders for this channel\nbb!subscribe bet",
     root: false,
     async execute(message, args) {
 
