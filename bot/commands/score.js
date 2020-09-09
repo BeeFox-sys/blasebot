@@ -3,7 +3,7 @@ const {scores} = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "subscribe updates",
+    name: "subscribe score",
     aliases: ["subscribe update","subscribe scores"],
     description: "Subscribes a channel to a teams game scores\nThe bot will update the channel whenever score changes\nA guild is only allowed one score tracking of each team, but unlike subscripitions they can share a channel\nbb!scores [team name]",
     root: false,

@@ -3,9 +3,9 @@ const {summaries} = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "unsummarize",
-    aliases: ["unsum"],
-    description: "Unsubscribes from the summaries game of a channel\nbb!unsummarize [team]",
+    name: "unsubscribe summaries",
+    aliases: [],
+    description: "Unsubscribes from the summaries game of a channel\nbb!unsubscribe summaries [team]",
     root: false,
     async execute(message, args) {
 

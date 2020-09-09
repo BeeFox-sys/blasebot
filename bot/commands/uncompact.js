@@ -3,9 +3,9 @@ const {compacts} = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "uncompact",
-    aliases: [],
-    description: "Unsubscribes from the score updates of a channel\nbb!uncompact [team]",
+    name: "unsubscribe compact",
+    aliases: ["unsubscribe small"],
+    description: "Unsubscribes from the score updates of a channel\nbb!unsubscribe compact [team]",
     root: false,
     async execute(message, args) {
 

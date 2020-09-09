@@ -3,9 +3,9 @@ const {scores} = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "unscore",
-    aliases: [],
-    description: "Unsubscribes from the score updates of a channel\nbb!unscore [team]",
+    name: "unsubscribe score",
+    aliases: ["unsubscribe scores","unsubscribe updates"],
+    description: "Unsubscribes from the score updates of a channel\nbb!unsubscribe score [team]",
     root: false,
     async execute(message, args) {
 
