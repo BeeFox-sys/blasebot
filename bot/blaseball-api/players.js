@@ -18,6 +18,17 @@ async function getPlayers(players){
         });
 }
 
+async function getDead(){
+    return await fetch("https://api.blaseball-reference.com/v1/deceased")
+        .then(res => {
+            if(!res.ok) throw new Error(res.statusText);
+            return res.json();
+        })
+        .catch(e => {
+            console.log(e.code);
+            console.error("Error at blaseball-referance endpoint /deceased:",e.message);
+        });
+}
 
 //PlayerCache
 const PlayerNames = new Collection();
@@ -35,7 +46,8 @@ async function updatePlayerCache(){
         return client.setTimeout(updatePlayerCache, 2000*60);
     }
     let playerPromises = [];
-    let playerIDs = [];
+    let dead = await getDead();
+    let playerIDs = dead.map(p=>p.player_id);
     let requests = 0;
     for (let index = 0; index < teams.length; index++) {
         const team = TeamCache.get(teams[index]);
@@ -44,7 +56,7 @@ async function updatePlayerCache(){
             PlayerTeams.set(playerID, team.id);
         });
         playerIDs = playerIDs.concat(teamIDs);
-        if(playerIDs.length >= 200 || index == teams.length-1){
+        if(playerIDs.length >= 190 || index == teams.length-1){
             requests++;
             playerPromises.push(
                 getPlayers(playerIDs).then((players)=>{

@@ -13,15 +13,15 @@ async function generatePlayerCard(player, forbidden){
         .addField("Team",team.fullName, true);
     if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
     if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||Yes||":"||No ||",true);
-    playerCard.addField("Fate",player.fate,true)
-        .addField("Coffee",coffeeStyles[player.coffee]??"Coffee",true)
+    playerCard.addField("Fate",player.fate??"A roll of the dice",true)
+        .addField("Coffee",coffeeStyles[player.coffee]??"Coffee?",true)
         .addField("Vibes",vibeString(vibes(player)), true)
         .addField("Item",items[player.bat]??"None",true) 
         .addField("Armor",items[player.armor]??"None",true)
         .addField("Blood",bloodTypes[player.blood]??"Blood?",true)
         .addField("Pregame Ritual",player.ritual||"** **",true)
         .addField("Attributes", attributes(player),true)
-        .addField("Soul Scream",soulscream(player),true)
+        .addField("Soul Scream",soulscream(player).length > 1024 ? soulscream(player).substring(0, 1023) + "…": soulscream(player),false)
         .addField("**--Stars--**","** **",false)
         .addField("Batting", stars(battingRating(player)))
         .addField("Pitching", stars(pitchingRating(player)))

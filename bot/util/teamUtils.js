@@ -6,7 +6,7 @@ const { MessageEmbed } = require("discord.js");
 
 
 async function getTeam(name){
-    let team = TeamCache.get(name);
+    let team = name?TeamCache.get(name):nullTeam;
     if(!team){
         let nameLowercase = name.toLowerCase();
         let teamName = TeamNames.findKey(team => (team.lowercase == nameLowercase || team.location == nameLowercase || team.nickname == nameLowercase || team.shorthand == nameLowercase || team.emoji == nameLowercase));
@@ -70,8 +70,16 @@ function playerList(players){
     return list;
 }
 
+const nullTeam = {
+    emoji: 10067,
+    mainColor: "#999999",
+    fullName: "Null Team",
+    slogan: "I AM ERROR"
+};
+
 
 module.exports = {
     getTeam: getTeam,
     generateTeamCard: generateTeamCard,
+    nullTeam:nullTeam
 };
