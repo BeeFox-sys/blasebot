@@ -2,7 +2,7 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateStreamData } = require("./blaseball-api/game");
+const { updateStreamData, getGames } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -17,7 +17,7 @@ source.once("open", (event)=>{
 });
 source.on("error",(error)=>console.error);
 
-const {subscriptions, summaries, scores, betReminders, compacts} = require("./schemas/subscription");
+const {subscriptions, summaries, scores, betReminders, compacts, eventsCol} = require("./schemas/subscription");
 const NodeCache = require("node-cache");
 
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
@@ -27,6 +27,7 @@ async function broadcastGames(gameData){
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
+
     for (const game of games) {
         //play by play        
         if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
@@ -59,6 +60,7 @@ async function broadcastGames(gameData){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
         if(lastupdate.gameComplete == false && game.gameComplete == true){
+            //Summary
             try{
                 console.log(game.id," finished!");
                 let summary = await generateGameCard(game);
@@ -68,6 +70,17 @@ async function broadcastGames(gameData){
                 for (const summarySubscription of docs) {
                     if(summarySubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==summarySubscription.channel_id)) continue;
                     client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.awayTeamName} v. ${game.homeTeamName} Game ${game.seriesIndex} of ${game.seriesLength} finished!`,summary).then(global.stats.messageFreq.mark())).catch(messageError);
+                }
+            }
+            catch(e){console.error(e); continue;}
+            //Outcomes
+            try{
+                let outcomes = handleEvents(game);
+                if(!outcomes.length) continue;
+                let err, docs = await eventsCol.find({});
+                if(err) throw err;
+                for(const doc of docs){
+                    client.channels.fetch(doc.channel_id).then(c=>c.send(outcomes).then(global.stats.messageFreq.mark()).catch(messageError));
                 }
             }
             catch(e){console.error(e); continue;}
@@ -177,6 +190,42 @@ function generatePlay(game){
     return play;
 }
 
+const eventTypes = [
+    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb/gi},//
+    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /[flicker]|[feedback]/gi},//
+    {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/gi},
+    {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/gi},
+    {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/gi},//
+    {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"} 
+];
+
+function handleEvents(game){
+    let events = [];
+    for(const outcome of game.outcomes){
+        let type;
+        for (const eventType of eventTypes) {
+            if(eventType.search?.test(outcome)){
+                type = eventType;
+            }
+        }
+        if(!type) type = eventTypes.UNKNOWN;
+        events.push({
+            id: game.id,
+            eventType: type,
+            flavor: outcome
+        });
+    }
+    let embeds = [];
+    for(const event of events){
+        let embed = new MessageEmbed()
+            .setTitle(event.flavor)
+            .setColor(event.eventType.colour)
+            .setFooter(`${game.awayTeamNickname} vs ${game.homeTeamNickname}\nSeason ${game.season+1} Day ${game.day+1}`);
+        embeds.push(embed);
+    }
+    return embeds;
+}
+
 //Handle channel deletions
 client.on("channelDelete", channel =>{
     let id = channel.id;
@@ -184,4 +233,6 @@ client.on("channelDelete", channel =>{
     subscriptions.deleteMany({channel_id:id}).catch(console.error);
     summaries.deleteMany({channel_id:id}).catch(console.error);
     betReminders.deleteMany({channel_id:id}).catch(console.error);
+    compacts.deleteMany({channel_id:id}).catch(console.error);
+    eventsCol.deleteMany({channel_id:id}).catch(console.error);
 });
