@@ -2,9 +2,9 @@ const { betReminders } = require("../schemas/subscription");
 const { messageError } = require("../util/miscUtils");
 
 const command = {
-    name: "subscribe bet",
+    name: "unsubscribe bet",
     aliases: [],
-    description: "Enables bet reminders for this channel\nbb!subscribe bet",
+    description: "Disables bet reminders for this channel\nbb!unsubscribe bet",
     root: false,
     async execute(message, args) {
 
@@ -13,16 +13,13 @@ const command = {
 
         let bet = await betReminders.findOne({channel_id:message.channel.id});
         if(!bet){
-            bet = new betReminders({
-                channel_id:message.channel.id
-            });
-            // eslint-disable-next-line no-unused-vars
-            let err, save = await bet.save();
-            if(err) throw err;
-            return message.channel.send("Enabled bet reminders in this channel!").then(global.stats.messageFreq.mark()).catch(messageError);
+            return message.channel.send("You are not reciving bet reminders here!");
         }
 
-        message.channel.send("You are already reciving bet reminders here");
+        // eslint-disable-next-line no-unused-vars
+        let err, del = bet.deleteOne();
+        if(err) throw err;
+        return message.channel.send("Disabled bet reminders in this channel").then(global.stats.messageFreq.mark()).catch(messageError);
     },
 };
 
