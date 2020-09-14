@@ -192,10 +192,12 @@ function generatePlay(game){
 
 const eventTypes = [
     {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb/gi},//
-    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /[flicker]|[feedback]/gi},//
+    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /flicker|feedback/gi},//
     {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/gi},
     {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/gi},
     {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/gi},//
+    {id: "SHAME",name:"SHAME",colour:"#800878",search: /shame/gi},
+    {id: "UNSTABLE", name:"Unstable",colour:"#eaabff",search: /unstable/gi},
     {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"} 
 ];
 
