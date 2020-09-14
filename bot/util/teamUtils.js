@@ -24,10 +24,10 @@ async function generateTeamCard(team, forbidden){
     let teamCard = new MessageEmbed()
         .setTitle(String.fromCodePoint(team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
-        .addField("Lineup",playerList(team.lineup),true)
-        .addField("Rotation",playerList(team.rotation),true);
-    if(forbidden) teamCard.addField("Bullpen", "||"+playerList(team.bullpen)+"||",true)
-        .addField("Bench", "||"+playerList(team.bench)+"||", true);
+        .addField("Lineup",team.lineup.length?playerList(team.lineup):"uhhhhh...",true)
+        .addField("Rotation",playerList(team.rotation):"uhhhhh...",true);
+    if(forbidden) teamCard.addField("Bullpen", team.bullpen.length?"||"+playerList(team.bullpen)+"||":"uhhhhh...",true)
+        .addField("Bench", team.bench.length?"||"+playerList(team.bench)+"||":"uhhhhh...", true);
     teamCard.addField("Championships",team.championships, true)
         .addField("Attributes", attributes(team)||"None",true)
         .addField("Been Shamed",team.totalShames, true)
