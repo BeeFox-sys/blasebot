@@ -56,7 +56,7 @@ async function updatePlayerCache(){
             PlayerTeams.set(playerID, team.id);
         });
         playerIDs = playerIDs.concat(teamIDs);
-        if(playerIDs.length >= 190 || index == teams.length-1){
+        if(playerIDs.length >= 150 || index == teams.length-1){
             requests++;
             playerPromises.push(
                 getPlayers(playerIDs).then((players)=>{
