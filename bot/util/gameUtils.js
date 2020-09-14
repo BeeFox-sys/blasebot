@@ -48,7 +48,7 @@ async function generateGameCard(game){
         .addField(`${game.awayTeamNickname} Score`, game.awayScore, true)
         .addField(`${game.homeTeamNickname} Score`, game.homeScore, true)
         .addField("Inning", game.gameStart?`${game.topOfInning?"Top":"Bottom"} of inning ${game.inning+1}`:"*Game yet to start*")
-        .addField("Weather", Weather[game.weather], true);
+        .addField("Weather", Weather[game.weather]??"Uhhhh...", true);
 
     if(game.shame) game.outcomes.push(`The ${loser} were shamed!`);
 

@@ -202,6 +202,7 @@ const eventTypes = [
 function handleEvents(game){
     let events = [];
     for(const outcome of game.outcomes){
+        console.log(outcome);
         let type;
         for (const eventType of eventTypes) {
             if(eventType.search?.test(outcome)){
