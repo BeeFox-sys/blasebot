@@ -25,7 +25,7 @@ async function generateTeamCard(team, forbidden){
         .setTitle(String.fromCodePoint(team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
         .addField("Lineup",team.lineup.length?playerList(team.lineup):"uhhhhh...",true)
-        .addField("Rotation",playerList(team.rotation):"uhhhhh...",true);
+        .addField("Rotation",team.rotation.length?playerList(team.rotation):"uhhhhh...",true);
     if(forbidden) teamCard.addField("Bullpen", team.bullpen.length?"||"+playerList(team.bullpen)+"||":"uhhhhh...",true)
         .addField("Bench", team.bench.length?"||"+playerList(team.bench)+"||":"uhhhhh...", true);
     teamCard.addField("Championships",team.championships, true)
