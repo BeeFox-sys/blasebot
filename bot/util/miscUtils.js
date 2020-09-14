@@ -43,25 +43,7 @@ function msgError(error){
     }
 }
 
-const attributesList = {
-    EXTRA_STRIKE: "The Fourth Strike",
-    SHAME_PIT: "Targeted Shame",
-    HOME_FIELD: "Home Field Advantage",
-    FIREPROOF: "Fireproof",
-    ALTERNATE: "Alternate",
-    SOUNDPROOF: "Soundproof",
-    SHELLED: "Shelled",
-    REVERBERATING: "Reverberating",
-    BLOOD_DONOR: "Blood Donor",
-    BLOOD_THIEF: "Blood Thief",
-    BLOOD_PITY: "Blood Pity",
-    BLOOD_WINNER: "Blood Winner",
-    BLOOD_FAITH: "Blood Faith",
-    BLOOD_LAW: "Blood Law",
-    BLOOD_CHAOS: "Blood Chaos"
-};
 
 module.exports = {
     messageError:msgError,
-    attributesList: attributesList
 };

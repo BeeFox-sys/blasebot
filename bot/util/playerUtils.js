@@ -123,21 +123,21 @@ const items = {
     ARM_CANNON: "Literal Arm Cannon"
 };
 
-const {attributesList} = require("./miscUtils");
+const attributesList = require("./attributes.json").data;
 
 function attributes(player){
     let attrString = "";
     for(const attribute of player.permAttr){
-        attrString += attributesList[attribute] +" (Permanent)\n";
+        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Permanent)\n";
     }
     for(const attribute of player.seasAttr){
-        attrString += attributesList[attribute] +" (Season)\n";
+        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Season)\n";
     }
     for(const attribute of player.weekAttr){
-        attrString += attributesList[attribute] +" (Week)\n";
+        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Week)\n";
     }
     for(const attribute of player.gameAttr){
-        attrString += attributesList[attribute] +" (Day)\n";
+        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Day)\n";
     }
     return attrString || "None";
 }
