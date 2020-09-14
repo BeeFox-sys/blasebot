@@ -2,7 +2,7 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateStreamData, getGames } = require("./blaseball-api/game");
+const { updateStreamData } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -209,7 +209,6 @@ const eventTypes = [
 function handleEvents(game){
     let events = [];
     for(const outcome of game.outcomes){
-        console.log(outcome);
         let type;
         for (const eventType of eventTypes) {
             if(eventType.search?.test(outcome)){
