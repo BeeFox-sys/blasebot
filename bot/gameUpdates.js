@@ -24,9 +24,10 @@ const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 
 async function broadcastGames(gameData){
     global.stats.gameEvents.mark();
+    if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
+
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
-    if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
 
     for (const game of games) {
         //play by play        
@@ -80,7 +81,11 @@ async function broadcastGames(gameData){
                 let err, docs = await eventsCol.find({});
                 if(err) throw err;
                 for(const doc of docs){
-                    client.channels.fetch(doc.channel_id).then(c=>c.send(outcomes).then(global.stats.messageFreq.mark()).catch(messageError));
+                    const channel = await client.channels.fetch(doc.channel_id);
+                    for (const outcome of outcomes){
+                        channel.send(outcome).then(global.stats.messageFreq.mark()).catch(messageError);
+                    }
+                    
                 }
             }
             catch(e){console.error(e); continue;}
@@ -191,13 +196,13 @@ function generatePlay(game){
 }
 
 const eventTypes = [
-    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb/gi},//
-    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /flicker|feedback/gi},//
-    {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/gi},
-    {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/gi},
-    {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/gi},//
-    {id: "SHAME",name:"SHAME",colour:"#800878",search: /shame/gi},
-    {id: "UNSTABLE", name:"Unstable",colour:"#eaabff",search: /unstable/gi},
+    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb/i},//
+    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /flicker|feedback/i},//
+    {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/i},
+    {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/i},
+    {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/i},//
+    {id: "SHAME",name:"SHAME",colour:"#800878",search: /shame/i},
+    {id: "UNSTABLE", name:"Unstable",colour:"#eaabff",search: /unstable/i},
     {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"} 
 ];
 
@@ -209,6 +214,7 @@ function handleEvents(game){
         for (const eventType of eventTypes) {
             if(eventType.search?.test(outcome)){
                 type = eventType;
+                
             }
         }
         if(!type) type = eventTypes.UNKNOWN;
