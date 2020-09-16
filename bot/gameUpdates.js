@@ -30,7 +30,7 @@ async function broadcastGames(gameData){
     let tomorrowSchedule = gameData.tomorrowSchedule;
 
     for (const game of games) {
-        //play by play        
+        //play by play    
         if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
         if(!game.gameStart) continue;
 
@@ -216,7 +216,8 @@ function handleEvents(game){
                 
             }
         }
-        if(!type) type = eventTypes.UNKNOWN;
+        if(type.id == "SHAME") console.log(game);
+        if(!type) type = eventTypes.find(e=>e.id=="UNKNOWN");
         events.push({
             id: game.id,
             eventType: type,

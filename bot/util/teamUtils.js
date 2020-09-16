@@ -43,16 +43,16 @@ const attributesList = require("./attributes.json").data;
 function attributes(team){
     let attrString = "";
     for(const attribute of team.permAttr){
-        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Permanent)\n";
+        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Permanent)\n";
     }
     for(const attribute of team.seasAttr){
-        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Season)\n";
+        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Season)\n";
     }
     for(const attribute of team.weekAttr){
-        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Week)\n";
+        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Week)\n";
     }
     for(const attribute of team.gameAttr){
-        attrString += (attributesList.find(a=>a.id==attribute).title??attribute) +" (Day)\n";
+        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Day)\n";
     }
     return attrString || "None";
 }
