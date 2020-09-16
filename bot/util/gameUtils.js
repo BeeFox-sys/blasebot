@@ -21,8 +21,8 @@ const Weather = {
     13: "Reverb"
 };
 
-async function generateGameCard(game){
-    game = Object.create(game);
+async function generateGameCard(gameInput){
+    let game = {...gameInput};
     let winner;
     if(game.gameComplete){
         winner = game.homeScore>game.awayScore ? game.homeTeamNickname : game.awayTeamNickname;
