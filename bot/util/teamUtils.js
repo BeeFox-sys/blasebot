@@ -39,7 +39,7 @@ async function generateTeamCard(team, forbidden){
     return teamCard;
 }
 
-const attributesList = require("./attributes.json").data;
+const attributesList = require("../data/attributes.json").collection;
 function attributes(team){
     let attrString = "";
     for(const attribute of team.permAttr){

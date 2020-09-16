@@ -4,6 +4,7 @@ const {MessageEmbed } = require("discord.js");
 
 
 
+const itemList = require("../data/items.json").collection;
 
 async function generatePlayerCard(player, forbidden){
     let team = await getTeam(PlayerTeams.get(player.id));
@@ -16,8 +17,8 @@ async function generatePlayerCard(player, forbidden){
     playerCard.addField("Fate",player.fate??"A roll of the dice",true)
         .addField("Coffee",coffeeStyles[player.coffee]??"Coffee?",true)
         .addField("Vibes",vibeString(vibes(player)), true)
-        .addField("Item",items[player.bat]??"None",true) 
-        .addField("Armor",items[player.armor]??"None",true)
+        .addField("Item",(itemList.find(a=>a.id==player.bat)?.name??player.bat)||"None",true) 
+        .addField("Armor",(itemList.find(a=>a.id==player.armor)?.name??player.armor)||"None",true)
         .addField("Blood",bloodTypes[player.blood]??"Blood?",true)
         .addField("Pregame Ritual",player.ritual||"** **",true)
         .addField("Attributes", attributes(player),true)
@@ -112,18 +113,7 @@ function soulscream(player){
     return scream;
 }
 
-const items = {
-    FIREPROOF: "Fireproof Jacket",
-    GUNBLADE_A: "The Dial Tone",
-    GUNBLADE_B: "Vibe Check",
-    MUSHROOM: "Mushroom",
-    GRAPPLING_HOOK: "Grappling Hook",
-    HEADPHONES: "Noise-Cancelling Headphones",
-    ENGLAND_MEMORABILIA: "Bangers & Smash",
-    ARM_CANNON: "Literal Arm Cannon"
-};
-
-const attributesList = require("./attributes.json").data;
+const attributesList = require("../data/attributes.json").collection;
 
 function attributes(player){
     player = Object.create(player);
