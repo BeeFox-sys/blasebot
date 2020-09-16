@@ -213,10 +213,8 @@ function handleEvents(game){
         for (const eventType of eventTypes) {
             if(eventType.search?.test(outcome)){
                 type = eventType;
-                
             }
         }
-        if(type.id == "SHAME") console.log(game);
         if(!type) type = eventTypes.find(e=>e.id=="UNKNOWN");
         events.push({
             id: game.id,
