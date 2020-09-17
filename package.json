@@ -12,8 +12,8 @@
     "@pm2/io": "^4.3.5",
     "discord.js": "^12.3.1",
     "eventsource": "^1.0.7",
-    "mongoose": "^5.10.2",
+    "mongoose": "^5.10.5",
     "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   }
 }
