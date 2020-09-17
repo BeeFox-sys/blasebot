@@ -60,7 +60,7 @@ async function broadcastGames(gameData){
     for(const game of games){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
-        if(lastupdate.gameComplete == game.gameComplete) true;
+        if(!(!lastupdate.gameComplete && game.gameComplete)) continue;
         //Outcomes
         try{
             let outcomes = handleEvents(game);
