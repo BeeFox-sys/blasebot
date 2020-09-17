@@ -208,7 +208,7 @@ const eventTypes = [
     {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/i},//
     {id: "SHAME",name:"SHAME",colour:"#800878",search: /shame/i},
     {id: "UNSTABLE", name:"Unstable",colour:"#eaabff",search: /unstable|instability /i},
-    {id: "BIRD", name:"Bird", colour:"#8e5fad",search: /birds/i}
+    {id: "BIRD", name:"Bird", colour:"#8e5fad",search: /birds/i},
     {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"} 
 ];
 
