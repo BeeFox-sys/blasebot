@@ -25,6 +25,7 @@ const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 async function broadcastGames(gameData){
     global.stats.gameEvents.mark();
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
+    
 
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
@@ -61,19 +62,6 @@ async function broadcastGames(gameData){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
         if(lastupdate.gameComplete == false && game.gameComplete == true){
-            //Summary
-            try{
-                console.log(game.id," finished!");
-                let summary = await generateGameCard(game);
-                let err, docs = await summaries.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
-                if(err) throw err;
-                if(docs.length == 0) continue;
-                for (const summarySubscription of docs) {
-                    if(summarySubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==summarySubscription.channel_id)) continue;
-                    client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.awayTeamName} v. ${game.homeTeamName} Game ${game.seriesIndex} of ${game.seriesLength} finished!`,summary).then(global.stats.messageFreq.mark())).catch(messageError);
-                }
-            }
-            catch(e){console.error(e); continue;}
             //Outcomes
             try{
                 let outcomes = handleEvents(game);
@@ -86,6 +74,19 @@ async function broadcastGames(gameData){
                         channel.send(outcome).then(global.stats.messageFreq.mark()).catch(messageError);
                     }
                     
+                }
+            }
+            catch(e){console.error(e); continue;}
+            //Summary
+            try{
+                console.log(game.id," finished!");
+                let summary = await generateGameCard(game);
+                let err, docs = await summaries.find({$or:[{team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
+                if(err) throw err;
+                if(docs.length == 0) continue;
+                for (const summarySubscription of docs) {
+                    if(summarySubscription.team == game.awayTeam && docs.find(d=>d.team==game.homeTeam&&d.channel_id==summarySubscription.channel_id)) continue;
+                    client.channels.fetch(summarySubscription.channel_id).then(c=>c.send(`${game.awayTeamName} v. ${game.homeTeamName} Game ${game.seriesIndex} of ${game.seriesLength} finished!`,summary).then(global.stats.messageFreq.mark())).catch(messageError);
                 }
             }
             catch(e){console.error(e); continue;}
@@ -202,7 +203,7 @@ const eventTypes = [
     {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/i},
     {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/i},//
     {id: "SHAME",name:"SHAME",colour:"#800878",search: /shame/i},
-    {id: "UNSTABLE", name:"Unstable",colour:"#eaabff",search: /unstable/i},
+    {id: "UNSTABLE", name:"Unstable",colour:"#eaabff",search: /unstable|instability /i},
     {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"} 
 ];
 
