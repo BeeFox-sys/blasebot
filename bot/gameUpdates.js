@@ -2,7 +2,7 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateStreamData } = require("./blaseball-api/game");
+const { updateStreamData, getGames } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -58,26 +58,30 @@ async function broadcastGames(gameData){
         catch(e){console.error(e); continue;}
     }
     for(const game of games){
+        let lastupdate = gameCache.get(game.id);
+        if(!lastupdate) continue;
+        if(lastupdate.gameComplete == game.gameComplete) true;
+        //Outcomes
+        try{
+            let outcomes = handleEvents(game);
+            if(!outcomes.length) continue;
+            let err, docs = await eventsCol.find({});
+            if(err) throw err;
+            for(const doc of docs){
+                const channel = await client.channels.fetch(doc.channel_id);
+                for (const outcome of outcomes){
+                    channel.send(outcome).then(global.stats.messageFreq.mark()).catch(messageError);
+                }
+                
+            }
+        }
+        catch(e){console.error(e); continue;}
+    }
+    for(const game of games){
         //Summaries
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
         if(lastupdate.gameComplete == false && game.gameComplete == true){
-            //Outcomes
-            try{
-                let outcomes = handleEvents(game);
-                if(!outcomes.length) continue;
-                let err, docs = await eventsCol.find({});
-                if(err) throw err;
-                for(const doc of docs){
-                    const channel = await client.channels.fetch(doc.channel_id);
-                    for (const outcome of outcomes){
-                        channel.send(outcome).then(global.stats.messageFreq.mark()).catch(messageError);
-                    }
-                    
-                }
-            }
-            catch(e){console.error(e); continue;}
-            //Summary
             try{
                 console.log(game.id," finished!");
                 let summary = await generateGameCard(game);
