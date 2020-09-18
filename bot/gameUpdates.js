@@ -143,17 +143,35 @@ async function broadcastGames(gameData){
 
     let lastPeanut = await peanutCache.get("peanut");
     
-    if(temporal.doc.epsilon && temporal.doc.zeta != lastPeanut?.zeta){
+    if(temporal.doc.epsilon && temporal.doc.zeta != lastPeanut?.zeta && temporal.doc.gamma != -1){
         //peanut is speaking
-        let peanutMessage = new MessageEmbed()
+
+        let speak = {};
+
+        if(temporal.doc.gamma == 0){
+            speak = {
+                name: "Peanut",
+                colour: "#FF0000",
+                url: "https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png"
+            };
+        }
+        else if (temporal.doc.gamma == 1){
+            speak = {
+                name: "Squid",
+                colour: "#0000FF",
+                url: "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
+            };
+        }
+
+        let speakMessage = new MessageEmbed()
             .setTitle(temporal.doc.zeta)
-            .setColor("#ff0000")
-            .setAuthor("The Peanut","https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png","https://blaseball.com");
+            .setColor(speak.colour)
+            .setAuthor(speak.name,speak.url,"https://blaseball.com");
         let err, docs = await eventsCol.find({});
         if(err) throw err;
         for(const doc of docs){
             const channel = await client.channels.fetch(doc.channel_id);
-            channel.send(peanutMessage).then(global.stats.messageFreq.mark()).catch(messageError);            
+            channel.send(speakMessage).then(global.stats.messageFreq.mark()).catch(messageError);            
         }
         peanutCache.set("peanut",temporal.doc);
     }
