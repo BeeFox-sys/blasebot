@@ -31,7 +31,7 @@ async function broadcastGames(gameData){
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
 
-    if(games.length)for (const game of games) {
+    if(games?.length)for (const game of games) {
         //play by play    
         if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
         if(!game.gameStart) continue;
@@ -58,7 +58,7 @@ async function broadcastGames(gameData){
         }
         catch(e){console.error(e); continue;}
     }
-    if(games.length)for(const game of games){
+    if(games?.length)for(const game of games){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
         if(!(!lastupdate.gameComplete && game.gameComplete)) continue;
@@ -78,7 +78,7 @@ async function broadcastGames(gameData){
         }
         catch(e){console.error(e); continue;}
     }
-    if(games.length)for(const game of games){
+    if(games?.length)for(const game of games){
         //Summaries
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
@@ -98,7 +98,7 @@ async function broadcastGames(gameData){
         }
         
     }
-    if(games.length)for(const game of games){
+    if(games?.length)for(const game of games){
         //Score recap
         let lastUpdate = gameCache.get(game.id);
         if(!lastUpdate) continue;
@@ -118,7 +118,7 @@ async function broadcastGames(gameData){
             catch(e){console.error(e); continue;}
         }
     }
-    if(games.length)for(const game of games){
+    if(games?.length)for(const game of games){
         //Compact score recap
         let lastUpdate = gameCache.get(game.id);
         if(!lastUpdate) continue;
@@ -178,7 +178,7 @@ async function broadcastGames(gameData){
         }
         catch(e){console.error(e);}
     }
-    if(games.length)for(const game of games){
+    if(games?.length)for(const game of games){
         gameCache.set(game.id, game);        
     }
 }
