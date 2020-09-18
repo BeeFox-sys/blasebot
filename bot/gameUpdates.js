@@ -2,7 +2,7 @@
 const client = global.client;
 const EventSource = require("eventsource");
 const { generateGameCard } = require("./util/gameUtils");
-const { updateStreamData, getGames } = require("./blaseball-api/game");
+const { updateStreamData, DataStreamCache } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData");
@@ -137,6 +137,28 @@ async function broadcastGames(gameData){
             catch(e){console.error(e); continue;}
         }
     }
+
+    let temporal = await DataStreamCache.get("temporal");
+
+    let lastPeanut = await gameCache.get("peanut");
+
+    temporal.doc.epsilon = true;
+
+    if(temporal.doc.epsilon && temporal.doc.zeta != lastPeanut?.zeta){
+        //peanut is speaking
+        let peanutMessage = new MessageEmbed()
+            .setTitle(temporal.doc.zeta)
+            .setColor("#ff0000")
+            .setAuthor("The Peanut","https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png","https://blaseball.com");
+        let err, docs = await eventsCol.find({});
+        if(err) throw err;
+        for(const doc of docs){
+            const channel = await client.channels.fetch(doc.channel_id);
+            channel.send(peanutMessage).then(global.stats.messageFreq.mark()).catch(messageError);            
+        }
+        gameCache.set("peanut",temporal.doc);
+    }
+
     if(Object.values(games).every(game=>game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false){
         console.log("All games finished!");
         try{

@@ -34,9 +34,9 @@ async function getGames(season,day){
 
 function updateStreamData(value){
     // console.debug("Updating Stream Data");
-    DataStreamCache.set("games",value.games);
-    DataStreamCache.set("leagues",value.leagues);
-    DataStreamCache.set("temporal",value.temporal);
+    if(value.games)DataStreamCache.set("games",value.games);
+    if(value.leagues)DataStreamCache.set("leagues",value.leagues);
+    if(value.temporal)DataStreamCache.set("temporal",value.temporal);
 }
 
 GameCache.on("expired",key=>console.debug("Expired game:",key));
