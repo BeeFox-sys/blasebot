@@ -141,9 +141,7 @@ async function broadcastGames(gameData){
     let temporal = await DataStreamCache.get("temporal");
 
     let lastPeanut = await gameCache.get("peanut");
-
-    temporal.doc.epsilon = true;
-
+    
     if(temporal.doc.epsilon && temporal.doc.zeta != lastPeanut?.zeta){
         //peanut is speaking
         let peanutMessage = new MessageEmbed()
