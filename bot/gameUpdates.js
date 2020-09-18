@@ -9,7 +9,7 @@ var source = new EventSource(client.config.apiUrlEvents+"/streamData", { withCre
 source.on("message",(message)=>{
     let data = JSON.parse(message.data).value;
     updateStreamData(data);
-    if(data.games) broadcastGames(data.games);
+    broadcast();
 
 });
 source.once("open", (event)=>{
@@ -20,13 +20,14 @@ source.on("error",(error)=>console.error);
 const {subscriptions, summaries, scores, betReminders, compacts, eventsCol} = require("./schemas/subscription");
 const NodeCache = require("node-cache");
 
-const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
-const peanutCache = new NodeCache({stdTTL:5400,checkperiod:3600});
+const gameCache = new NodeCache();
+const peanutCache = new NodeCache();
 
-async function broadcastGames(gameData){
+async function broadcast(){
     global.stats.gameEvents.mark();
     if(!client.readyAt) return; //Prevent attempting to send messages before connected to discord
     
+    let gameData = DataStreamCache.get("games");
 
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
@@ -173,8 +174,8 @@ async function broadcastGames(gameData){
             const channel = await client.channels.fetch(doc.channel_id);
             channel.send(speakMessage).then(global.stats.messageFreq.mark()).catch(messageError);            
         }
-        peanutCache.set("peanut",temporal.doc);
     }
+    peanutCache.set("peanut",temporal.doc);
 
     if(Object.values(games).every(game=>game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false){
         console.log("All games finished!");

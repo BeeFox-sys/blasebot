@@ -5,8 +5,8 @@ const NodeCache = require("node-cache");
 
 
 const DataStreamCache = new NodeCache();
-const GameCache = new NodeCache({stdTTL:300, checkperiod:30});
-const DayCache = new NodeCache({stdTTL:300, checkperiod:30});
+const GameCache = new NodeCache();
+const DayCache = new NodeCache();
 
 DayCache.on("expired",key=>console.debug("Expired day:",key));
 
