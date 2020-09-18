@@ -209,6 +209,7 @@ const eventTypes = [
     {id: "SHAME",name:"SHAME",colour:"#800878",search: /shame/i},
     {id: "UNSTABLE", name:"Unstable",colour:"#eaabff",search: /unstable|instability /i},
     {id: "BIRD", name:"Bird", colour:"#8e5fad",search: /birds/i},
+    {id: "PARTY", name:"Party Time", colour:"#ff66f9", search: /party/i},
     {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"} 
 ];
 
