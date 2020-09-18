@@ -21,6 +21,7 @@ const {subscriptions, summaries, scores, betReminders, compacts, eventsCol} = re
 const NodeCache = require("node-cache");
 
 const gameCache = new NodeCache({stdTTL:5400,checkperiod:3600});
+const peanutCache = new NodeCache({stdTTL:5400,checkperiod:3600});
 
 async function broadcastGames(gameData){
     global.stats.gameEvents.mark();
@@ -140,7 +141,7 @@ async function broadcastGames(gameData){
 
     let temporal = await DataStreamCache.get("temporal");
 
-    let lastPeanut = await gameCache.get("peanut");
+    let lastPeanut = await peanutCache.get("peanut");
     
     if(temporal.doc.epsilon && temporal.doc.zeta != lastPeanut?.zeta){
         //peanut is speaking
@@ -154,7 +155,7 @@ async function broadcastGames(gameData){
             const channel = await client.channels.fetch(doc.channel_id);
             channel.send(peanutMessage).then(global.stats.messageFreq.mark()).catch(messageError);            
         }
-        gameCache.set("peanut",temporal.doc);
+        peanutCache.set("peanut",temporal.doc);
     }
 
     if(Object.values(games).every(game=>game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false){
