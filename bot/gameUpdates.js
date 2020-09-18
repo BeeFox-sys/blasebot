@@ -140,8 +140,7 @@ async function broadcastGames(gameData){
     }
 
     let temporal = await DataStreamCache.get("temporal");
-    temporal.doc.epsilon = true;
-    temporal.doc.gamma = 1;
+
     let lastPeanut = await peanutCache.get("peanut");
     
     if(temporal.doc.epsilon && temporal.doc.zeta != lastPeanut?.zeta && temporal.doc.gamma != -1){
