@@ -5,7 +5,7 @@ const { generateGameCard } = require("./util/gameUtils");
 const { updateStreamData, DataStreamCache } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
-var source = new EventSource(client.config.apiUrlEvents+"/streamData");
+var source = new EventSource(client.config.apiUrlEvents+"/streamData", { withCredentials: true });
 source.on("message",(message)=>{
     let data = JSON.parse(message.data).value;
     updateStreamData(data);
