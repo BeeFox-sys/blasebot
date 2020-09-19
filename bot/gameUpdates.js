@@ -144,7 +144,12 @@ async function broadcast(){
 
     let lastPeanut = await peanutCache.get("peanut");
     
-    if(temporal.doc.epsilon && temporal.doc.zeta != lastPeanut?.zeta && temporal.doc.gamma != -1){
+    if(
+        temporal.doc.epsilon 
+        && temporal.doc.zeta != lastPeanut?.zeta 
+        && temporal.doc.gamma != -1 
+        && temporal.doc.zeta.length > 0
+    ){
         //peanut is speaking
 
         let speak = {};
@@ -177,7 +182,10 @@ async function broadcast(){
     }
     peanutCache.set("peanut",temporal.doc);
 
-    if(Object.values(games).every(game=>game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false){
+    if(
+        Object.values(games).every(game=>game.gameComplete) === true 
+        && Object.values(gameCache.mget(gameCache.keys())).every(game=>game.gameComplete) === false
+    ){
         console.log("All games finished!");
         try{
             // eslint-disable-next-line no-unused-vars
