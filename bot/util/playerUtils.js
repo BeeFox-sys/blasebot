@@ -13,7 +13,7 @@ async function generatePlayerCard(player, forbidden){
         .setColor(team.mainColor)
         .addField("Team",team.fullName, true);
     if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
-    if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||Yes||":"||No ||",true);
+    if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||`Yes`||":"||`No `||",true);
     playerCard.addField("Fate",player.fate??"A roll of the dice",true)
         .addField("Coffee",coffeeStyles[player.coffee]??"Coffee?",true)
         .addField("Vibes",vibeString(vibes(player)), true)
