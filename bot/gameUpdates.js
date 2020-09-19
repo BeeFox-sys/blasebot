@@ -141,7 +141,9 @@ async function broadcast(){
     }
 
     let temporal = await DataStreamCache.get("temporal");
-
+    // temporal.doc.gamma = 1;
+    // temporal.doc.epsilon = true;
+    // temporal.doc.zeta = "who was that?";
     let lastPeanut = await peanutCache.get("peanut");
     
     if(
@@ -157,14 +159,14 @@ async function broadcast(){
         if(temporal.doc.gamma == 0){
             speak = {
                 name: "Peanut",
-                colour: "#dc3545",
+                colour: "#FF0000",
                 url: "https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png"
             };
         }
         else if (temporal.doc.gamma == 1){
             speak = {
                 name: "Squid",
-                colour: "#007bff",
+                colour: "#5988ff",
                 url: "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
             };
         }
