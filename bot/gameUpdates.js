@@ -32,33 +32,33 @@ async function broadcast(){
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
 
-    if(games?.length)for (const game of games) {
-        //play by play    
-        if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
-        if(!game.gameStart) continue;
+    // if(games?.length)for (const game of games) {
+    //     //play by play    
+    //     if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
+    //     if(!game.gameStart) continue;
 
-        try{
-            let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
-            if(err) throw err;
-            if(docs.length == 0) continue;
+    //     try{
+    //         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
+    //         if(err) throw err;
+    //         if(docs.length == 0) continue;
 
-            let play = generatePlay(game);
+    //         let play = generatePlay(game);
         
-            if(game.gameComplete && gameCache.get(game.id)?.gameComplete == false){
-                let winner;
-                if(game.homeScore>game.awayScore) winner = game.homeTeamNickname;
-                else winner = game.awayTeamNickname;
-                play = `**Game Over**\n> **${game.awayTeamNickname} v ${game.homeTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n> Game ${game.seriesIndex} of ${game.seriesLength}\n> ${winner} wins!\n> ${String.fromCodePoint(game.awayTeamEmoji)}: ${game.awayScore} | ${String.fromCodePoint(game.homeTeamEmoji)}: ${game.homeScore}`;
-            }
+    //         if(game.gameComplete && gameCache.get(game.id)?.gameComplete == false){
+    //             let winner;
+    //             if(game.homeScore>game.awayScore) winner = game.homeTeamNickname;
+    //             else winner = game.awayTeamNickname;
+    //             play = `**Game Over**\n> **${game.awayTeamNickname} v ${game.homeTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n> Game ${game.seriesIndex} of ${game.seriesLength}\n> ${winner} wins!\n> ${String.fromCodePoint(game.awayTeamEmoji)}: ${game.awayScore} | ${String.fromCodePoint(game.homeTeamEmoji)}: ${game.homeScore}`;
+    //         }
 
-            if(!play) continue;
+    //         if(!play) continue;
 
-            for (const subscription of docs) {
-                client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
-            }
-        }
-        catch(e){console.error(e); continue;}
-    }
+    //         for (const subscription of docs) {
+    //             client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
+    //         }
+    //     }
+    //     catch(e){console.error(e); continue;}
+    // }
     if(games?.length)for(const game of games){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
