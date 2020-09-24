@@ -35,6 +35,7 @@ require("./gameUpdates");
 //setup Mongoose
 const Mongoose = require.main.require("mongoose");
 const process = require("process");
+const { exit } = require("process");
 Mongoose.connect(process.env.DB_URL || client.config.dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -42,7 +43,7 @@ Mongoose.connect(process.env.DB_URL || client.config.dbUrl, {
     useCreateIndex: true
 });
 Mongoose.connection
-    .on("error",(error)=>{console.error(error);})
+    .on("error",(error)=>{console.error(error); exit();})
     .once("open", function () {
         console.log("Connected to database");
         console.log("Initaliszing Caches");

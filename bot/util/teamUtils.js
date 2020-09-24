@@ -7,13 +7,13 @@ const { MessageEmbed } = require("discord.js");
 
 async function getTeam(name){
     let team = name?TeamCache.get(name):nullTeam;
-    if(!team){
+    if(!team || team.fullName == "Null Team"){
         let nameLowercase = name.toLowerCase();
         let teamName = TeamNames.findKey(team => (team.lowercase == nameLowercase || team.location == nameLowercase || team.nickname == nameLowercase || team.shorthand == nameLowercase || team.emoji == nameLowercase));
         if(!teamName) return null;
         team = TeamCache.get(teamName);
     }
-    if(!team) return null;
+    if(!team || team.fullName == "Null Team") return null;
     else return team;
 }
 

@@ -10,7 +10,7 @@ const command = {
     async execute(message, args) {
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
-        if(!team) return message.channel.send("I couldn't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);
+        if(!team || team.fullName == "Null Team") return message.channel.send("I couldn't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);
         let guild = await getGuild(message.guild?.id??message.channel.id);
         let teamCard = await generateTeamCard(team, guild.forbidden);
         await message.channel.send(String.fromCodePoint(team.emoji), teamCard).then(global.stats.messageFreq.mark()).catch(messageError);

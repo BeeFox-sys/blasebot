@@ -26,7 +26,7 @@ const command = {
         if(!guild || (!guild.forbidden && (season>currentSeason || day>currentDay+1))) return message.channel.send("Game does not exist!").catch(messageError).then(global.stats.messageFreq.mark());
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
-        if(!team) return message.channel.send("I can't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);
+        if(!team || team.fullName == "Null Team") return message.channel.send("I can't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);
         let games = await getGames(season,day);
         let game = games.filter(g=> (g.awayTeam == team.id || g.homeTeam == team.id))[0];
         if(!game) return message.channel.send("That game doesn't exist!").then(global.stats.messageFreq.mark()).catch(messageError);
