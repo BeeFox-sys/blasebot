@@ -20,8 +20,10 @@ source.on("error",(error)=>console.error);
 const {subscriptions, summaries, scores, betReminders, compacts, eventsCol} = require("./schemas/subscription");
 const NodeCache = require("node-cache");
 
-const gameCache = new NodeCache();
+const gameCache = new NodeCache({stdTTL:60*60});
 const peanutCache = new NodeCache();
+const playCache = new NodeCache({stdTTL:600});
+const playCounter = new NodeCache({stdTTL:600});
 
 async function broadcast(){
     global.stats.gameEvents.mark();
@@ -32,33 +34,45 @@ async function broadcast(){
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
 
-    // if(games?.length)for (const game of games) {
-    //     //play by play    
-    //     if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
-    //     if(!game.gameStart) continue;
+    if(games?.length)for (const game of games) {
+        //play by play    
+        if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === true)) continue;
+        if(!game.gameStart) continue;
 
-    //     try{
-    //         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
-    //         if(err) throw err;
-    //         if(docs.length == 0) continue;
+        try{
+            let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
+            if(err) throw err;
+            if(docs.length == 0) continue;
 
-    //         let play = generatePlay(game);
-        
-    //         if(game.gameComplete && gameCache.get(game.id)?.gameComplete == false){
-    //             let winner;
-    //             if(game.homeScore>game.awayScore) winner = game.homeTeamNickname;
-    //             else winner = game.awayTeamNickname;
-    //             play = `**Game Over**\n> **${game.awayTeamNickname} v ${game.homeTeamNickname} Season __${game.season+1}__ Day __${game.day+1}__**\n> Game ${game.seriesIndex} of ${game.seriesLength}\n> ${winner} wins!\n> ${String.fromCodePoint(game.awayTeamEmoji)}: ${game.awayScore} | ${String.fromCodePoint(game.homeTeamEmoji)}: ${game.homeScore}`;
-    //         }
+            let play = generatePlay(game);
 
-    //         if(!play) continue;
+            if(playCounter.get(game.id) == undefined){
+                playCounter.set(game.id, 0);
+                if(!play) continue;
+                playCache.set(game.id, play);
+                continue;
+            }
+            else if(game.lastUpdate == "Game Over."){
+                //Continue with code
+            }
+            else if(playCounter.get(game.id) < 1){
+                playCounter.set(game.id, playCounter.get(game.id)+1);
+                if(!play) continue;
+                playCache.set(game.id, playCache.get(game.id)+play);
+                continue;
+            }
 
-    //         for (const subscription of docs) {
-    //             client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
-    //         }
-    //     }
-    //     catch(e){console.error(e); continue;}
-    // }
+
+            if(!playCache.get(game.id)) continue;
+            play = playCache.get(game.id);
+            for (const subscription of docs) {
+                client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
+            }
+            playCache.del(game.id);
+            playCounter.del(game.id);
+        }
+        catch(e){console.error(e); continue;}
+    }
     if(games?.length)for(const game of games){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
@@ -243,15 +257,15 @@ function generatePlay(game){
     play += `${game.lastUpdate}\n`;
 
     if(lastUpdate && lastUpdate.baserunnerCount < game.baserunnerCount){
-        play += `${game.baserunnerCount} bases\n`;
+        play += `${game.baserunnerCount} bases loaded.\n`;
     }
 
     if(lastUpdate && lastUpdate.halfInningOuts < game.halfInningOuts){
-        play += `${game.halfInningOuts} outs\n`;
+        play += `${game.halfInningOuts} outs.\n`;
     }
 
     if(!lastUpdate || lastUpdate.inning < game.inning || game.topOfInning != lastUpdate.topOfInning){
-        play += `${game.topOfInning?game.homePitcherName:game.awayPitcherName} pitching.`;
+        play += `${game.topOfInning?game.homePitcherName:game.awayPitcherName} pitching.\n`;
     }
 
     lastPlay.set(game.id, game.lastUpdate);
