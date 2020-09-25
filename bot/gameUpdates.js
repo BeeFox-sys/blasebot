@@ -36,7 +36,7 @@ async function broadcast(){
 
     if(games?.length)for (const game of games) {
         //play by play    
-        if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === true)) continue;
+        if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
         if(!game.gameStart) continue;
 
         try{
@@ -52,7 +52,7 @@ async function broadcast(){
                 playCache.set(game.id, play);
                 continue;
             }
-            else if(game.lastUpdate == "Game Over."){
+            else if(game.lastUpdate.contains("Game Over.")){
                 //Continue with code
             }
             else if(playCounter.get(game.id) < 1){
