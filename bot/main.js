@@ -115,4 +115,7 @@ client.on("message", async (message) => {
 
 });
 
-client.on("rateLimit",console.error);
+client.on("rateLimit",(e)=>{
+    console.error(e);
+    global.stats.ratelimit.inc();
+});

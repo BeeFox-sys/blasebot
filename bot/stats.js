@@ -33,4 +33,8 @@ global.stats.gameEvents = io.meter({
     samples: 60,
     timeframe: 300
 });
+global.stats.ratelimit = io.counter({
+    name: "Ratelimits",
+    type: "counter"
+});
 
