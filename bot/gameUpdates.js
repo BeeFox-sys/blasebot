@@ -52,7 +52,7 @@ async function broadcast(){
                 playCache.set(game.id, play);
                 continue;
             }
-            else if(game.lastUpdate.contains("Game Over.")){
+            else if(game.lastUpdate == "Game Over."){
                 //Continue with code
             }
             else if(playCounter.get(game.id) < 1){
