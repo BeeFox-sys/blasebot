@@ -34,45 +34,45 @@ async function broadcast(){
     let games = gameData.schedule;
     let tomorrowSchedule = gameData.tomorrowSchedule;
 
-    if(games?.length)for (const game of games) {
-        //play by play    
-        if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
-        if(!game.gameStart) continue;
+    // if(games?.length)for (const game of games) {
+    //     //play by play    
+    //     if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
+    //     if(!game.gameStart) continue;
 
-        try{
-            let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
-            if(err) throw err;
-            if(docs.length == 0) continue;
+    //     try{
+    //         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
+    //         if(err) throw err;
+    //         if(docs.length == 0) continue;
 
-            let play = generatePlay(game);
+    //         let play = generatePlay(game);
 
-            if(playCounter.get(game.id) == undefined){
-                playCounter.set(game.id, 0);
-                if(!play) continue;
-                playCache.set(game.id, play);
-                continue;
-            }
-            else if(game.lastUpdate == "Game Over."){
-                //Continue with code
-            }
-            else if(playCounter.get(game.id) < 1){
-                playCounter.set(game.id, playCounter.get(game.id)+1);
-                if(!play) continue;
-                playCache.set(game.id, playCache.get(game.id)+play);
-                continue;
-            }
+    //         if(playCounter.get(game.id) == undefined){
+    //             playCounter.set(game.id, 0);
+    //             if(!play) continue;
+    //             playCache.set(game.id, play);
+    //             continue;
+    //         }
+    //         else if(game.lastUpdate == "Game Over."){
+    //             //Continue with code
+    //         }
+    //         else if(playCounter.get(game.id) < 1){
+    //             playCounter.set(game.id, playCounter.get(game.id)+1);
+    //             if(!play) continue;
+    //             playCache.set(game.id, playCache.get(game.id)+play);
+    //             continue;
+    //         }
 
 
-            if(!playCache.get(game.id)) continue;
-            play = playCache.get(game.id);
-            for (const subscription of docs) {
-                client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
-            }
-            playCache.del(game.id);
-            playCounter.del(game.id);
-        }
-        catch(e){console.error(e); continue;}
-    }
+    //         if(!playCache.get(game.id)) continue;
+    //         play = playCache.get(game.id);
+    //         for (const subscription of docs) {
+    //             client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
+    //         }
+    //         playCache.del(game.id);
+    //         playCounter.del(game.id);
+    //     }
+    //     catch(e){console.error(e); continue;}
+    // }
     if(games?.length)for(const game of games){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
