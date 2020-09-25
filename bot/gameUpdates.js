@@ -36,6 +36,9 @@ async function broadcast(){
 
     // if(games?.length)for (const game of games) {
     //     //play by play    
+    //
+    //  !!! IMPLEMENT WEBHOOKS FOR PLAY BY PLAY !!!
+    //
     //     if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
     //     if(!game.gameStart) continue;
 
