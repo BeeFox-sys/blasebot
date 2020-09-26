@@ -6,8 +6,11 @@ const { updateStreamData, DataStreamCache } = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
 var source = new EventSource(client.config.apiUrlEvents+"/streamData", { withCredentials: true });
+let lastUpdateData;
 source.on("message",(message)=>{
     let data = JSON.parse(message.data).value;
+    if(lastUpdateData == data) return;
+    lastUpdateData = data;
     updateStreamData(data);
     broadcast();
 
