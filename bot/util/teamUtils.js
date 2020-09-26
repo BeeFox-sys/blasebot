@@ -6,6 +6,7 @@ const { MessageEmbed } = require("discord.js");
 
 
 async function getTeam(name){
+    if(name == undefined) return nullTeam;
     let team = name?TeamCache.get(name):nullTeam;
     if(!team || team.fullName == "Null Team"){
         let nameLowercase = name.toLowerCase();
