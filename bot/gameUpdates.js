@@ -82,7 +82,7 @@ async function broadcast(){
     if(games?.length)for(const game of games){
         let lastupdate = gameCache.get(game.id);
         if(!lastupdate) continue;
-        if(!(!lastupdate.gameComplete && game.gameComplete)) continue;
+        if(!(lastupdate.gameComplete == false && game.gameComplete == true)) continue;
         //Outcomes
         try{
             let outcomes = handleEvents(game);
