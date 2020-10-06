@@ -13,7 +13,6 @@ source.on("message",(message)=>{
     lastUpdateData = data;
     updateStreamData(data);
     broadcast();
-
 });
 source.once("open", (event)=>{
     console.log("Subscribed to event stream!");
@@ -280,7 +279,7 @@ function generatePlay(game){
 }
 
 const eventTypes = [
-    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb/i},//
+    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb|repeat/i},//
     {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /flicker|feedback/i},//
     {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/i},
     {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/i},
