@@ -90,7 +90,7 @@ async function broadcast() {
     //     }
     //     catch(e){console.error(e); continue;}
     // }
-    if (games ?. length) 
+    if (games?.length) 
         for (const game of games) {
             let lastupdate = gameCache.get(game.id);
             if (! lastupdate) 
@@ -130,7 +130,7 @@ async function broadcast() {
             }
         }
     
-    if (games ?. length) 
+    if (games?.length) 
         for (const game of games) {
             // Summaries
             let lastupdate = gameCache.get(game.id);
@@ -179,7 +179,7 @@ async function broadcast() {
 
         }
     
-    if (games ?. length) 
+    if (games?.length) 
         for (const game of games) {
             // Score recap
             let lastUpdate = gameCache.get(game.id);
@@ -262,7 +262,7 @@ async function broadcast() {
             }
         }
     
-    if (games ?. length) 
+    if (games?.length) 
         for (const game of games) {
             // Compact score recap
             let lastUpdate = gameCache.get(game.id);
@@ -337,7 +337,7 @@ async function broadcast() {
     // temporal.doc.zeta = "Some New Person";
     let lastPeanut = await peanutCache.get("peanut");
 
-    if ((temporal.doc.epsilon || bossFights.length > 0) && temporal.doc.zeta != lastPeanut ?. zeta && temporal.doc.gamma != -1 && temporal.doc.zeta.length > 0) {
+    if ((temporal.doc.epsilon || bossFights.length > 0) && temporal.doc.zeta != lastPeanut?.zeta && temporal.doc.gamma != -1 && temporal.doc.zeta.length > 0) {
         // peanut is speaking
 
         let speak = {};
@@ -377,7 +377,7 @@ async function broadcast() {
     }
     peanutCache.set("peanut", temporal.doc);
 
-    if (false || Object.values(games).every(game => game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game => game.gameComplete) === false) {
+    if (Object.values(games).every(game => game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game => game.gameComplete) === false) {
         console.log("All games finished!");
         try {
             // eslint-disable-next-line no-unused-vars
