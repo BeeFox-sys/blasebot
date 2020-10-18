@@ -37,6 +37,8 @@ function updateStreamData(value){
     if(value.games)DataStreamCache.set("games",value.games);
     if(value.leagues)DataStreamCache.set("leagues",value.leagues);
     if(value.temporal)DataStreamCache.set("temporal",value.temporal);
+    if(value.fights)DataStreamCache.set("fights",value.fights);
+
 }
 
 GameCache.on("expired",key=>console.debug("Expired game:",key));

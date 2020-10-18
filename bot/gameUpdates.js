@@ -331,12 +331,13 @@ async function broadcast() {
     
 
     let temporal = await DataStreamCache.get("temporal");
+    let bossFights = await DataStreamCache.get("fights").bossFights;
     // temporal.doc.gamma = 2;
     // temporal.doc.epsilon = true;
     // temporal.doc.zeta = "Some New Person";
     let lastPeanut = await peanutCache.get("peanut");
 
-    if (temporal.doc.epsilon && temporal.doc.zeta != lastPeanut ?. zeta && temporal.doc.gamma != -1 && temporal.doc.zeta.length > 0) {
+    if ((temporal.doc.epsilon || bossFights.length > 0) && temporal.doc.zeta != lastPeanut ?. zeta && temporal.doc.gamma != -1 && temporal.doc.zeta.length > 0) {
         // peanut is speaking
 
         let speak = {};
@@ -363,6 +364,7 @@ async function broadcast() {
         }
 
         let speakMessage = new MessageEmbed().setTitle(temporal.doc.zeta).setColor(speak.colour).setAuthor(speak.name, speak.url, "https://blaseball.com");
+        if(bossFights.length > 0)speakMessage.setFooter(`Season [${gameData.sim.season+1}] Day [X]`);
         let err,
             docs = await eventsCol.find({});
         if (err) 
