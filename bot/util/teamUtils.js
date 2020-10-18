@@ -20,8 +20,8 @@ async function getTeam(name){
 
 async function generateTeamCard(team, forbidden){
     let standings = DataStreamCache.get("games").standings;
-    let wins = standings.wins[team.id];
-    let losses = standings.losses[team.id];
+    let wins = standings.wins[team.id] ?? 0;
+    let losses = standings.losses[team.id] ?? 0;
     let teamCard = new MessageEmbed()
         .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
