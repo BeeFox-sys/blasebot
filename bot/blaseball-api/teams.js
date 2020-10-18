@@ -38,7 +38,7 @@ async function updateTeamCache(){
             location: team.location.toLowerCase(),
             nickname: team.nickname.toLowerCase(),
             shorthand: team.shorthand.toLowerCase(),
-            emoji: String.fromCodePoint(team.emoji)
+            emoji: Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji
         });
     }
     client.mode = 0;

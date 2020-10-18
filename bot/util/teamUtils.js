@@ -23,7 +23,7 @@ async function generateTeamCard(team, forbidden){
     let wins = standings.wins[team.id];
     let losses = standings.losses[team.id];
     let teamCard = new MessageEmbed()
-        .setTitle(String.fromCodePoint(team.emoji) + " " + team.fullName)
+        .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
         .addField("Lineup",team.lineup.length?playerList(team.lineup):"uhhhhh...",true)
         .addField("Rotation",team.rotation.length?playerList(team.rotation):"uhhhhh...",true);

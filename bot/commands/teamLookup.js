@@ -13,7 +13,7 @@ const command = {
         if(!team || team.fullName == "Null Team") return message.channel.send("I couldn't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);
         let guild = await getGuild(message.guild?.id??message.channel.id);
         let teamCard = await generateTeamCard(team, guild.forbidden);
-        await message.channel.send(String.fromCodePoint(team.emoji), teamCard).then(global.stats.messageFreq.mark()).catch(messageError);
+        await message.channel.send(Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji, teamCard).then(global.stats.messageFreq.mark()).catch(messageError);
     },
 };
 
