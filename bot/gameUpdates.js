@@ -355,6 +355,12 @@ async function broadcast() {
             url: "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
         };
             break;
+        case 2: speak = {
+            name: "Boss",
+            colour: "#ffbe00",
+            url: "https://www.blaseball.com/static/media/Equity.7cde27ee.png"
+        };
+            break;
         default: speak = {
             name: "???",
             colour: "#666666",
