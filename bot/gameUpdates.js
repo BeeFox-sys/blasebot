@@ -232,7 +232,7 @@ async function broadcast() {
                         } of ${
                             game.inning + 1
                         }\n${
-                            String.fromCodePoint(game.awayTeamEmoji)
+                            Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
                         } ${
                             ! hometeamscore ? "**" : ""
                         }${
@@ -242,7 +242,7 @@ async function broadcast() {
                         }: ${
                             game.awayScore
                         }\n${
-                            String.fromCodePoint(game.homeTeamEmoji)
+                            Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.awayTeamEmoji
                         } ${
                             hometeamscore ? "**" : ""
                         }${
@@ -303,7 +303,7 @@ async function broadcast() {
                         } of ${
                             game.inning + 1
                         }** | ${
-                            String.fromCodePoint(game.awayTeamEmoji)
+                            Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
                         } ${
                             ! hometeamscore ? "**" : ""
                         }${
@@ -311,7 +311,7 @@ async function broadcast() {
                         }${
                             ! hometeamscore ? "**" : ""
                         } ${
-                            String.fromCodePoint(game.homeTeamEmoji)
+                            Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
                         } ${
                             hometeamscore ? "**" : ""
                         }${
@@ -398,9 +398,9 @@ async function broadcast() {
                 for (const game of tomorrowSchedule) {
                     let underlineHome = Math.round(game.awayOdds * 100) < Math.round(game.homeOdds * 100);
                     oddsEmbed.addField(`${
-                        String.fromCodePoint(game.awayTeamEmoji)
+                        Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
                     } v. ${
-                        String.fromCodePoint(game.homeTeamEmoji)
+                        Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
                     }`,
                     `${
                         ! underlineHome ? "__" : ""
@@ -474,11 +474,11 @@ function generatePlay(game) {
 
     if (! lastUpdate || lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore) 
         play += `> ${
-            String.fromCodePoint(game.awayTeamEmoji)
+            Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
         }: ${
             game.awayScore
         } | ${
-            String.fromCodePoint(game.homeTeamEmoji)
+            Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
         }: ${
             game.homeScore
         }\n`;
