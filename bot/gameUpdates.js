@@ -391,9 +391,9 @@ async function broadcast() {
             let oddsEmbed;
             if (tomorrowSchedule.length > 0) {
                 oddsEmbed = new MessageEmbed().setTitle(`Season ${
-                    gameData.sim.season + 1
+                    gameData.sim.season + 2
                 } Day ${
-                    gameData.sim.day + 1
+                    gameData.sim.day + 2
                 } Odds:`);
                 for (const game of tomorrowSchedule) {
                     let underlineHome = Math.round(game.awayOdds * 100) < Math.round(game.homeOdds * 100);
@@ -430,7 +430,7 @@ async function broadcast() {
             console.error(e);
         }
     }
-    if (games ?. length) 
+    if (games?.length) 
         for (const game of games) {
             gameCache.set(game.id, game);
         }
