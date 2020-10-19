@@ -337,7 +337,7 @@ async function broadcast() {
     // temporal.doc.zeta = "Some New Person";
     let lastPeanut = await peanutCache.get("peanut");
 
-    if ((temporal.doc.epsilon || bossFights.length > 0) && temporal.doc.zeta != lastPeanut?.zeta && temporal.doc.gamma != -1 && temporal.doc.zeta.length > 0) {
+    if ((temporal.doc.epsilon || bossFights?.length > 0) && temporal.doc.zeta != lastPeanut?.zeta && temporal.doc.gamma != -1 && temporal.doc.zeta.length > 0) {
         
         let speak = {};
 
