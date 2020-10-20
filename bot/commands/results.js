@@ -24,7 +24,7 @@ function results(games){
         .setTitle(`Season ${games[0].season+1} Day ${games[0].day+1} ${(Object.values(games).every(game=>game.gameComplete) === true)?"Final Results:":"Live Scores:"}`);
     for(const game of games){
         let underlineHome = game.awayScore < game.homeScore;
-        results.addField(`${String.fromCodePoint(game.awayTeamEmoji)} v. ${String.fromCodePoint(game.homeTeamEmoji)}`, `${!underlineHome&&game.gameComplete?"__":""}**${game.awayScore}**${!underlineHome&&game.gameComplete?"__":""} | ${underlineHome&&game.gameComplete?"__":""}**${game.homeScore}**${underlineHome&&game.gameComplete?"__":""}`,true);
+        results.addField(`${Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji} v. ${Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji}`, `${!underlineHome&&game.gameComplete?"__":""}**${game.awayScore}**${!underlineHome&&game.gameComplete?"__":""} | ${underlineHome&&game.gameComplete?"__":""}**${game.homeScore}**${underlineHome&&game.gameComplete?"__":""}`,true);
     }
     return results;
 }

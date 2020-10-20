@@ -30,7 +30,7 @@ async function generateGameCard(gameInput){
     else winner = "[*Game yet to start*](https://www.blaseball.com/upcoming)";
     let shame = `SH${"A".repeat((Math.random()*5)+1)}${"M".repeat((Math.random()*5)+1)}${"E".repeat((Math.random()*5)+1)}${"!".repeat((Math.random()*5)+1)}`;
     let gameCard = new MessageEmbed()
-        .setTitle(`${String.fromCodePoint(game.awayTeamEmoji)} __${game.awayTeamName}__ vs __${game.homeTeamName}__ ${String.fromCodePoint(game.homeTeamEmoji)}\nSeason ${game.season+1} Day ${game.day+1}`)
+        .setTitle(`${Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji} __${game.awayTeamName}__ vs __${game.homeTeamName}__ ${Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji}\nSeason ${game.season+1} Day ${game.day+1}`)
         .setColor(game.homeTeamColor)
         .setFooter(`Season: ${game.season+1} | Day: ${game.day+1}${game.shame?"\n"+shame:""}\nID: ${game.id}`)
         .addField(`${game.awayTeamNickname} Odds`, Math.round(game.awayOdds*100)+"%",true)

@@ -9,7 +9,7 @@ const itemList = require("../data/items.json").collection;
 async function generatePlayerCard(player, forbidden){
     let team = await getTeam(PlayerTeams.get(player.id));
     let playerCard = new MessageEmbed()
-        .setTitle(String.fromCodePoint(team.emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
+        .setTitle(Number(team.emoji)?String.fromCodePoint(team.emoji):team.Emoji + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
         .setColor(team.mainColor)
         .addField("Team",team.fullName, true);
     if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
