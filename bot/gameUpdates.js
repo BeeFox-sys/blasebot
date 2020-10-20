@@ -510,10 +510,19 @@ function generatePlay(game) {
 }
 
 const eventTypes = [
-    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb|repeat/i}, //
-    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /flicker|feedback/i}, //
-    {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/i}, {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/i}, {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/i}, //
-    {id: "SHAME", name:"SHAME", colour:"#800878", search: /shame/i}, {id: "UNSTABLE", name:"Unstable", colour:"#eaabff", search: /unstable|instability /i}, {id: "BIRD", name:"Bird", colour:"#8e5fad", search: /birds/i}, {id: "PARTY", name:"Party Time", colour:"#ff66f9", search: /party/i}, {id: "REDHOT", name:"Red Hot", colour:"#e32600", search: /red hot/i}, {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"} 
+    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb|repeat/i},
+    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /flicker|feedback/i},
+    {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/i},
+    {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/i}, 
+    {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/i},
+    {id: "SHAME", name:"SHAME", colour:"#800878", search: /shame/i},
+    {id: "UNSTABLE", name:"Unstable", colour:"#eaabff", search: /unstable|instability /i}, 
+    {id: "BIRD", name:"Bird", colour:"#8e5fad", search: /birds/i}, 
+    {id: "PARTY", name:"Party Time", colour:"#ff66f9", search: /party/i}, 
+    {id: "REDHOT", name:"Red Hot", colour:"#e32600", search: /red hot/i}, 
+    {id: "BLACKHOLE", name:"Black Hole", colour:"#00374a", search: /black hole/i}, 
+    {id: "SUN2", name:"Sun 2", colour:"#fdff9c", search: /sun 2/i}, 
+    {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"}
 ];
 
 function handleEvents(game, index){

@@ -6,7 +6,7 @@ const { MessageEmbed } = require("discord.js");
 
 const Weather = {
     0: "Void",
-    1: "Sunny",
+    1: "Sun 2",
     2: "Overcast",
     3: "Rainy",
     4: "Sandstorm",
@@ -18,7 +18,8 @@ const Weather = {
     10: "Peanuts",
     11: "Bird",
     12: "Feedback",
-    13: "Reverb"
+    13: "Reverb",
+    14: "Black Hole"
 };
 
 async function generateGameCard(gameInput){
