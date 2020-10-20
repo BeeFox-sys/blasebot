@@ -33,9 +33,6 @@ const NodeCache = require("node-cache");
 const gameCache = new NodeCache({
     stdTTL: 60 * 60
 });
-const peanutCache = new NodeCache();
-const playCache = new NodeCache({stdTTL: 600});
-const playCounter = new NodeCache({stdTTL: 600});
 
 async function broadcast() {
     global.stats.gameEvents.mark();
@@ -46,7 +43,6 @@ async function broadcast() {
     let gameData = DataStreamCache.get("games");
 
     let games = gameData.schedule;
-    let tomorrowSchedule = gameData.tomorrowSchedule;
 
     // if(games?.length)for (const game of games) {
     //     //play by play
@@ -90,427 +86,397 @@ async function broadcast() {
     //     }
     //     catch(e){console.error(e); continue;}
     // }
-    if (games?.length) 
-        for (const game of games) {
-            let lastupdate = gameCache.get(game.id);
-            if (! lastupdate) 
-                continue;
-            
-            // if(game.outcomes.length == 0) game.outcomes.push("Grey Alvarado is Partying!");
-            if (lastupdate.outcomes.length == game.outcomes.length) 
-                continue;
-            
-            // Outcomes
-            try {
-                // console.log(game);
-                let outcomes = handleEvents(game, lastupdate.outcomes.length);
-                if (! outcomes.length) 
-                    continue;
-                
-                let err,
-                    docs = await eventsCol.find({});
-                if (err) 
-                    throw err;
-                
-                for (const doc of docs) {
-                    const channel = await client.channels.fetch(doc.channel_id).catch((e) => {
-                        messageError(e);
-                    });
-                    if (! channel) 
-                        continue;
-                    
-                    for (const outcome of outcomes) {
-                        channel.send(outcome).then(global.stats.messageFreq.mark()).catch(messageError);
-                    }
-
-                }
-            } catch (e) {
-                console.error(e);
-                continue;
-            }
-        }
     
-    if (games?.length) 
-        for (const game of games) {
-            // Summaries
-            let lastupdate = gameCache.get(game.id);
-            if (! lastupdate) 
-                continue;
-            
-            if (lastupdate.gameComplete == false && game.gameComplete == true) {
-                try {
-                    console.log(game.id, " finished!");
-                    let summary = await generateGameCard(game);
-                    let err,
-                        docs = await summaries.find({
-                            $or: [
-                                {
-                                    team: game.homeTeam
-                                }, {
-                                    team: game.awayTeam
-                                }
-                            ]
-                        }).then(global.stats.dbQueryFreq.mark());
-                    if (err) 
-                        throw err;
-                    
-                    if (docs.length == 0) 
-                        continue;
-                    
-                    for (const summarySubscription of docs) {
-                        if (summarySubscription.team == game.awayTeam && docs.find(d => d.team == game.homeTeam && d.channel_id == summarySubscription.channel_id)) 
-                            continue;
-                        
-                        client.channels.fetch(summarySubscription.channel_id).then(c => c.send(`${
-                            game.awayTeamName
-                        } v. ${
-                            game.homeTeamName
-                        } Game ${
-                            game.seriesIndex
-                        } of ${
-                            game.seriesLength
-                        } finished!`, summary).then(global.stats.messageFreq.mark())).catch(messageError);
-                    }
-                } catch (e) {
-                    console.error(e);
-                    continue;
-                }
-            }
-
-        }
-    
-    if (games?.length) 
-        for (const game of games) {
-            // Score recap
-            let lastUpdate = gameCache.get(game.id);
-            if (! lastUpdate) 
-                continue;
-            
-            if (lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore) {
-                try {
-                    let err,
-                        docs = await scores.find({
-                            $or: [
-                                {
-                                    team: game.homeTeam
-                                }, {
-                                    team: game.awayTeam
-                                }
-                            ]
-                        }).then(global.stats.dbQueryFreq.mark());
-                    if (err) 
-                        throw err;
-                    
-                    if (docs.length == 0) 
-                        continue;
-                    
-                    for (const scoreSubscription of docs) {
-                        if (scoreSubscription.team == game.awayTeam && docs.find(d => d.team == game.homeTeam && d.channel_id == scoreSubscription.channel_id)) 
-                            continue;
-                        // anti double posting
-                        let hometeamscore;
-                        if (lastUpdate.homeScore != game.homeScore) 
-                            hometeamscore = true;
-                        
-                        if (lastUpdate.awayScore != game.awayScore) 
-                            hometeamscore = false;
-                        
-                        client.channels.fetch(scoreSubscription.channel_id).then(c => c.send(`**__${
-                            game.awayTeamName
-                        }__ v. __${
-                            game.homeTeamName
-                        }__\nSeason ${
-                            gameData.sim.season + 1
-                        } Day ${
-                            gameData.sim.day + 1
-                        }, Game ${
-                            game.seriesIndex
-                        } of ${
-                            game.seriesLength
-                        } update!**\n${
-                            game.topOfInning ? "Top" : "Bottom"
-                        } of ${
-                            game.inning + 1
-                        }\n${
-                            Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
-                        } ${
-                            ! hometeamscore ? "**" : ""
-                        }${
-                            game.awayTeamNickname
-                        }${
-                            ! hometeamscore ? "**" : ""
-                        }: ${
-                            game.awayScore
-                        }\n${
-                            Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.awayTeamEmoji
-                        } ${
-                            hometeamscore ? "**" : ""
-                        }${
-                            game.homeTeamNickname
-                        }${
-                            hometeamscore ? "**" : ""
-                        }: ${
-                            game.homeScore
-                        }\n> ${
-                            game.lastUpdate
-                        }`).then(global.stats.messageFreq.mark())).catch(messageError);
-                    }
-                } catch (e) {
-                    console.error(e);
-                    continue;
-                }
-            }
-        }
-    
-    if (games?.length) 
-        for (const game of games) {
-            // Compact score recap
-            let lastUpdate = gameCache.get(game.id);
-            if (! lastUpdate) 
-                continue;
-            
-            if (lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore) {
-                try {
-                    let err,
-                        docs = await compacts.find({
-                            $or: [
-                                {
-                                    team: game.homeTeam
-                                }, {
-                                    team: game.awayTeam
-                                }
-                            ]
-                        }).then(global.stats.dbQueryFreq.mark());
-                    if (err) 
-                        throw err;
-                    
-                    if (docs.length == 0) 
-                        continue;
-                    
-                    for (const compactSubscription of docs) {
-                        if (compactSubscription.team == game.awayTeam && docs.find(d => d.team == game.homeTeam && d.channel_id == compactSubscription.channel_id)) 
-                            continue;
-                        // anti double posting
-                        let hometeamscore;
-                        if (lastUpdate.homeScore != game.homeScore) 
-                            hometeamscore = true;
-                        
-                        if (lastUpdate.awayScore != game.awayScore) 
-                            hometeamscore = false;
-                        
-                        client.channels.fetch(compactSubscription.channel_id).then(c => c.send(`**${
-                            game.topOfInning ? "Top" : "Bottom"
-                        } of ${
-                            game.inning + 1
-                        }** | ${
-                            Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
-                        } ${
-                            ! hometeamscore ? "**" : ""
-                        }${
-                            game.awayScore
-                        }${
-                            ! hometeamscore ? "**" : ""
-                        } ${
-                            Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
-                        } ${
-                            hometeamscore ? "**" : ""
-                        }${
-                            game.homeScore
-                        }${
-                            hometeamscore ? "**" : ""
-                        }\n> ${
-                            game.lastUpdate
-                        }`).then(global.stats.messageFreq.mark())).catch(messageError);
-                    }
-                } catch (e) {
-                    console.error(e);
-                    continue;
-                }
-            }
-        }
-    
-
-    let temporal = await DataStreamCache.get("temporal");
-    let bossFights = await DataStreamCache.get("fights").bossFights;
-    // temporal.doc.gamma = 2;
-    // temporal.doc.epsilon = true;
-    // temporal.doc.zeta = "Some New Person";
-    let lastPeanut = await peanutCache.get("peanut");
-
-    if ((temporal.doc.epsilon || bossFights?.length > 0) && temporal.doc.zeta != lastPeanut?.zeta && temporal.doc.gamma != -1 && temporal.doc.zeta.length > 0) {
-        
-        let speak = {};
-
-        switch (temporal.doc.gamma) {
-        case 0: speak = {
-            name: "The Shelled One",
-            colour: "#FF0000",
-            url: "https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png"
-        };
-            break;
-        case 1: speak = {
-            name: "The Monitor",
-            colour: "#5988ff",
-            url: "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
-        };
-            break;
-        case 2: speak = {
-            name: "Boss",
-            colour: "#ffbe00",
-            url: "https://www.blaseball.com/static/media/Equity.7cde27ee.png"
-        };
-            break;
-        default: speak = {
-            name: "???",
-            colour: "#666666",
-            url: ""
-        };
-
-        }
-
-        let speakMessage = new MessageEmbed().setTitle(temporal.doc.zeta).setColor(speak.colour).setAuthor(speak.name, speak.url, "https://blaseball.com");
-        if(bossFights.length > 0)speakMessage.setFooter(`Season [${gameData.sim.season+1}] Day [X]`);
-        let err,
-            docs = await eventsCol.find({});
-        if (err) 
-            throw err;
-        
-        for (const doc of docs) {
-            const channel = await client.channels.fetch(doc.channel_id);
-            channel.send(speakMessage).then(global.stats.messageFreq.mark()).catch(messageError);
-        }
-    }
-    peanutCache.set("peanut", temporal.doc);
 
     // console.log(gameCache.keys());
     let oldGames = Object.values(gameCache.mget(gameCache.keys()));
     if (games?.every(g=>g.gameComplete) && oldGames.every(g=>g.gameComplete === false)) {
-        console.log("All games finished!");
-        try {
-            // eslint-disable-next-line no-unused-vars
-            let err,
-                docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
-            let oddsEmbed;
-            if (tomorrowSchedule.length > 0) {
-                oddsEmbed = new MessageEmbed().setTitle(`Season ${
-                    gameData.sim.season + 1
-                } Day ${
-                    gameData.sim.day + 2
-                } Odds:`);
-                for (const game of tomorrowSchedule) {
-                    let underlineHome = Math.round(game.awayOdds * 100) < Math.round(game.homeOdds * 100);
-                    oddsEmbed.addField(`${
-                        Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
-                    } v. ${
-                        Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
-                    }`,
-                    `${
-                        ! underlineHome ? "__" : ""
-                    }**${
-                        Math.round(game.awayOdds * 100)
-                    }%**${
-                        ! underlineHome ? "__" : ""
-                    } | ${
-                        underlineHome ? "__" : ""
-                    }**${
-                        Math.round(game.homeOdds * 100)
-                    }%**${
-                        underlineHome ? "__" : ""
-                    }`, true);
-                }
+        
+        if (games.length){
+            for (const game of games) {
+                gameCache.set(game.id, game);
             }
-            for (const channel of docs) {
-                client.channels.fetch(channel.channel_id).then(c => c.send(`All Season ${
-                    gameData.sim.season + 1
+        }
+    }
+}
+
+const {events, sim} = require("blaseball");
+
+// -- Temporal --
+
+events.on("rawTemporal",(temporal)=>{
+    if (temporal.doc.epsilon) screenTakeover(temporal);
+});
+
+async function screenTakeover(temporal){
+    let speak = {};
+
+    switch (temporal.doc.gamma) {
+    case 0: speak = {
+        name: "The Shelled One",
+        colour: "#FF0000",
+        url: "https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png"
+    };
+        break;
+    case 1: speak = {
+        name: "The Monitor",
+        colour: "#5988ff",
+        url: "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
+    };
+        break;
+    case 2: speak = {
+        name: "Boss",
+        colour: "#ffbe00",
+        url: "https://www.blaseball.com/static/media/Equity.7cde27ee.png"
+    };
+        break;
+    default: speak = {
+        name: "???",
+        colour: "#666666",
+        url: ""
+    };
+    }
+
+    let speakMessage = new MessageEmbed().setTitle(temporal.doc.zeta).setColor(speak.colour).setAuthor(speak.name, speak.url, "https://blaseball.com");
+    // if(bossFights.length > 0)speakMessage.setFooter(`Season [${sim().season+1}] Day [X]`);
+    let err,
+        docs = await eventsCol.find({});
+    if (err) 
+        throw err;
+    
+    for (const doc of docs) {
+        const channel = await client.channels.fetch(doc.channel_id);
+        channel.send(speakMessage).then(global.stats.messageFreq.mark()).catch(messageError);
+    }
+}
+
+// --- Game Updates ---
+//Outcomes
+events.on("gameUpdate",async (newGame, oldGame)=>{
+    try{
+        if(!oldGame || newGame.gameComplete) return;
+        let outcomes = handleEvents(newGame, oldGame.outcomes.length);
+        if (!outcomes.length) return;
+        
+        let err,docs = await eventsCol.find({});
+        if (err) throw err;
+
+        for (const doc of docs) {
+            const channel = await client.channels.fetch(doc.channel_id).catch((e) => {
+                messageError(e);
+            });
+            if (! channel) return;
+            for (const outcome of outcomes) {
+                channel.send(outcome).then(global.stats.messageFreq.mark()).catch(messageError);
+            }
+        }
+    } catch (e) {
+        console.error(e);
+    }
+});
+// Compact Scores
+events.on("gameUpdate",async (newGame,oldGame)=>{
+    if(!oldGame || newGame.gameComplete) return;
+    if (oldGame.homeScore != newGame.homeScore || oldGame.awayScore != newGame.awayScore) {
+        try {
+            let err,
+                docs = await compacts.find({
+                    $or: [
+                        {
+                            team: newGame.homeTeam
+                        }, {
+                            team: newGame.awayTeam
+                        }
+                    ]
+                }).then(global.stats.dbQueryFreq.mark());
+            if (err) 
+                throw err;
+            
+            if (docs.length == 0) 
+                return;
+            
+            for (const compactSubscription of docs) {
+                if (compactSubscription.team == newGame.awayTeam && docs.find(d => d.team == newGame.homeTeam && d.channel_id == compactSubscription.channel_id)) 
+                    continue;
+                // anti double posting
+                let hometeamscore;
+                if (oldGame.homeScore != newGame.homeScore) 
+                    hometeamscore = true;
+                
+                if (oldGame.awayScore != newGame.awayScore) 
+                    hometeamscore = false;
+                
+                client.channels.fetch(compactSubscription.channel_id).then(c => c.send(`**${
+                    newGame.topOfInning ? "Top" : "Bottom"
+                } of ${
+                    newGame.inning + 1
+                }** | ${
+                    Number(newGame.awayTeamEmoji)?String.fromCodePoint(newGame.awayTeamEmoji):newGame.awayTeamEmoji
+                } ${
+                    ! hometeamscore ? "**" : ""
+                }${
+                    newGame.awayScore
+                }${
+                    ! hometeamscore ? "**" : ""
+                } ${
+                    Number(newGame.homeTeamEmoji)?String.fromCodePoint(newGame.homeTeamEmoji):newGame.homeTeamEmoji
+                } ${
+                    hometeamscore ? "**" : ""
+                }${
+                    newGame.homeScore
+                }${
+                    hometeamscore ? "**" : ""
+                }\n> ${
+                    newGame.lastUpdate
+                }`).then(global.stats.messageFreq.mark())).catch(messageError);
+            }
+        } catch (e) {
+            console.error(e);
+            return;
+        }
+    }
+});
+//Beeg scores
+events.on("gameUpdate",async (newGame, oldGame)=>{
+    if (! oldGame || newGame.gameComplete) 
+        return;
+            
+    if (oldGame.homeScore != newGame.homeScore || oldGame.awayScore != newGame.awayScore) {
+        try {
+            let err,
+                docs = await scores.find({
+                    $or: [
+                        {
+                            team: newGame.homeTeam
+                        }, {
+                            team: newGame.awayTeam
+                        }
+                    ]
+                }).then(global.stats.dbQueryFreq.mark());
+            if (err) 
+                throw err;
+                    
+            if (docs.length == 0) 
+                return;
+                    
+            for (const scoreSubscription of docs) {
+                if (scoreSubscription.team == newGame.awayTeam && docs.find(d => d.team == newGame.homeTeam && d.channel_id == scoreSubscription.channel_id)) 
+                    return;
+                // anti double posting
+                let hometeamscore;
+                if (oldGame.homeScore != newGame.homeScore) 
+                    hometeamscore = true;
+                        
+                if (oldGame.awayScore != newGame.awayScore) 
+                    hometeamscore = false;
+                        
+                client.channels.fetch(scoreSubscription.channel_id).then(c => c.send(`**__${
+                    newGame.awayTeamName
+                }__ v. __${
+                    newGame.homeTeamName
+                }__\nSeason ${
+                    sim().season + 1
                 } Day ${
-                    gameData.sim.day + 1
-                } Games Complete!${
-                    tomorrowSchedule ? " Go Bet!" : " Go catch up on some sleep!"
-                }`, oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
+                    sim().day + 1
+                }, Game ${
+                    newGame.seriesIndex
+                } of ${
+                    newGame.seriesLength
+                } update!**\n${
+                    newGame.topOfInning ? "Top" : "Bottom"
+                } of ${
+                    newGame.inning + 1
+                }\n${
+                    Number(newGame.awayTeamEmoji)?String.fromCodePoint(newGame.awayTeamEmoji):newGame.awayTeamEmoji
+                } ${
+                    ! hometeamscore ? "**" : ""
+                }${
+                    newGame.awayTeamNickname
+                }${
+                    ! hometeamscore ? "**" : ""
+                }: ${
+                    newGame.awayScore
+                }\n${
+                    Number(newGame.homeTeamEmoji)?String.fromCodePoint(newGame.homeTeamEmoji):newGame.awayTeamEmoji
+                } ${
+                    hometeamscore ? "**" : ""
+                }${
+                    newGame.homeTeamNickname
+                }${
+                    hometeamscore ? "**" : ""
+                }: ${
+                    newGame.homeScore
+                }\n> ${
+                    newGame.lastUpdate
+                }`).then(global.stats.messageFreq.mark())).catch(messageError);
             }
         } catch (e) {
             console.error(e);
         }
     }
-    if (games.length){
-        for (const game of games) {
-            gameCache.set(game.id, game);
+});
+// -- Post Game --
+// Summary
+events.on("gameComplete",async (game)=>{
+    try{
+        let summary = await generateGameCard(game);
+        let err,
+            docs = await summaries.find({
+                $or: [
+                    {
+                        team: game.homeTeam
+                    }, {
+                        team: game.awayTeam
+                    }
+                ]
+            }).then(global.stats.dbQueryFreq.mark());
+        if (err) 
+            throw err;
+                    
+        if (docs.length == 0) 
+            return;
+                    
+        for (const summarySubscription of docs) {
+            if (summarySubscription.team == game.awayTeam && docs.find(d => d.team == game.homeTeam && d.channel_id == summarySubscription.channel_id)) 
+                continue;
+                        
+            client.channels.fetch(summarySubscription.channel_id).then(c => c.send(`${
+                game.awayTeamName
+            } v. ${
+                game.homeTeamName
+            } Game ${
+                game.seriesIndex
+            } of ${
+                game.seriesLength
+            } finished!`, summary).then(global.stats.messageFreq.mark())).catch(messageError);
         }
+    } catch (e) {
+        console.error(e);
+        return;
     }
-    
-}
+});
+//Bet
+events.on("gamesFinished",async (todaySchedule, tomorrowSchedule)=>{
+    console.log("All games finished!");
+    try {
+        // eslint-disable-next-line no-unused-vars
+        let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
+        let oddsEmbed;
+        if (tomorrowSchedule.length > 0) {
+            oddsEmbed = new MessageEmbed().setTitle(`Season ${
+                sim().season + 1
+            } Day ${
+                sim().day + 2
+            } Odds:`);
+            for (const game of tomorrowSchedule) {
+                let underlineHome = Math.round(game.awayOdds * 100) < Math.round(game.homeOdds * 100);
+                oddsEmbed.addField(`${
+                    Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
+                } v. ${
+                    Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
+                }`,
+                `${
+                    ! underlineHome ? "__" : ""
+                }**${
+                    Math.round(game.awayOdds * 100)
+                }%**${
+                    ! underlineHome ? "__" : ""
+                } | ${
+                    underlineHome ? "__" : ""
+                }**${
+                    Math.round(game.homeOdds * 100)
+                }%**${
+                    underlineHome ? "__" : ""
+                }`, true);
+            }
+        }
+        for (const channel of docs) {
+            client.channels.fetch(channel.channel_id).then(c => c.send(`All Season ${
+                sim().season + 1
+            } Day ${
+                sim().day + 1
+            } Games Complete!${
+                tomorrowSchedule.length ? " Go Bet!" : " Go catch up on some sleep!"
+            }`, oddsEmbed).then(global.stats.messageFreq.mark())).catch(messageError);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+});
 
-const lastPlay = new NodeCache({stdTTL: 60, checkperiod: 300});
-const {Weather} = require("./util/gameUtils");
+
+
+// // const lastPlay = new NodeCache({stdTTL: 60, checkperiod: 300});
+// const {Weather} = require("./util/gameUtils");
 const {messageError} = require("./util/miscUtils");
 const {MessageEmbed} = require("discord.js");
 
-function generatePlay(game) {
+// function generatePlay(game) {
 
-    let lastUpdate = gameCache.get(game.id);
+//     let lastUpdate = gameCache.get(game.id);
 
-    if (game.lastUpdate == lastPlay.get(game.id)) 
-        return;
+//     if (game.lastUpdate == lastPlay.get(game.id)) 
+//         return;
     
 
 
-    let play = "";
+//     let play = "";
 
 
-    if (! lastUpdate) 
-        play += `> **${
-            game.awayTeamNickname
-        } v ${
-            game.homeTeamNickname
-        } Season __${
-            game.season + 1
-        }__ Day __${
-            game.day + 1
-        }__**\n> Game ${
-            game.seriesIndex
-        } of ${
-            game.seriesLength
-        }\n> Weather: ${
-            Weather[game.weather]
-        }\n`;
+//     if (! lastUpdate) 
+//         play += `> **${
+//             game.awayTeamNickname
+//         } v ${
+//             game.homeTeamNickname
+//         } Season __${
+//             game.season + 1
+//         }__ Day __${
+//             game.day + 1
+//         }__**\n> Game ${
+//             game.seriesIndex
+//         } of ${
+//             game.seriesLength
+//         }\n> Weather: ${
+//             Weather[game.weather]
+//         }\n`;
     
 
-    if (! lastUpdate || lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore) 
-        play += `> ${
-            Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
-        }: ${
-            game.awayScore
-        } | ${
-            Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
-        }: ${
-            game.homeScore
-        }\n`;
+//     if (! lastUpdate || lastUpdate.homeScore != game.homeScore || lastUpdate.awayScore != game.awayScore) 
+//         play += `> ${
+//             Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
+//         }: ${
+//             game.awayScore
+//         } | ${
+//             Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
+//         }: ${
+//             game.homeScore
+//         }\n`;
     
 
-    play += `${
-        game.lastUpdate
-    }\n`;
+//     play += `${
+//         game.lastUpdate
+//     }\n`;
 
-    if (lastUpdate && lastUpdate.baserunnerCount < game.baserunnerCount) {
-        play += `${
-            game.baserunnerCount
-        } bases loaded.\n`;
-    }
+//     if (lastUpdate && lastUpdate.baserunnerCount < game.baserunnerCount) {
+//         play += `${
+//             game.baserunnerCount
+//         } bases loaded.\n`;
+//     }
 
-    if (lastUpdate && lastUpdate.halfInningOuts < game.halfInningOuts) {
-        play += `${
-            game.halfInningOuts
-        } outs.\n`;
-    }
+//     if (lastUpdate && lastUpdate.halfInningOuts < game.halfInningOuts) {
+//         play += `${
+//             game.halfInningOuts
+//         } outs.\n`;
+//     }
 
-    if (! lastUpdate || lastUpdate.inning<game.inning || game.topOfInning != lastUpdate.topOfInning){
-        play += `${game.topOfInning?game.homePitcherName:game.awayPitcherName} pitching.\n`;
-    }
+//     if (! lastUpdate || lastUpdate.inning<game.inning || game.topOfInning != lastUpdate.topOfInning){
+//         play += `${game.topOfInning?game.homePitcherName:game.awayPitcherName} pitching.\n`;
+//     }
 
-    lastPlay.set(game.id, game.lastUpdate);
+//     lastPlay.set(game.id, game.lastUpdate);
 
-    return play;
-}
+//     return play;
+// }
 
 const eventTypes = [
     {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb|repeat/i},
