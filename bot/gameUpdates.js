@@ -382,7 +382,9 @@ async function broadcast() {
     }
     peanutCache.set("peanut", temporal.doc);
 
-    if (Object.values(games).every(game => game.gameComplete) === true && Object.values(gameCache.mget(gameCache.keys())).every(game => game.gameComplete) === false) {
+    // console.log(gameCache.keys());
+    let oldGames = Object.values(gameCache.mget(gameCache.keys()));
+    if (games?.every(g=>g.gameComplete) && oldGames.every(g=>g.gameComplete === false)) {
         console.log("All games finished!");
         try {
             // eslint-disable-next-line no-unused-vars
@@ -391,7 +393,7 @@ async function broadcast() {
             let oddsEmbed;
             if (tomorrowSchedule.length > 0) {
                 oddsEmbed = new MessageEmbed().setTitle(`Season ${
-                    gameData.sim.season + 2
+                    gameData.sim.season + 1
                 } Day ${
                     gameData.sim.day + 2
                 } Odds:`);
@@ -430,10 +432,11 @@ async function broadcast() {
             console.error(e);
         }
     }
-    if (games?.length) 
+    if (games.length){
         for (const game of games) {
             gameCache.set(game.id, game);
         }
+    }
     
 }
 
