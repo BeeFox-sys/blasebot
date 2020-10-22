@@ -15,6 +15,7 @@
     "eventsource": "^1.0.7",
     "mongoose": "^5.10.5",
     "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "node-windows": "^1.0.0-beta.5"
   }
 }

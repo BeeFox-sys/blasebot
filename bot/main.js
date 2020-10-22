@@ -46,7 +46,7 @@ Mongoose.connection
     .on("error",(error)=>{console.error(error); exit();})
     .once("open", function () {
         console.log("Connected to database");
-        console.log("Initaliszing Caches");
+        console.log("Initaliszing Caches"); 
         initCaches().then(()=>{
             console.log("Connecting to discord...");
             client.login(client.config.discordToken);
@@ -59,7 +59,7 @@ client.once("ready", () => {
     if(client.mode == 1){
         client.user.setActivity("the waiting game | Can't connect to blasball :c");
     } else {
-        client.user.setActivity("Blaseball! | bb!help");
+        client.user.setActivity("Crystal Clear Blaseball! | bb!help");
     }
 });
 
