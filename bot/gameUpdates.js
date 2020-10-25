@@ -1,24 +1,24 @@
 const client = global.client;
-const EventSource = require("eventsource");
+// const EventSource = require("eventsource");
 const {generateGameCard} = require("./util/gameUtils");
-const {updateStreamData, DataStreamCache} = require("./blaseball-api/game");
+// const {updateStreamData, DataStreamCache} = require("./blaseball-api/game");
 
 console.log("Subscribing to stream data...");
-var source = new EventSource(client.config.apiUrlEvents + "/streamData", {withCredentials: true});
-let lastUpdateData;
-source.on("message", (message) => {
-    let data = JSON.parse(message.data).value;
-    if (lastUpdateData == data) 
-        return;
+// var source = new EventSource(client.config.apiUrlEvents + "/streamData", {withCredentials: true});
+// let lastUpdateData;
+// source.on("message", (message) => {
+//     let data = JSON.parse(message.data).value;
+//     if (lastUpdateData == data) 
+//         return;
     
-    lastUpdateData = data;
-    updateStreamData(data);
-    broadcast();
-});
-source.once("open", (event) => {
-    console.log("Subscribed to event stream!");
-});
-source.on("error", (error) => console.error);
+//     lastUpdateData = data;
+//     updateStreamData(data);
+//     broadcast();
+// });
+// source.once("open", (event) => {
+//     console.log("Subscribed to event stream!");
+// });
+// source.on("error", (error) => console.error);
 
 const {
     subscriptions,
@@ -28,79 +28,79 @@ const {
     compacts,
     eventsCol
 } = require("./schemas/subscription");
-const NodeCache = require("node-cache");
+// const NodeCache = require("node-cache");
 
-const gameCache = new NodeCache({
-    stdTTL: 60 * 60
-});
+// const gameCache = new NodeCache({
+//     stdTTL: 60 * 60
+// });
 
-async function broadcast() {
-    global.stats.gameEvents.mark();
-    if (! client.readyAt) 
-        return;
-    // Prevent attempting to send messages before connected to discord
+// async function broadcast() {
+//     global.stats.gameEvents.mark();
+//     if (! client.readyAt) 
+//         return;
+//     // Prevent attempting to send messages before connected to discord
 
-    let gameData = DataStreamCache.get("games");
+//     let gameData = DataStreamCache.get("games");
 
-    let games = gameData.schedule;
+//     let games = gameData.schedule;
 
-    // if(games?.length)for (const game of games) {
-    //     //play by play
-    //
-    // !!! IMPLEMENT WEBHOOKS FOR PLAY BY PLAY !!!
-    //
-    //     if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
-    //     if(!game.gameStart) continue;
+//     // if(games?.length)for (const game of games) {
+//     //     //play by play
+//     //
+//     // !!! IMPLEMENT WEBHOOKS FOR PLAY BY PLAY !!!
+//     //
+//     //     if(game.gameComplete && !(gameCache.get(game.id)?.gameComplete === false)) continue;
+//     //     if(!game.gameStart) continue;
 
-    //     try{
-    //         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
-    //         if(err) throw err;
-    //         if(docs.length == 0) continue;
+//     //     try{
+//     //         let err, docs = await subscriptions.find({$or:[{ team:game.homeTeam},{team:game.awayTeam}]}).then(global.stats.dbQueryFreq.mark());
+//     //         if(err) throw err;
+//     //         if(docs.length == 0) continue;
 
-    //         let play = generatePlay(game);
+//     //         let play = generatePlay(game);
 
-    //         if(playCounter.get(game.id) == undefined){
-    //             playCounter.set(game.id, 0);
-    //             if(!play) continue;
-    //             playCache.set(game.id, play);
-    //             continue;
-    //         }
-    //         else if(game.lastUpdate == "Game Over."){
-    //             //Continue with code
-    //         }
-    //         else if(playCounter.get(game.id) < 1){
-    //             playCounter.set(game.id, playCounter.get(game.id)+1);
-    //             if(!play) continue;
-    //             playCache.set(game.id, playCache.get(game.id)+play);
-    //             continue;
-    //         }
+//     //         if(playCounter.get(game.id) == undefined){
+//     //             playCounter.set(game.id, 0);
+//     //             if(!play) continue;
+//     //             playCache.set(game.id, play);
+//     //             continue;
+//     //         }
+//     //         else if(game.lastUpdate == "Game Over."){
+//     //             //Continue with code
+//     //         }
+//     //         else if(playCounter.get(game.id) < 1){
+//     //             playCounter.set(game.id, playCounter.get(game.id)+1);
+//     //             if(!play) continue;
+//     //             playCache.set(game.id, playCache.get(game.id)+play);
+//     //             continue;
+//     //         }
 
 
-    //         if(!playCache.get(game.id)) continue;
-    //         play = playCache.get(game.id);
-    //         for (const subscription of docs) {
-    //             client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
-    //         }
-    //         playCache.del(game.id);
-    //         playCounter.del(game.id);
-    //     }
-    //     catch(e){console.error(e); continue;}
-    // }
+//     //         if(!playCache.get(game.id)) continue;
+//     //         play = playCache.get(game.id);
+//     //         for (const subscription of docs) {
+//     //             client.channels.fetch(subscription.channel_id).then(c=>c.send(play).then(global.stats.messageFreq.mark()).catch(messageError));
+//     //         }
+//     //         playCache.del(game.id);
+//     //         playCounter.del(game.id);
+//     //     }
+//     //     catch(e){console.error(e); continue;}
+//     // }
     
 
-    // console.log(gameCache.keys());
-    let oldGames = Object.values(gameCache.mget(gameCache.keys()));
-    if (games?.every(g=>g.gameComplete) && oldGames.every(g=>g.gameComplete === false)) {
+//     // console.log(gameCache.keys());
+//     let oldGames = Object.values(gameCache.mget(gameCache.keys()));
+//     if (games?.every(g=>g.gameComplete) && oldGames.every(g=>g.gameComplete === false)) {
         
-        if (games.length){
-            for (const game of games) {
-                gameCache.set(game.id, game);
-            }
-        }
-    }
-}
+//         if (games.length){
+//             for (const game of games) {
+//                 gameCache.set(game.id, game);
+//             }
+//         }
+//     }
+// }
 
-const {events, sim} = require("blaseball");
+const {events, sim, games} = require("blaseball");
 
 // -- Temporal --
 
@@ -362,6 +362,8 @@ events.on("gamesFinished",async (todaySchedule, tomorrowSchedule)=>{
         // eslint-disable-next-line no-unused-vars
         let err, docs = await betReminders.find({}).then(global.stats.dbQueryFreq.mark()).catch(console.error);
         let oddsEmbed;
+        if(tomorrowSchedule.length == 0) await new Promise(resolve => setTimeout(resolve, 30000));
+        tomorrowSchedule = games().tomorrowSchedule;
         if (tomorrowSchedule.length > 0) {
             oddsEmbed = new MessageEmbed().setTitle(`Season ${
                 sim().season + 1
@@ -370,24 +372,11 @@ events.on("gamesFinished",async (todaySchedule, tomorrowSchedule)=>{
             } Odds:`);
             for (const game of tomorrowSchedule) {
                 let underlineHome = Math.round(game.awayOdds * 100) < Math.round(game.homeOdds * 100);
-                oddsEmbed.addField(`${
-                    Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji
-                } v. ${
-                    Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji
-                }`,
-                `${
-                    ! underlineHome ? "__" : ""
-                }**${
-                    Math.round(game.awayOdds * 100)
-                }%**${
-                    ! underlineHome ? "__" : ""
-                } | ${
-                    underlineHome ? "__" : ""
-                }**${
-                    Math.round(game.homeOdds * 100)
-                }%**${
-                    underlineHome ? "__" : ""
-                }`, true);
+                oddsEmbed.addField(
+                    `${Number(game.awayTeamEmoji)?String.fromCodePoint(game.awayTeamEmoji):game.awayTeamEmoji} v. ${Number(game.homeTeamEmoji)?String.fromCodePoint(game.homeTeamEmoji):game.homeTeamEmoji}`,
+                    `${! underlineHome ? "__" : ""}**${Math.round(game.awayOdds * 100)}%**${!underlineHome ? "__" : ""} | ${underlineHome ? "__" : ""}**${Math.round(game.homeOdds * 100)}%**${underlineHome ? "__" : ""}`, 
+                    true
+                );
             }
         }
         for (const channel of docs) {
