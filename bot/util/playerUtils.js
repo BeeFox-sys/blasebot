@@ -4,7 +4,6 @@ const {MessageEmbed } = require("discord.js");
 
 
 
-// const itemList = require("../data/items.json").collection;
 const {coffeeCache, bloodCache, itemCache} = require("blaseball");
 
 async function generatePlayerCard(player, forbidden){
