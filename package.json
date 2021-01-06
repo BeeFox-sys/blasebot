@@ -4,7 +4,7 @@
   "description": "A discordbot for blaseball",
   "main": "bot/main.js",
   "scripts": {
-    "update": "git pull && node scripts/update-attr.js && pm2 restart blasebot"
+    "update": "git pull && pm2 restart blasebot"
   },
   "author": "Beefox",
   "license": "GPL-3.0-or-later",
