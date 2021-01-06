@@ -30,7 +30,7 @@ async function generateTeamCard(team, forbidden){
     if(forbidden) teamCard.addField("Bullpen", team.bullpen.length?"||"+playerList(team.bullpen)+"||":"uhhhhh...",true)
         .addField("Bench", team.bench.length?"||"+playerList(team.bench)+"||":"uhhhhh...", true);
     teamCard.addField("Championships",team.championships, true)
-        .addField("Attributes", attributes(team)||"None",true)
+        .addField("Attributes", await attributes(team)||"None",true)
         .addField("Been Shamed",team.totalShames, true)
         .addField("Shamed Others",team.totalShamings,true)
         .addField("Been Shamed This Season", team.seasonShames, true)
@@ -40,20 +40,26 @@ async function generateTeamCard(team, forbidden){
     return teamCard;
 }
 
-const attributesList = require("../data/attributes.json").collection;
-function attributes(team){
+
+const {modCache} = require("blaseball");
+async function attributes(team){
+    team = Object.create(team);
     let attrString = "";
     for(const attribute of team.permAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Permanent)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Permanent)\n";
     }
     for(const attribute of team.seasAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Season)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Season)\n";
     }
     for(const attribute of team.weekAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Week)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Week)\n";
     }
     for(const attribute of team.gameAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Day)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Day)\n";
     }
     return attrString || "None";
 }

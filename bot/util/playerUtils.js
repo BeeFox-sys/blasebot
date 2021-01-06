@@ -4,24 +4,25 @@ const {MessageEmbed } = require("discord.js");
 
 
 
-const itemList = require("../data/items.json").collection;
+// const itemList = require("../data/items.json").collection;
+const {coffeeCache, bloodCache, itemCache} = require("blaseball");
 
 async function generatePlayerCard(player, forbidden){
     let team = await getTeam(PlayerTeams.get(player.id));
     let playerCard = new MessageEmbed()
-        .setTitle(Number(team.emoji)?String.fromCodePoint(team.emoji):team.Emoji + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
+        .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.Emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
         .setColor(team.mainColor)
         .addField("Team",team.fullName, true);
     if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
     if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||`Yes`||":"||`No `||",true);
     playerCard.addField("Fate",player.fate??"A roll of the dice",true)
-        .addField("Coffee",coffeeStyles[player.coffee]??"Coffee?",true)
+        .addField("Coffee",await coffeeCache.fetch(player.coffee)??"Coffee?",true)
         .addField("Vibes",vibeString(vibes(player)), true)
-        .addField("Item",(itemList.find(a=>a.id==player.bat)?.name??player.bat)||"None",true) 
-        .addField("Armor",(itemList.find(a=>a.id==player.armor)?.name??player.armor)||"None",true)
-        .addField("Blood",bloodTypes[player.blood]??"Blood?",true)
+        .addField("Item",player.bat?(await itemCache.fetch(player.bat)).name:"None",true) 
+        .addField("Armor",player.armor?(await itemCache.fetch(player.armor)).name:"None",true)
+        .addField("Blood",await bloodCache.fetch(player.blood)??"Blood?",true)
         .addField("Pregame Ritual",player.ritual||"** **",true)
-        .addField("Attributes", attributes(player),true)
+        .addField("Attributes", await attributes(player),true)
         .addField("Soul Scream",soulscream(player).length > 1024 ? soulscream(player).substring(0, 1023) + "…": soulscream(player),false)
         .addField("**--Stars--**","** **",false)
         .addField("Batting", stars(battingRating(player)))
@@ -113,57 +114,29 @@ function soulscream(player){
     return scream;
 }
 
-const attributesList = require("../data/attributes.json").collection;
+const { modCache } = require("blaseball");
 
-function attributes(player){
+async function attributes(player){
     player = Object.create(player);
     let attrString = "";
     for(const attribute of player.permAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Permanent)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Permanent)\n";
     }
     for(const attribute of player.seasAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Season)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Season)\n";
     }
     for(const attribute of player.weekAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Week)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Week)\n";
     }
     for(const attribute of player.gameAttr){
-        attrString += (attributesList.find(a=>a.id==attribute)?.title??attribute) +" (Day)\n";
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Day)\n";
     }
     return attrString || "None";
 }
-
-const coffeeStyles = {
-    0: "Black",
-    1: "Light & Sweet",
-    2: "Macchiato",
-    3: "Cream & Sugar",
-    4: "Cold Brew",
-    5: "Flat White",
-    6: "Americano",
-    8: "Heavy Foam",
-    9: "Latte",
-    10: "Decaf",
-    11: "Milk Substitute",
-    12: "Plenty of Sugar",
-    13: "Anything"
-};
-
-const bloodTypes = {
-    0: "A",
-    1: "AA",
-    2: "AAA",
-    3: "Acid",
-    4: "Basic",
-    5: "O",
-    6: "O No",
-    7: "H²O",
-    8: "Electric",
-    9: "Love",
-    10: "Fire",
-    11: "Psychic",
-    12: "Grass"
-};
 
 
 module.exports = {
