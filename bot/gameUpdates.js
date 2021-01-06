@@ -3,7 +3,7 @@ const client = global.client;
 const {generateGameCard} = require("./util/gameUtils");
 // const {updateStreamData, DataStreamCache} = require("./blaseball-api/game");
 
-console.log("Subscribing to stream data...");
+// console.log("Subscribing to stream data...");
 // var source = new EventSource(client.config.apiUrlEvents + "/streamData", {withCredentials: true});
 // let lastUpdateData;
 // source.on("message", (message) => {

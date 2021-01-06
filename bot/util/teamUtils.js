@@ -1,6 +1,6 @@
 const {TeamCache, TeamNames} = require("../blaseball-api/teams");
 const {PlayerCache} = require("../blaseball-api/players");
-const {DataStreamCache} = require("../blaseball-api/game");
+const {games} = require("blaseball");
 const { MessageEmbed } = require("discord.js");
 
 
@@ -19,7 +19,7 @@ async function getTeam(name){
 }
 
 async function generateTeamCard(team, forbidden){
-    let standings = DataStreamCache.get("games").standings;
+    let standings = games().standings;
     let wins = standings.wins[team.id] ?? 0;
     let losses = standings.losses[team.id] ?? 0;
     let teamCard = new MessageEmbed()

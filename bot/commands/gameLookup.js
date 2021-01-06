@@ -1,4 +1,4 @@
-const { getGames, getGameByID, DataStreamCache } = require("../blaseball-api/game");
+const { gameCache, sim} = require("blaseball");
 const { getTeam } = require("../util/teamUtils");
 const { generateGameCard } = require("../util/gameUtils");
 const { getGuild } = require("../util/guildUtils");
@@ -11,7 +11,7 @@ const command = {
     root: false,
     async execute(message, args) {
         if(args.length == 1){
-            let game = await getGameByID(args[0]);
+            let game = await gameCache.fetch(args[0]);
             if(!game) return message.channel.send("That game doesn't exist!").then(global.stats.messageFreq.mark()).catch(messageError);  
             let gameCard = await generateGameCard(game);
             await message.channel.send(gameCard).then(global.stats.messageFreq.mark()).catch(messageError);          
@@ -21,13 +21,13 @@ const command = {
         let guild = await getGuild(message.guild?.id??message.channel.id);
         let season = args.shift()-1;
         let day = args.shift()-1;
-        let currentSeason = DataStreamCache.get("games").sim.season;
-        let currentDay = DataStreamCache.get("games").sim.day;
-        if(!guild || (!guild.forbidden && (season>currentSeason || day>currentDay+1))) return message.channel.send("Game does not exist!").catch(messageError).then(global.stats.messageFreq.mark());
+        let currentSeason = sim().season;
+        let currentDay = sim().day;
+        if(!guild || (!guild.forbidden && (season>currentSeason || (season==currentSeason && day>currentDay+1)))) return message.channel.send("Game does not exist!").catch(messageError).then(global.stats.messageFreq.mark());
         let teamName = args.join(" ");
         let team = await getTeam(teamName);
         if(!team || team.fullName == "Null Team") return message.channel.send("I can't find that team!").then(global.stats.messageFreq.mark()).catch(messageError);
-        let games = await getGames(season,day);
+        let games = await gameCache.fetchByDay(day,season);
         let game = games.filter(g=> (g.awayTeam == team.id || g.homeTeam == team.id))[0];
         if(!game) return message.channel.send("That game doesn't exist!").then(global.stats.messageFreq.mark()).catch(messageError);
         let gameCard = await generateGameCard(game);
@@ -36,5 +36,3 @@ const command = {
 };
 
 module.exports = command;
-
-//https://www.blaseball.com/database/games?season=3&day=68

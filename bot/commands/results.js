@@ -1,6 +1,6 @@
 const { messageError } = require("../util/miscUtils");
 const { MessageEmbed } = require("discord.js");
-const { getGames } = require("../blaseball-api/game");
+const { gameCache } = require("blaseball");
 
 const command = {
     name: "results",
@@ -12,8 +12,8 @@ const command = {
         if(args.length < 2) return message.channel.send("You must specify a season and day").then(global.stats.messageFreq.mark()).catch(messageError);
 
         let games;
-        games = await getGames(args[0]-1, args[1]-1);
-        if(!(Object.values(games).every(game=>game.gameStart) === true)) return message.channel.send("Day does not exist, or has yet to begin!").catch(messageError);
+        games = await gameCache.fetchByDay(args[1]-1,args[0]-1);
+        if(!(Object.values(games).every(game=>game.gameStart) === true) || games.length == 0) return message.channel.send("Day does not exist, or has yet to begin!").catch(messageError);
         let result = results(games);
         message.channel.send(result).then(global.stats.messageFreq.mark()).catch(messageError);
     },
