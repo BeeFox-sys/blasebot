@@ -226,7 +226,7 @@ events.on("gameUpdate",async (newGame,oldGame)=>{
                     newGame.homeScore
                 }${
                     hometeamscore ? "**" : ""
-                }\n> ${
+                }\n>>> ${
                     newGame.lastUpdate
                 }`).then(global.stats.messageFreq.mark())).catch(messageError);
             }
