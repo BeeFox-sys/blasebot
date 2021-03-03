@@ -228,90 +228,13 @@ events.on("gameUpdate",async (newGame,oldGame)=>{
                     hometeamscore ? "**" : ""
                 }\n>>> ${
                     newGame.lastUpdate
-                }`).then(global.stats.messageFreq.mark())).catch(messageError);
+                }\n\`${
+                    newGame.scoreUpdate
+                }\``).then(global.stats.messageFreq.mark())).catch(messageError);
             }
         } catch (e) {
             console.error(e);
             return;
-        }
-    }
-});
-//Beeg scores
-events.on("gameUpdate",async (newGame, oldGame)=>{
-    if (! oldGame || newGame.gameComplete) 
-        return;
-            
-    if (oldGame.homeScore != newGame.homeScore || oldGame.awayScore != newGame.awayScore) {
-        try {
-            let err,
-                docs = await scores.find({
-                    $or: [
-                        {
-                            team: newGame.homeTeam
-                        }, {
-                            team: newGame.awayTeam
-                        }
-                    ]
-                }).then(global.stats.dbQueryFreq.mark());
-            if (err) 
-                throw err;
-                    
-            if (docs.length == 0) 
-                return;
-                    
-            for (const scoreSubscription of docs) {
-                if (scoreSubscription.team == newGame.awayTeam && docs.find(d => d.team == newGame.homeTeam && d.channel_id == scoreSubscription.channel_id)) 
-                    return;
-                // anti double posting
-                let hometeamscore;
-                if (oldGame.homeScore != newGame.homeScore) 
-                    hometeamscore = true;
-                        
-                if (oldGame.awayScore != newGame.awayScore) 
-                    hometeamscore = false;
-                        
-                client.channels.fetch(scoreSubscription.channel_id).then(c => c.send(`**__${
-                    newGame.awayTeamName
-                }__ v. __${
-                    newGame.homeTeamName
-                }__\nSeason ${
-                    sim().season + 1
-                } Day ${
-                    sim().day + 1
-                }, Game ${
-                    newGame.seriesIndex
-                } of ${
-                    newGame.seriesLength
-                } update!**\n${
-                    newGame.topOfInning ? "Top" : "Bottom"
-                } of ${
-                    newGame.inning + 1
-                }\n${
-                    Number(newGame.awayTeamEmoji)?String.fromCodePoint(newGame.awayTeamEmoji):newGame.awayTeamEmoji
-                } ${
-                    ! hometeamscore ? "**" : ""
-                }${
-                    newGame.awayTeamNickname
-                }${
-                    ! hometeamscore ? "**" : ""
-                }: ${
-                    newGame.awayScore
-                }\n${
-                    Number(newGame.homeTeamEmoji)?String.fromCodePoint(newGame.homeTeamEmoji):newGame.awayTeamEmoji
-                } ${
-                    hometeamscore ? "**" : ""
-                }${
-                    newGame.homeTeamNickname
-                }${
-                    hometeamscore ? "**" : ""
-                }: ${
-                    newGame.homeScore
-                }\n> ${
-                    newGame.lastUpdate
-                }`).then(global.stats.messageFreq.mark())).catch(messageError);
-            }
-        } catch (e) {
-            console.error(e);
         }
     }
 });
