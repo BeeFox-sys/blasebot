@@ -18,15 +18,15 @@ async function getPlayers(players){
         });
 }
 
-async function getDead(){
-    return await fetch("https://api.blaseball-reference.com/v1/deceased")
+async function getListOfPlayers(){
+    return await fetch("https://api.sibr.dev/chronicler/v1/players/names")
         .then(res => {
             if(!res.ok) throw new Error(res.statusText);
             return res.json();
         })
         .catch(e => {
             console.log(e.code);
-            console.error("Error at blaseball-referance endpoint /deceased:",e.message);
+            console.error("Error at chronicler endpoint /players/names:",e.message);
         });
 }
 
@@ -45,30 +45,30 @@ async function updatePlayerCache(){
         console.log("Team cache empty, trying again in 1 minute");
         return client.setTimeout(updatePlayerCache, 2000*60);
     }
-    let playerPromises = [];
-    let dead = await getDead();
-    let playerIDs = dead.map(p=>p.player_id);
-    let requests = 0;
     for (let index = 0; index < teams.length; index++) {
         const team = TeamCache.get(teams[index]);
         let teamIDs = team.lineup.concat( team.rotation, team.bullpen, team.bench );
         teamIDs.forEach(playerID => {
             PlayerTeams.set(playerID, team.id);
         });
-        playerIDs = playerIDs.concat(teamIDs);
-        if(playerIDs.length >= 150 || index == teams.length-1){
-            requests++;
-            playerPromises.push(
-                getPlayers(playerIDs).then((players)=>{
-                    let playerObjects = players.map(p => {return {key: p.id, val: p};});
-                    PlayerCache.mset(playerObjects);
-                    players.forEach(player => {
-                        PlayerNames.set(player.name.toLowerCase(), player.id);
-                    });
-                })
-            );
-            playerIDs = [];
-        }
+    }
+    
+    let playerPromises = [];
+    let playerIDs = Object.keys(await getListOfPlayers());
+    let requests = 0;
+    for (let index = 0; index < playerIDs.length; index += 150) {
+        requests++;
+        let endindex = Math.min(playerIDs.length, index + 150);
+        let subsetIDs = playerIDs.slice(index, endindex);
+        playerPromises.push(
+            getPlayers(subsetIDs).then((players)=>{
+                let playerObjects = players.map(p => {return {key: p.id, val: p};});
+                PlayerCache.mset(playerObjects);
+                players.forEach(player => {
+                    PlayerNames.set(player.name.toLowerCase(), player.id);
+                });
+            })
+        );
     }
     await Promise.all(playerPromises);
     let endCache = performance.now();
