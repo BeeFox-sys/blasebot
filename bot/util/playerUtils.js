@@ -15,11 +15,11 @@ async function generatePlayerCard(player, forbidden){
     if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
     if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||`Yes`||":"||`No `||",true);
     playerCard.addField("Fate",player.fate??"A roll of the dice",true)
-        .addField("Coffee",await coffeeCache.fetch(player.coffee)??"Coffee?",true)
+        .addField("Coffee",player.coffee?(await coffeeCache.fetch(player.coffee)):"Coffee?",true)
         .addField("Vibes",vibeString(vibes(player)), true)
         .addField("Item",player.bat?(await itemCache.fetch(player.bat)).name:"None",true) 
         .addField("Armor",player.armor?(await itemCache.fetch(player.armor)).name:"None",true)
-        .addField("Blood",await bloodCache.fetch(player.blood)??"Blood?",true)
+        .addField("Blood",player.blood?(await bloodCache.fetch(player.blood)): "Blood?",true)
         .addField("Pregame Ritual",player.ritual||"** **",true)
         .addField("Attributes", await attributes(player),true)
         .addField("Soul Scream",soulscream(player).length > 1024 ? soulscream(player).substring(0, 1023) + "…": soulscream(player),false)
