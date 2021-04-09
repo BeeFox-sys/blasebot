@@ -127,7 +127,13 @@ async function screenTakeover(temporal){
     case 2: speak = {
         name: "Boss",
         colour: "#ffbe00",
-        url: "https://www.blaseball.com/static/media/Equity.7cde27ee.png"
+        url: "https://d35iw2jmbg6ut8.cloudfront.net/static/media/Equity.c533a2ae.png"
+    };
+        break;
+    case 3: speak = {
+        name: "???",
+        colour: "#a16dc3",
+        url: ""
     };
         break;
     default: speak = {
@@ -391,19 +397,28 @@ const {MessageEmbed} = require("discord.js");
 // }
 
 const eventTypes = [
-    {id: "REVERB", name: "Reverb", colour:"#62b2ff", search: /reverb|repeat/i},
-    {id: "FEEDBACK", name: "Feedback", colour:"#ff017b", search: /flicker|feedback/i},
-    {id: "INCINERATION", name: "Incineration", colour:"#fefefe", search: /rogue umpire/i},
-    {id: "PEANUT", name: "Peaunt", colour:"#fffd85", search: /peanut/i}, 
-    {id: "BLOOD DRAIN", name:"Blooddrain", colour:"#ff1f3c", search: /blooddrain/i},
-    {id: "SHAME", name:"SHAME", colour:"#800878", search: /shame/i},
-    {id: "UNSTABLE", name:"Unstable", colour:"#eaabff", search: /unstable|instability /i}, 
-    {id: "BIRD", name:"Bird", colour:"#8e5fad", search: /birds/i}, 
-    {id: "PARTY", name:"Party Time", colour:"#ff66f9", search: /party/i}, 
-    {id: "REDHOT", name:"Red Hot", colour:"#e32600", search: /red hot/i}, 
-    {id: "BLACKHOLE", name:"Black Hole", colour:"#00374a", search: /black hole/i}, 
-    {id: "SUN2", name:"Sun 2", colour:"#fdff9c", search: /sun 2/i}, 
-    {id: "UNKNOWN", name: "Unknown Event", colour:"#010101"}
+    {id: "REVERB", name: "Reverb", colour: "#61b3ff", search: /reverb|repeat/i},
+    {id: "FEEDBACK", name: "Feedback", colour: "#ff007b", search: /flicker|feedback/i},
+    {id: "INCINERATION", name: "Incineration", colour: "#fefefe", search: /rogue umpire/i},
+    {id: "PEANUT", name: "Peanut", colour: "#c4aa70", search: /stray peanut/i},
+    {id: "BLOOD DRAIN", name: "Blooddrain", colour: "#ff1f3c", search: /blooddrain/i},
+    {id: "BIRD", name: "Birds", colour: "#8e5fad", search: /birds/i},
+    {id: "BLACKHOLE", name: "Black Hole", colour: "#00374a", search: /black hole/i},
+    {id: "SUN2", name: "Sun 2", colour: "#fdff9c", search: /sun 2/i},
+
+    {id: "UNSTABLE", name: "Unstable", colour: "#eaabff", search: /unstable|instability /i},
+    {id: "PARTY", name: "Party Time", colour: "#ff66f9", search: /party/i},
+    {id: "REDHOT", name: "Red Hot", colour: "#e32600", search: /red hot/i},
+    {id: "PERCOLATED", name: "Percolated", colour: "#96afd4", search: /percolated/i},
+    {id: "HONEYROASTED", name: "Shelled", colour: "#ffda75", search: /tasted the infinite/i},
+    {id: "ELSEWHERE", name: "Elsewhere", colour: "#bdb3c3", search: /elsewhere/i},
+    {id: "CONSUMERS", name: "CONSUMERS", colour: "#c80c0c", search: /consumers/i},
+    {id: "ECHO", name: "Echo", colour: "#9c2c46", search: /echo/i},
+    {id: "OBSERVED", name: "Observed", colour: "#9a7b4f", search: /observed/i},
+    {id: "SUNDIALED", name: "Sun Dialed", colour: "#ffe100", search: /catches some rays/i},
+
+    {id: "SHAME", name: "SHAME", colour: "#800878", search: /shame/i},
+    {id: "UNKNOWN", name: "Unknown Event", colour: "#010101"}
 ];
 
 function handleEvents(game, index){
