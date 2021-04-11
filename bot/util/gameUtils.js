@@ -23,8 +23,7 @@ const Weather = {
     15: "Coffee",
     16: "Coffee 2",
     17: "Coffee 3s",
-    18: "Flooding",
-    19: "Salmon"
+    18: "Flooding"
 };
 
 async function generateGameCard(gameInput){
