@@ -139,7 +139,7 @@ async function screenTakeover(temporal){
     case 4: speak = {
         name: "The Microphone",
         colour: "#c50c55",
-        url: "https://pbs.twimg.com/profile_images/1294011086035804160/9aP7YQ8v_400x400.jpg"
+        url: "https://www.blaseball.wiki/images/8/88/Tgb_feedback.png"
     };
         break;
     case 5: speak = {
