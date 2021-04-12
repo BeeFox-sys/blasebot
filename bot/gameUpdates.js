@@ -131,7 +131,7 @@ async function screenTakeover(temporal){
     };
         break;
     case 3: speak = {
-        name: "Tarot",
+        name: "Tarot Draw",
         colour: "#a16dc3",
         url: ""
     };
