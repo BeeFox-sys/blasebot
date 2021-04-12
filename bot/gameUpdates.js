@@ -137,6 +137,12 @@ async function screenTakeover(temporal){
     };
         break;
     case 4: speak = {
+        name: "The Microphone",
+        colour: "#c50c55",
+        url: "https://pbs.twimg.com/profile_images/1294011086035804160/9aP7YQ8v_400x400.jpg"
+    };
+        break;
+    case 5: speak = {
         name: "Lōotcrates",
         colour: "#707070",
         url: "https://ik.imagekit.io/beefox/blaseball/Lootcrates.png"
