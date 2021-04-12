@@ -131,9 +131,15 @@ async function screenTakeover(temporal){
     };
         break;
     case 3: speak = {
-        name: "???",
+        name: "Tarot",
         colour: "#a16dc3",
         url: ""
+    };
+        break;
+    case 4: speak = {
+        name: "Lōotcrates",
+        colour: "#707070",
+        url: "https://ik.imagekit.io/beefox/blaseball/Lootcrates.png"
     };
         break;
     default: speak = {
