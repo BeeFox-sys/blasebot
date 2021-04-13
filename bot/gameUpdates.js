@@ -409,6 +409,7 @@ const {MessageEmbed} = require("discord.js");
 // }
 
 const eventTypes = [
+    // Note: if multiple matches are made, only the *last* one will be used
     {id: "REVERB", name: "Reverb", colour: "#5c407d", search: /reverb|repeat/i},
     {id: "FEEDBACK", name: "Feedback", colour: "#ff007b", search: /flicker|feedback/i},
     {id: "INCINERATION", name: "Incineration", colour: "#fefefe", search: /rogue umpire/i},
@@ -429,6 +430,7 @@ const eventTypes = [
     {id: "ECHO", name: "Echo", colour: "#9c2c46", search: /echo/i},
     {id: "OBSERVED", name: "Observed", colour: "#9a7b4f", search: /observed/i},
     {id: "SUNDIALED", name: "Sun Dialed", colour: "#ffe100", search: /catches some rays/i},
+    {id: "UNHOLEY", name: "Unholey", colour: "#863490", search: /compressed by gamma/i},
 
     {id: "CONSUMERS", name: "CONSUMERS", colour: "#c80c0c", search: /consumers/i},
     {id: "BREAK", name: "Item Broken", colour: "#6dc0ff", search: /broke|breaks/i},
