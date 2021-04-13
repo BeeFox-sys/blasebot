@@ -14,7 +14,7 @@ async function generatePlayerCard(player, forbidden){
         .addField("Team", team.fullName, true)
         .addField("Position", getPosition(team, player), true);
     if(forbidden) playerCard.addField("Fingers", "||" + player.totalFingers + " Fingers||", true);
-    if(forbidden) playerCard.addField("eDensity", "||" + player.eDensity.toFixed(5) + "||", true);
+    if(forbidden) playerCard.addField("eDensity", "||" + player.eDensity.toFixed(5) + " bl/m³||", true);
     playerCard.addField("Current Vibe", (player.permAttr.includes("SCATTERED") ? (forbidden ? "||" + vibeString(vibes(player)) + "||" : "** **") : vibeString(vibes(player))), true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4) ? "**Base " + player.evolution + "**" : (player.evolution == 4 ? "Home" : "Base")), true)
         .addField("Peanut Allergy", player.peanutAllergy?"Yes":"No", true)
