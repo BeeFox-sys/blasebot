@@ -1,46 +1,49 @@
-const {PlayerTeams} = require("../blaseball-api/players");
-const { getTeam } = require("./teamUtils.js");
-const {MessageEmbed } = require("discord.js");
+const { PlayerTeams } = require("../blaseball-api/players");
+const { getTeam, emojiString } = require("./teamUtils.js");
+const { MessageEmbed } = require("discord.js");
 
 
 
 const {coffeeCache, bloodCache} = require("blaseball");
 
 async function generatePlayerCard(player, forbidden){
-    let team = await getTeam(PlayerTeams.get(player.id));
+    let team = await getTeam(player.leagueTeamId || player.tournamentTeamId || PlayerTeams.get(player.id));
     let playerCard = new MessageEmbed()
-        .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
+        .setTitle(emojiString(team.emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
         .setColor(team.mainColor)
         .setURL("https://www.blaseball.com/player/" + player.id)
-        .addField("Team", team.fullName, true)
-        .addField("Position", getPosition(team, player), true);
+        .addField("Team", emojiString(team.emoji) + " " + team.fullName + (team.fullName != "Null Team" ? " (" + getPosition(team, player) + ")" : ""), true);
+    if(player.leagueTeamId && player.tournamentTeamId){
+        let tourneyTeam = await getTeam(player.tournamentTeamId);
+        playerCard.addField("Tournament Team", emojiString(tourneyTeam.emoji) + " " + tourneyTeam.fullName + " (" + getPosition(tourneyTeam, player) + ")", true);
+    }
     if(forbidden) playerCard.addField("Fingers", "||" + player.totalFingers + " Fingers||", true);
     if(forbidden) playerCard.addField("eDensity", "||" + player.eDensity.toFixed(5) + " bl/m³||", true);
     playerCard.addField("Current Vibe", (player.permAttr.includes("SCATTERED") ? (forbidden ? "||" + vibeString(vibes(player)) + "||" : "** **") : vibeString(vibes(player))), true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4) ? "**Base " + player.evolution + "**" : (player.evolution == 4 ? "Home" : "Base")), true)
         .addField("Peanut Allergy", player.peanutAllergy?"Yes":"No", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
-        .addField("Coffee Style", player.coffee?(await coffeeCache.fetch(player.coffee)):"Coffee?", true)
-        .addField("Blood Type", player.blood?(await bloodCache.fetch(player.blood)): "Blood?", true)
+        .addField("Coffee Style", player.coffee ? (player.coffee == 7 ? "Espresso" : (await coffeeCache.fetch(player.coffee))) : "Coffee?", true)
+        .addField("Blood Type", player.blood ? (await bloodCache.fetch(player.blood)) : "Blood?", true)
         .addField("Fate", player.fate??"A roll of the dice", true)
         .addField((player.permAttr.includes("RETIRED")) ? "Soulsong" : "Soulscream", soulscreamString(soulscream(player), player.soul, forbidden), false)
         .addField("Items", items(player), true)
         .addField("Modifications", await attributes(player), true)
         .addField("**--Stars--**","** **", false)
-        .addField("Batting", ratingString(player, "hitting", player.evolution))
-        .addField("Pitching", ratingString(player, "pitching", player.evolution))
-        .addField("Baserunning", ratingString(player, "baserunning", player.evolution))
-        .addField("Defense", ratingString(player, "defense", player.evolution))
+        .addField("Batting", ratingString(player, "hitting"))
+        .addField("Pitching", ratingString(player, "pitching"))
+        .addField("Baserunning", ratingString(player, "baserunning"))
+        .addField("Defense", ratingString(player, "defense"))
         .setFooter(`${team.slogan} | ID: ${player.id}`);
     return playerCard;
 }
 
-function ratingString(player, statCategory, evolution=0) {
+function ratingString(player, statCategory) {
     let itemBoost = 0;
     for(const item of player.items){
         if(item.health > 0) itemBoost += item[statCategory + "Rating"];
     }
-    return stars(player[statCategory + "Rating"] + itemBoost, evolution) + " (" + (player[statCategory + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
+    return stars(player[statCategory + "Rating"] + itemBoost, player.evolution) + " (" + (player[statCategory + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
 }
 
 /*
@@ -75,7 +78,7 @@ function baserunningRating(player){
 }
 */
 
-function stars(rating, evolution){
+function stars(rating, evolution=0){
     let stars = 0.5 * Math.round(10*rating);
 
     let starsString = "";
@@ -93,19 +96,21 @@ function stars(rating, evolution){
     return starsString;
 }
 
+
 const teamPositions = [
     { id: "lineup", name: "Lineup" },
     { id: "rotation", name: "Rotation" },
-    { id: "bullpen", name: "Bullpen", siteName: "Shadow Lineup" }, // sic
-    { id: "bench", name: "Bench", siteName: "Shadow Rotation" }
+    { id: "bullpen", name: "Bullpen"/*, siteName: "Shadow Lineup"*/ },
+    { id: "bench", name: "Bench"/*, siteName: "Shadow Rotation"*/ }
 ];
 
 function getPosition(team, player){
     for(const position of teamPositions){
-        if(team[position.id]?.includes(player.id)) return (position.siteName ? position.siteName + " (" + position.name + ")" : position.name);
+        if(team[position.id]?.includes(player.id)) return position.siteName ?? position.name;
     }
-    return "Uhhhhh...";
+    return "Not\u00a0on\u00a0roster"; // "Not on roster" with non-breaking spaces
 }
+
 
 const {sim} = require("blaseball");
 
@@ -154,6 +159,7 @@ function soulscreamString(soulscream, soul, forbidden){
   if(forbidden) soulString += " (||" + soul + "\u00a0Soul||)"; // \u00a0 is a non-breaking space
   return soulString;
 }
+
 
 const { modCache } = require("blaseball");
 

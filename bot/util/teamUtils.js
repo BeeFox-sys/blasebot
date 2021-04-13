@@ -8,13 +8,13 @@ const { MessageEmbed } = require("discord.js");
 async function getTeam(name){
     if(name == undefined) return nullTeam;
     let team = name?TeamCache.get(name):nullTeam;
-    if(!team || team.fullName == "Null Team"){
+    if(!team || team.fullName == nullTeam.fullName){
         let nameLowercase = name.toLowerCase();
         let teamName = TeamNames.findKey(team => (team.lowercase == nameLowercase || team.location == nameLowercase || team.nickname == nameLowercase || team.shorthand == nameLowercase || team.emoji == nameLowercase));
         if(!teamName) return null;
         team = TeamCache.get(teamName);
     }
-    if(!team || team.fullName == "Null Team") return null;
+    if(!team || team.fullName == nullTeam.fullName) return null;
     else return team;
 }
 
@@ -26,13 +26,13 @@ async function generateTeamCard(team, forbidden){
     let runs = standings.runs[team.id] ?? 0;
 
     let teamCard = new MessageEmbed()
-        .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji) + " " + team.fullName)
+        .setTitle(emojiString(team.emoji) + " " + team.fullName)
         .setColor(team.mainColor)
         .setURL("https://www.blaseball.com/team/" + team.id)
         .addField("Lineup",team.lineup.length?playerList(team.lineup):"*Empty*",true)
         .addField("Rotation",team.rotation.length?playerList(team.rotation):"*Empty*",true);
-    if(forbidden) teamCard.addField("Shadow Lineup (Bullpen)", team.bullpen.length ? "||" + playerList(team.bullpen) + "||" : "||*Empty*||", true)
-        .addField("Shadow Rotation (Bench)", team.bench.length ? "||" + playerList(team.bench) + "||" : "||*Empty*||", true);
+    if(forbidden) teamCard.addField("Bullpen", team.bullpen.length ? "||" + playerList(team.bullpen) + "||" : "||*Empty*||", true)
+        .addField("Bench", team.bench.length ? "||" + playerList(team.bench) + "||" : "||*Empty*||", true);
     teamCard.addField("Modifications", await attributes(team)||"None",true)
         .addField("Level", creditLevels[team.level] || "-", true)
         .addField("eDensity", team.eDensity.toFixed(5) + " bl/m³", true)
@@ -131,10 +131,15 @@ const creditLevels = {
     10: "AAAAA"
 }
 
+function emojiString(emoji) {
+    return Number(emoji) ? String.fromCodePoint(emoji) : emoji;
+}
+
 module.exports = {
     getTeam: getTeam,
     generateTeamCard: generateTeamCard,
     nullTeam: nullTeam,
     tarotCards: tarotCards,
-    creditLevels: creditLevels
+    creditLevels: creditLevels,
+    emojiString: emojiString
 };

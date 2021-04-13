@@ -246,9 +246,9 @@ events.on("gameUpdate",async (newGame,oldGame)=>{
                     hometeamscore ? "**" : ""
                 }\n>>> ${
                     newGame.lastUpdate
-                }\n\`${
-                    newGame.scoreUpdate
-                }\``).then(global.stats.messageFreq.mark())).catch(messageError);
+                }${
+                    newGame.scoreUpdate ? "\n`" + newGame.scoreUpdate + "`" : ""
+                }`).then(global.stats.messageFreq.mark())).catch(messageError);
             }
         } catch (e) {
             console.error(e);
@@ -433,7 +433,7 @@ const eventTypes = [
     {id: "UNHOLEY", name: "Unholey", colour: "#863490", search: /compressed by gamma/i},
 
     {id: "CONSUMERS", name: "CONSUMERS", colour: "#c80c0c", search: /consumers/i},
-    {id: "BREAK", name: "Item Broken", colour: "#6dc0ff", search: /broke|breaks/i},
+    {id: "ITEMDAMAGE", name: "Item Damaged", colour: "#6dc0ff", search: /broke|breaks|damaged/i},
     {id: "SHAME", name: "SHAME", colour: "#800878", search: /shame/i},
     {id: "UNKNOWN", name: "Unknown Event", colour: "#010101"}
 ];
