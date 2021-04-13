@@ -11,6 +11,7 @@ async function generatePlayerCard(player, forbidden){
     let playerCard = new MessageEmbed()
         .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
         .setColor(team.mainColor)
+        .setURL("https://www.blaseball.com/player/" + player.id)
         .addField("Team", team.fullName, true)
         .addField("Position", getPosition(team, player), true);
     if(forbidden) playerCard.addField("Fingers", "||" + player.totalFingers + " Fingers||", true);
