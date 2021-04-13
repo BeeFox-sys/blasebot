@@ -4,34 +4,45 @@ const {MessageEmbed } = require("discord.js");
 
 
 
-const {coffeeCache, bloodCache, itemCache} = require("blaseball");
+const {coffeeCache, bloodCache} = require("blaseball");
 
 async function generatePlayerCard(player, forbidden){
     let team = await getTeam(PlayerTeams.get(player.id));
     let playerCard = new MessageEmbed()
-        .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.Emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
+        .setTitle((Number(team.emoji)?String.fromCodePoint(team.emoji):team.emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
         .setColor(team.mainColor)
-        .addField("Team",team.fullName, true);
-    if(forbidden) playerCard.addField("Fingers","||"+player.totalFingers+" Fingers||",true);
-    if(forbidden) playerCard.addField("Allergic to peanuts?",player.peanutAllergy?"||`Yes`||":"||`No `||",true);
-    playerCard.addField("Fate",player.fate??"A roll of the dice",true)
-        .addField("Coffee",player.coffee?(await coffeeCache.fetch(player.coffee)):"Coffee?",true)
-        .addField("Vibes",vibeString(vibes(player)), true)
-        .addField("Item",player.bat?(await itemCache.fetch(player.bat)).name:"None",true) 
-        .addField("Armor",player.armor?(await itemCache.fetch(player.armor)).name:"None",true)
-        .addField("Blood",player.blood?(await bloodCache.fetch(player.blood)): "Blood?",true)
-        .addField("Pregame Ritual",player.ritual||"** **",true)
-        .addField("Attributes", await attributes(player),true)
-        .addField("Soul Scream",soulscream(player).length > 1024 ? soulscream(player).substring(0, 1023) + "…": soulscream(player),false)
-        .addField("**--Stars--**","** **",false)
-        .addField("Batting", stars(battingRating(player)))
-        .addField("Pitching", stars(pitchingRating(player)))
-        .addField("Baserunning", stars(baserunningRating(player)))
-        .addField("Defence", stars(defenceRating(player)))
+        .addField("Team", team.fullName, true)
+        .addField("Position", getPosition(team, player), true);
+    if(forbidden) playerCard.addField("Fingers", "||" + player.totalFingers + " Fingers||", true);
+    if(forbidden) playerCard.addField("eDensity", "||" + player.eDensity.toFixed(5) + "||", true);
+    playerCard.addField("Current Vibe", (player.permAttr.includes("SCATTERED") ? (forbidden ? "||" + vibeString(vibes(player)) + "||" : "** **") : vibeString(vibes(player))), true)
+        .addField("Evolution", ((player.evolution > 0 && player.evolution < 4) ? "**Base " + player.evolution + "**" : (player.evolution == 4 ? "Home" : "Base")), true)
+        .addField("Peanut Allergy", player.peanutAllergy?"Yes":"No", true)
+        .addField("Pregame Ritual", player.ritual || "** **", true)
+        .addField("Coffee Style", player.coffee?(await coffeeCache.fetch(player.coffee)):"Coffee?", true)
+        .addField("Blood Type", player.blood?(await bloodCache.fetch(player.blood)): "Blood?", true)
+        .addField("Fate", player.fate??"A roll of the dice", true)
+        .addField((player.permAttr.includes("RETIRED")) ? "Soulsong" : "Soulscream", soulscreamString(soulscream(player), player.soul, forbidden), false)
+        .addField("Items", items(player), true)
+        .addField("Modifications", await attributes(player), true)
+        .addField("**--Stars--**","** **", false)
+        .addField("Batting", ratingString(player, "hitting"))
+        .addField("Pitching", ratingString(player, "pitching"))
+        .addField("Baserunning", ratingString(player, "baserunning"))
+        .addField("Defense", ratingString(player, "defense"))
         .setFooter(`${team.slogan} | ID: ${player.id}`);
     return playerCard;
 }
 
+function ratingString(player, type) {
+    let itemBoost = 0;
+    for(const item of player.items){
+        itemBoost += item[type + "Rating"];
+    }
+    return stars(player[type + "Rating"] + itemBoost) + " (" + (player[type + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
+}
+
+/*
 function battingRating(player){
     let rating = Math.pow(1-player.tragicness, 0.01); 
     rating *= Math.pow(1-player.patheticism,0.05);
@@ -50,7 +61,7 @@ function pitchingRating(player){
     return rating;
 }
 
-function defenceRating(player){
+function defenseRating(player){
     let rating = Math.pow(player.omniscience*player.tenaciousness, 0.2);
     rating *= Math.pow(player.watchfulness*player.anticapitalism*player.chasiness, 0.1);
     return rating;
@@ -61,6 +72,7 @@ function baserunningRating(player){
     rating *= Math.pow(player.baseThirst*player.continuation*player.groundFriction*player.indulgence,0.1);
     return rating;
 }
+*/
 
 function stars(rating){
     let stars = 0.5 * Math.round(10*rating);
@@ -76,6 +88,20 @@ function stars(rating){
     if(starsString == "") starsString = "** **";
 
     return starsString;
+}
+
+const teamPositions = [
+    { id: "lineup", name: "Lineup" },
+    { id: "rotation", name: "Rotation" },
+    { id: "bullpen", name: "Bullpen", siteName: "Shadow Lineup" }, // sic
+    { id: "bench", name: "Bench", siteName: "Shadow Rotation" }
+];
+
+function getPosition(team, player){
+    for(const position of teamPositions){
+        if(team[position.id]?.includes(player.id)) return (position.siteName ? position.siteName + " (" + position.name + ")" : position.name);
+    }
+    return "Uhhhhh...";
 }
 
 const {sim} = require("blaseball");
@@ -105,12 +131,25 @@ function soulscream(player){
     let trait = [player.pressurization, player.divinity, player.tragicness, player.shakespearianism, player.ruthlessness]; 
     for (let i = 0; i < player.soul; i++)
         for (var j = 0; j < 11; j++) {
-            var a = 1 / Math.pow(10, j),
+            var a = 1 / Math.pow(10, i),
                 b = trait[j % trait.length] % a,
                 c = Math.floor(b / a * 10);
             scream += letter[c];
         }
     return scream;
+}
+
+function soulscreamString(soulscream, soul, forbidden){
+  let maxScreamLength = (forbidden ? 1005 - soul.toString().length : 1018); // 1024 minus the formatting and, if FK is on, the soul number
+  let soulString = "***";
+  if(soulscream.length > maxScreamLength){
+    soulString += soulscream.substring(0, maxScreamLength - 1) + "…";
+  } else {
+    soulString += (soul > 0 ? soulscream : " ");
+  }
+  soulString += "***";
+  if(forbidden) soulString += " (||" + soul + "\u00a0Soul||)"; // \u00a0 is a non-breaking space
+  return soulString;
 }
 
 const { modCache } = require("blaseball");
@@ -134,9 +173,33 @@ async function attributes(player){
         let attr = await modCache.fetch(attribute);
         attrString += (attr.title) +" (Day)\n";
     }
-    return attrString || "None";
+    for(const attribute of player.itemAttr){
+        let attr = await modCache.fetch(attribute);
+        attrString += (attr.title) +" (Item)\n";
+    }
+    return attrString || "*None*";
 }
 
+function items(player){
+    let itemString = "";
+    for(let i = 0; i < 4; i++){
+        itemString += "Slot " + (i + 1) + ": "
+        if(i < player.items.length){
+            itemString += player.items[i].name + " [" + healthString(player.items[i].durability, player.items[i].health) + "]";
+        } else if(i > player.evolution){
+            itemString += ":lock:";
+        }
+        itemString += "\n"
+    }
+    return itemString;
+}
+
+function healthString(durability, health){
+    // \u26ab - MEDIUM BLACK CIRCLE
+    // \u26aa - MEDIUM WHITE CIRCLE
+    // \ufe0e - VARIATION SELECTOR-15 (forces text presentation instead of emoji)
+    return "\u26ab\ufe0e".repeat(health) + "\u26aa\ufe0e".repeat(durability - health);
+}
 
 module.exports = {
     generatePlayerCard: generatePlayerCard
