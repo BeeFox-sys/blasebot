@@ -35,12 +35,12 @@ async function generatePlayerCard(player, forbidden){
     return playerCard;
 }
 
-function ratingString(player, type) {
+function ratingString(player, statCategory) {
     let itemBoost = 0;
     for(const item of player.items){
-        itemBoost += item[type + "Rating"];
+        if(item.health > 0) itemBoost += item[statCategory + "Rating"];
     }
-    return stars(player[type + "Rating"] + itemBoost) + " (" + (player[type + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
+    return stars(player[statCategory + "Rating"] + itemBoost) + " (" + (player[statCategory + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
 }
 
 /*
@@ -196,6 +196,7 @@ function items(player){
 }
 
 function healthString(durability, health){
+    if(durability === -1) return "**∞**";
     // \u26ab - MEDIUM BLACK CIRCLE
     // \u26aa - MEDIUM WHITE CIRCLE
     // \ufe0e - VARIATION SELECTOR-15 (forces text presentation instead of emoji)
