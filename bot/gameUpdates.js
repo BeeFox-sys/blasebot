@@ -417,6 +417,8 @@ const eventTypes = [
     {id: "BIRD", name: "Birds", colour: "#8e5fad", search: /birds/i},
     {id: "BLACKHOLE", name: "Black Hole", colour: "#00374a", search: /black hole/i},
     {id: "SUN2", name: "Sun 2", colour: "#fdff9c", search: /sun 2/i},
+    {id: "SALMON", name: "Salmon", colour: "#ba7b97", search: /salmon/i},
+    {id: "GLITTER", name: "Glitter", colour: "#fff98a", search: /gained/i},
 
     {id: "UNSTABLE", name: "Unstable", colour: "#eaabff", search: /unstable|instability /i},
     {id: "PARTY", name: "Party Time", colour: "#ff66f9", search: /party/i},
