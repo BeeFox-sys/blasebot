@@ -1,25 +1,32 @@
+const { Permissions } = require("discord.js");
 const {getGuild, saveGuild} = require("../util/guildUtils");
-const { messageError } = require("../util/miscUtils");
+const { permShift, interactionRespond } = require("../util/interactionUtils");
 
 const command = {
-    name: "forbidden",
-    aliases: [],
-    description: "Toggles if forbidden knowledge is disabled in this guild\nDefault: Hide forbidden knowlage\nbb!subscribe [team name]",
-    root: false,
-    async execute(message, args) {
+    action: "forbidden-knowledge",
+    async execute(interaction, client) {
 
-        if(message.guild && !message.channel.permissionsFor(message.member).has("MANAGE_GUILD")) return message.channel.send("You require the manage server permission to run this command!").then(global.stats.messageFreq.mark()).catch(messageError);
+        if(interaction.guild_id){
+            let permissions = new Permissions(permShift(interaction.member.permissions));
+            if(!permissions.has("MANAGE_GUILD")) return interactionRespond(interaction, client, {ephemeral:true, content:"You require the manage channel permission to run this command!"});
+        }
 
-        let guild = await getGuild(message.guild?.id??message.channel.id);
+        let enable = interaction.data.options?.[0].value??null;
+        
+        let guild = await getGuild(interaction.guild_id??interaction.channel_id);
 
         let current = guild?.forbidden ?? false;
 
-        guild.forbidden = !current;
+        if(enable === null){
+            return interactionRespond(interaction,client,{
+                content:`Currently, blasebot ${current?"shows":"hides"} forbidden knowledge in this server!\nUse \`/forbidden-knowledge enable:${current?"false":"true"}\` to ${current?"hide":"show"} F    K`
+            });
+        }
+        
+        guild.forbidden = enable;
         guild = await saveGuild(guild);
 
-        return await message.channel.send(`Now ${guild.forbidden?"showing":"hiding"} forbidden knowledge in this guild!`).then(global.stats.messageFreq.mark()).catch(messageError);
-
-
+        return await interactionRespond(interaction, client, {content:`Now ${guild.forbidden?"showing":"hiding"} forbidden knowledge in this guild!`});
     },
 };
 

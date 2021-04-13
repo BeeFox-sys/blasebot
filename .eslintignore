@@ -1,0 +1,6 @@
+.gitignore
+.vscode
+scripts
+*.md
+*.json
+*.yml

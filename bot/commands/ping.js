@@ -1,13 +1,10 @@
-const { messageError } = require("../util/miscUtils");
+const { interactionRespond } = require("../util/interactionUtils");
 
 const command = {
-    name: "ping",
-    aliases: [],
-    description: "pong!\nbb!ping",
-    root: false,
-    async execute(message, args) {
-        message.channel.send("Splortsmanship!").then(global.stats.messageFreq.mark()).catch(messageError);
-    },
+    action: "ping",
+    async execute(interaction, client){
+        interactionRespond(interaction, client, {content: "🏓 Pong!"});
+    }
 };
 
 module.exports = command;

@@ -56,9 +56,9 @@ async function updatePlayerCache(){
     let playerPromises = [];
     let playerIDs = Object.keys(await getListOfPlayers());
     let requests = 0;
-    for (let index = 0; index < playerIDs.length; index += 150) {
+    for (let index = 0; index < playerIDs.length; index += 120) {
         requests++;
-        let endindex = Math.min(playerIDs.length, index + 150);
+        let endindex = Math.min(playerIDs.length, index + 120);
         let subsetIDs = playerIDs.slice(index, endindex);
         playerPromises.push(
             getPlayers(subsetIDs).then((players)=>{

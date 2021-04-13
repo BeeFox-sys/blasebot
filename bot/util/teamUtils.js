@@ -47,19 +47,19 @@ async function attributes(team){
     let attrString = "";
     for(const attribute of team.permAttr){
         let attr = await modCache.fetch(attribute);
-        attrString += (attr.title) +" (Permanent)\n";
+        attrString += ":yellow_square: "+(attr.title) +"\n";
     }
     for(const attribute of team.seasAttr){
         let attr = await modCache.fetch(attribute);
-        attrString += (attr.title) +" (Season)\n";
+        attrString += ":red_square: "+(attr.title) +"\n";
     }
     for(const attribute of team.weekAttr){
         let attr = await modCache.fetch(attribute);
-        attrString += (attr.title) +" (Week)\n";
+        attrString += ":blue_square: "+(attr.title) +"\n";
     }
     for(const attribute of team.gameAttr){
         let attr = await modCache.fetch(attribute);
-        attrString += (attr.title) +" (Day)\n";
+        attrString += ":green_square:"+(attr.title) +" (Day)\n";
     }
     return attrString || "None";
 }
