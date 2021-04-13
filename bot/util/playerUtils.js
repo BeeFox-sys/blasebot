@@ -27,20 +27,20 @@ async function generatePlayerCard(player, forbidden){
         .addField("Items", items(player), true)
         .addField("Modifications", await attributes(player), true)
         .addField("**--Stars--**","** **", false)
-        .addField("Batting", ratingString(player, "hitting"))
-        .addField("Pitching", ratingString(player, "pitching"))
-        .addField("Baserunning", ratingString(player, "baserunning"))
-        .addField("Defense", ratingString(player, "defense"))
+        .addField("Batting", ratingString(player, "hitting", player.evolution))
+        .addField("Pitching", ratingString(player, "pitching", player.evolution))
+        .addField("Baserunning", ratingString(player, "baserunning", player.evolution))
+        .addField("Defense", ratingString(player, "defense", player.evolution))
         .setFooter(`${team.slogan} | ID: ${player.id}`);
     return playerCard;
 }
 
-function ratingString(player, statCategory) {
+function ratingString(player, statCategory, evolution=0) {
     let itemBoost = 0;
     for(const item of player.items){
         if(item.health > 0) itemBoost += item[statCategory + "Rating"];
     }
-    return stars(player[statCategory + "Rating"] + itemBoost) + " (" + (player[statCategory + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
+    return stars(player[statCategory + "Rating"] + itemBoost, evolution) + " (" + (player[statCategory + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
 }
 
 /*
@@ -75,12 +75,14 @@ function baserunningRating(player){
 }
 */
 
-function stars(rating){
+function stars(rating, evolution){
     let stars = 0.5 * Math.round(10*rating);
 
     let starsString = "";
+    if(evolution > 0) starsString += "__";
     for (let index = 0; index < Math.floor(stars); index++) {
         starsString += "★";
+        if(index == evolution - 1) starsString += "__";
     }
     if(stars != Math.floor(stars)){
         starsString += "☆";
