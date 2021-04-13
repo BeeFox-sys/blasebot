@@ -409,7 +409,7 @@ const {MessageEmbed} = require("discord.js");
 // }
 
 const eventTypes = [
-    {id: "REVERB", name: "Reverb", colour: "#61b3ff", search: /reverb|repeat/i},
+    {id: "REVERB", name: "Reverb", colour: "#5c407d", search: /reverb|repeat/i},
     {id: "FEEDBACK", name: "Feedback", colour: "#ff007b", search: /flicker|feedback/i},
     {id: "INCINERATION", name: "Incineration", colour: "#fefefe", search: /rogue umpire/i},
     {id: "PEANUT", name: "Peanut", colour: "#c4aa70", search: /stray peanut/i},
@@ -424,11 +424,12 @@ const eventTypes = [
     {id: "PERCOLATED", name: "Percolated", colour: "#96afd4", search: /percolated/i},
     {id: "HONEYROASTED", name: "Shelled", colour: "#ffda75", search: /tasted the infinite/i},
     {id: "ELSEWHERE", name: "Elsewhere", colour: "#bdb3c3", search: /elsewhere/i},
-    {id: "CONSUMERS", name: "CONSUMERS", colour: "#c80c0c", search: /consumers/i},
     {id: "ECHO", name: "Echo", colour: "#9c2c46", search: /echo/i},
     {id: "OBSERVED", name: "Observed", colour: "#9a7b4f", search: /observed/i},
     {id: "SUNDIALED", name: "Sun Dialed", colour: "#ffe100", search: /catches some rays/i},
 
+    {id: "CONSUMERS", name: "CONSUMERS", colour: "#c80c0c", search: /consumers/i},
+    {id: "BREAK", name: "Item Broken", colour: "#6dc0ff", search: /broke|breaks/i},
     {id: "SHAME", name: "SHAME", colour: "#800878", search: /shame/i},
     {id: "UNKNOWN", name: "Unknown Event", colour: "#010101"}
 ];
