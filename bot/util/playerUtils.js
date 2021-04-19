@@ -43,7 +43,7 @@ function ratingString(player, statCategory) {
     for(const item of player.items){
         if(item.health > 0) itemBoost += item[statCategory + "Rating"];
     }
-    return stars(player[statCategory + "Rating"] + itemBoost, player.evolution) + " (" + (player[statCategory + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + (itemBoost * 5).toFixed(1) : "") + ")";
+    return stars(player[statCategory + "Rating"] + itemBoost, player.evolution) + " (" + (player[statCategory + "Rating"] * 5).toFixed(1) + ((itemBoost * 5).toFixed(1) != 0 ? (itemBoost > 0 ? " + " : " - ") + Math.abs(itemBoost * 5).toFixed(1) : "") + ")";
 }
 
 /*
