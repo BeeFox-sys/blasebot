@@ -9,7 +9,7 @@ const {coffeeCache, bloodCache} = require("blaseball");
 async function generatePlayerCard(player, forbidden){
     let team = await getTeam(player.leagueTeamId || player.tournamentTeamId || PlayerTeams.get(player.id));
     let playerCard = new MessageEmbed()
-        .setTitle(emojiString(team.emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":""))
+        .setTitle(emojiString(team.emoji) + " " + player.name + (player.permAttr.includes("SHELLED")?" 🥜":"") + (player.deceased ? " 💀" : ""))
         .setColor(team.mainColor)
         .setURL("https://www.blaseball.com/player/" + player.id)
         .addField("Team", emojiString(team.emoji) + " " + team.fullName + (team.fullName != "Null Team" ? " (" + getPosition(team, player) + ")" : ""), true);
