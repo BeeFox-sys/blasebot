@@ -17,16 +17,16 @@ async function generatePlayerCard(player, forbidden){
         let tourneyTeam = await getTeam(player.tournamentTeamId);
         playerCard.addField("Tournament Team", emojiString(tourneyTeam.emoji) + " " + tourneyTeam.fullName + " (" + getPosition(tourneyTeam, player) + ")", true);
     }
-    if(forbidden) playerCard.addField("Fingers", "||" + player.totalFingers + " Fingers||", true);
-    if(forbidden) playerCard.addField("eDensity", "||" + player.eDensity.toFixed(5) + " bl/m³||", true);
     playerCard.addField("Current Vibe", (player.permAttr.includes("SCATTERED") ? (forbidden ? "||" + vibeString(vibes(player)) + "||" : "** **") : vibeString(vibes(player))), true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4) ? "**Base " + player.evolution + "**" : (player.evolution == 4 ? "Home" : "Base")), true)
         .addField("Peanut Allergy", player.peanutAllergy?"Yes":"No", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
-        .addField("Coffee Style", player.coffee ? (player.coffee == 7 ? "Espresso" : (await coffeeCache.fetch(player.coffee))) : "Coffee?", true)
-        .addField("Blood Type", player.blood ? (await bloodCache.fetch(player.blood)) : "Blood?", true)
+        .addField("Coffee Style", player.coffee !== null ? (player.coffee == 7 ? "Espresso" : (await coffeeCache.fetch(player.coffee))) : "Coffee?", true)
+        .addField("Blood Type", player.blood !== null ? (await bloodCache.fetch(player.blood)) : "Blood?", true)
         .addField("Fate", player.fate??"A roll of the dice", true)
-        .addField((player.permAttr.includes("RETIRED")) ? "Soulsong" : "Soulscream", soulscreamString(soulscream(player), player.soul, forbidden), false)
+    if(forbidden) playerCard.addField("Fingers", "||" + player.totalFingers + " Fingers||", true);
+    if(forbidden) playerCard.addField("eDensity", "||" + player.eDensity.toFixed(5) + " bl/m³||", true);
+    playerCard.addField((player.permAttr.includes("RETIRED")) ? "Soulsong" : "Soulscream", soulscreamString(soulscream(player), player.soul, forbidden), false)
         .addField("Items", items(player), true)
         .addField("Modifications", await attributes(player), true)
         .addField("**--Stars--**","** **", false)
