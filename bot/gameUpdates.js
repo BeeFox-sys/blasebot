@@ -337,7 +337,7 @@ events.on("gamesFinished",async (todaySchedule, tomorrowSchedule)=>{
 
 
 // // const lastPlay = new NodeCache({stdTTL: 60, checkperiod: 300});
-// const {Weather} = require("./util/gameUtils");
+// const {weatherCache} = require("blaseball");
 const {messageError} = require("./util/miscUtils");
 const {MessageEmbed} = require("discord.js");
 
@@ -367,7 +367,7 @@ const {MessageEmbed} = require("discord.js");
 //         } of ${
 //             game.seriesLength
 //         }\n> Weather: ${
-//             Weather[game.weather]
+//             (await weatherCache.fetch(game.weather)).name ?? "Uhhhh..."
 //         }\n`;
     
 
