@@ -1,28 +1,51 @@
-let {guilds} = require("../schemas/guildsettings");
+const {"guilds": Guilds} = require("../schemas/guildsettings");
 const NodeCache = require("node-cache");
 
-let guildCache = new NodeCache({stdTTL:60*60});
+const guildCache = new NodeCache({"stdTTL": 60 * 60});
 
-async function getGuild(id){
-    if(guildCache.has(id)) return guildCache.get(id);
-    let err, guild = await guilds.findOne({guild_id:id}).then(global.stats.dbQueryFreq.mark());
-    if(err) throw err;
-    if(!guild) guild = new guilds({
-        guild_id: id,
-    });
-    guildCache.set(id,guild);
+/**
+ * Gets Guild Doc (or creates one)
+ * @param {snowflake} id
+ * @returns {doc}
+ */
+async function getGuild (id) {
+
+    if (guildCache.has(id)) {
+
+        return guildCache.get(id);
+
+    }
+    let guild = await Guilds.findOne({"guild_id": id});
+
+    if (!guild) {
+
+        guild = new Guilds({
+            "guild_id": id
+        });
+
+    }
+    guildCache.set(id, guild);
+    
     return guild;
+
 }
 
-async function saveGuild(guild){
-    let err;
-    err, guild = await guild.save();
-    if(err) throw err;
-    guildCache.set(guild.guild_id, guild);
-    return guild;
+/**
+ *  Saves a guild doc
+ * @param {guildDoc} guild
+ * @returns {guildDoc}
+ */
+async function saveGuild (guild) {
+
+    const guildSaved = await guild.save();
+
+    guildCache.set(guildSaved.guild_id, guildSaved);
+    
+    return guildSaved;
+
 }
 
 module.exports = {
-    getGuild: getGuild,
-    saveGuild: saveGuild,
+    getGuild,
+    saveGuild
 };

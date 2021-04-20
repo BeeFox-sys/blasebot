@@ -31,7 +31,9 @@ rules:
   default-case: error
   default-case-last: error
   default-param-last: error
-  dot-location: error
+  dot-location: 
+    - error
+    - property
   dot-notation: error
   eol-last: error
   eqeqeq: error
@@ -43,13 +45,12 @@ rules:
     - declaration
   function-paren-newline: error
   generator-star-spacing: error
-  global-require: error
   grouped-accessor-pairs: error
   guard-for-in: error
   handle-callback-err: error
   id-blacklist: error
   id-denylist: error
-  id-length: error
+  id-length: warn
   id-match: error
   implicit-arrow-linebreak: error
   indent: error
@@ -67,15 +68,16 @@ rules:
   lines-between-class-members: error
   max-classes-per-file: error
   max-depth: error
-  max-len: error
-  max-lines: error
-  max-lines-per-function: error
+  max-len: 
+    - warn
+    - 100
   max-nested-callbacks: error
   max-params: error
-  max-statements: error
   max-statements-per-line: error
   multiline-comment-style: error
-  multiline-ternary: error
+  multiline-ternary: 
+    - warn
+    - always-multiline
   new-cap: error
   new-parens: error
   newline-after-var: error
@@ -83,8 +85,6 @@ rules:
   newline-per-chained-call: error
   no-alert: error
   no-array-constructor: error
-  no-await-in-loop: error
-  no-bitwise: error
   no-buffer-constructor: error
   no-caller: error
   no-catch-shadow: error
@@ -99,7 +99,6 @@ rules:
   no-extend-native: error
   no-extra-bind: error
   no-extra-label: error
-  no-extra-parens: error
   no-floating-decimal: error
   no-implicit-coercion: error
   no-implicit-globals: error
@@ -120,7 +119,6 @@ rules:
   no-multi-str: error
   no-multiple-empty-lines: error
   no-native-reassign: error
-  no-negated-condition: error
   no-negated-in-lhs: error
   no-nested-ternary: error
   no-new: error
@@ -131,7 +129,6 @@ rules:
   no-octal-escape: error
   no-param-reassign: error
   no-path-concat: error
-  no-plusplus: error
   no-process-exit: error
   no-promise-executor-return: error
   no-proto: error
@@ -142,18 +139,20 @@ rules:
   no-restricted-properties: error
   no-restricted-syntax: error
   no-return-assign: error
-  no-return-await: error
   no-script-url: error
   no-self-compare: error
   no-sequences: error
   no-shadow: error
   no-spaced-func: error
-  no-sync: error
+  no-sync: 
+    - error
+    - { allowAtRootLevel: true }
   no-tabs: error
   no-template-curly-in-string: error
-  no-ternary: error
   no-throw-literal: error
-  no-trailing-spaces: error
+  no-trailing-spaces: 
+    - warn
+    - {"skipBlankLines":true}
   no-undef-init: error
   no-undefined: error
   no-underscore-dangle: error
@@ -183,7 +182,9 @@ rules:
   object-shorthand: error
   one-var-declaration-per-line: error
   operator-assignment: error
-  operator-linebreak: error
+  operator-linebreak: 
+    - warn
+    - before
   padded-blocks: error
   padding-line-between-statements: error
   prefer-arrow-callback: error
@@ -194,7 +195,6 @@ rules:
   prefer-numeric-literals: error
   prefer-object-spread: error
   prefer-promise-reject-errors: error
-  prefer-reflect: error
   prefer-regex-literals: error
   prefer-rest-params: error
   prefer-spread: error
@@ -204,8 +204,8 @@ rules:
     - error
     - double
   radix: error
-  require-atomic-updates: error
-  require-jsdoc: error
+  require-atomic-updates: warn
+  require-jsdoc: warn
   require-unicode-regexp: error
   rest-spread-spacing: error
   semi: error

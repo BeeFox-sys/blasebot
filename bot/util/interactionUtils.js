@@ -23,9 +23,16 @@ function interactionRespond (interaction, client, options) {
 
 }
 
+/**
+ * Waits for response
+ * @param {Interaction} interaction
+ * @param {Client} client
+ * @param {Boolean} ephemeral
+ * @returns {void}
+ */
 function interactionThink (interaction, client, ephemeral) {
 
-    return client.api.interactions(interaction.id, interaction.token).callback.post({
+    client.api.interactions(interaction.id, interaction.token).callback.post({
         "data": {
             "type": 5,
             "data": {
@@ -36,6 +43,13 @@ function interactionThink (interaction, client, ephemeral) {
 
 }
 
+/**
+ * Sends a thonk message
+ * @param {Interaction} interaction
+ * @param {Client} client
+ * @param {Options} options
+ * @returns {messages}
+ */
 async function interactionThunk (interaction, client, options) {
 
     const application = await client.fetchApplication();
@@ -50,6 +64,11 @@ async function interactionThunk (interaction, client, options) {
 
 }
 
+/**
+ * Simply fixes perms from the api
+ * @param {bitfield} bitfield
+ * @returns {bitfield}
+ */
 function permShift (bitfield) {
 
     return bitfield >>> 1;

@@ -20,7 +20,7 @@ const options = {
 
 
 (async ()=>{
-    let ids = await fetch("https://discord.com/api/v8/applications/"+require("../config.json").clientID+(process.argv[2]?"/guilds/"+process.argv[2]:"")+"/commands", options ).then(res=>res.json()).then(res=>res.map(c=>c.id));
+    let ids = return await fetch("https://discord.com/api/v8/applications/"+require("../config.json").clientID+(process.argv[2]?"/guilds/"+process.argv[2]:"")+"/commands", options ).then(res=>res.json()).then(res=>res.map(c=>c.id));
     options.method = "delete";
     ids.forEach(id => {
         fetch("https://discord.com/api/v8/applications/"+require("../config.json").clientID+(process.argv[2]?"/guilds/"+process.argv[2]:"")+"/commands/"+id, options).then(res=>console.log(res.status, id));

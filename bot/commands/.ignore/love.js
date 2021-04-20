@@ -7,7 +7,7 @@ const command = {
     root: false,
     hide: true,
     async execute(message, args) {
-        message.channel.send("❤ And I love you ❤").then(global.stats.messageFreq.mark()).catch(messageError);
+        message.channel.send("❤ And I love you ❤").catch(messageError);
     },
 };
 

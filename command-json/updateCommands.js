@@ -22,7 +22,7 @@ const options = {
 
 (async ()=>{for (const file of commandFiles) {
     options.body = JSON.stringify(require(`./${file}`));
-    await fetch("https://discord.com/api/v8/applications/"+require("../config.json").clientID+(process.argv[2]?"/guilds/"+process.argv[2]+"/commands":"/commands"), options ).then(res=>{console.log(res.status, file);});
+    return await fetch("https://discord.com/api/v8/applications/"+require("../config.json").clientID+(process.argv[2]?"/guilds/"+process.argv[2]+"/commands":"/commands"), options ).then(res=>{console.log(res.status, file);});
     
 }})();
 
