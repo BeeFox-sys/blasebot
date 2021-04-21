@@ -1,9 +1,9 @@
 const {PlayerTeams} = require("../blaseball-api/players");
-const {getTeam} = require("./teamUtils.js");
+const {getTeam, emojiString} = require("./teamUtils.js");
 const {MessageEmbed} = require("discord.js");
 
 
-const {coffeeCache, bloodCache, itemCache} = require("blaseball");
+const {coffeeCache, bloodCache} = require("blaseball");
 
 /**
  * Generate a player's card
@@ -16,22 +16,28 @@ async function generatePlayerCard (player, forbidden) {
     const team = await getTeam(PlayerTeams.get(player.id));
     const playerCard = new MessageEmbed()
         .setTitle(`${
-            Number(team.emoji)
-                ? String.fromCodePoint(team.emoji)
-                : team.Emoji
+            emojiString(team.emoji)
         } ${player.name}${
             player.permAttr.includes("SHELLED") ? " 🥜" : ""}${
-            player.permAttr.includes("ELSEWHERE") ? " 🌫" : ""}`)
+            player.permAttr.includes("ELSEWHERE") ? " 🌫" : ""}${
+            player.deceased ? " 💀" : ""}`)
         .setColor(team.mainColor)
-        .addField("Team", team.fullName, true);
+        .addField("Team", `${team.fullName}\n- ${getPosition(team, player)}`, true);
+
+    if (player.leagueTeamId && player.tournamentTeamId) {
+
+        const tourneyTeam = await getTeam(player.tournamentTeamId);
+
+        playerCard
+            .addField("Tournament Team", `${
+                emojiString(tourneyTeam.emoji)} ${tourneyTeam.fullName} (${
+                getPosition(tourneyTeam, player)})`, true);
+    
+    }
 
     if (forbidden) {
 
         playerCard.addField("Fingers", `||${player.totalFingers} Fingers||`, true);
-
-    }
-    if (forbidden) {
-
         playerCard.addField(
             "Allergic to peanuts?",
             player.peanutAllergy ? "||`Yes`||" : "||`No `||", true
@@ -39,113 +45,90 @@ async function generatePlayerCard (player, forbidden) {
 
     }
     playerCard.addField("Fate", player.fate ?? "A roll of the dice", true)
-        .addField(
-            "Coffee",
-            player.coffee ? await coffeeCache.fetch(player.coffee) : "Coffee?", true
-        )
+        .addField("Evolution", ((player.evolution > 0 && player.evolution < 4)
+            ? `**Base ${player.evolution}**`
+            : (player.evolution === 4 ? "Home" : "Base")), true);
+    if (forbidden) {
+
+        playerCard.addField("eDensity", `||${player.eDensity.toFixed(5)} bl/m³||`, true);
+
+    }
+    playerCard.addField(
+        "Coffee",
+        player.coffee ? await coffeeCache.fetch(player.coffee) : "Coffee?", true
+    )
         .addField("Vibes", vibeString(vibes(player)), true)
-        .addField("Item", player.bat ? (await itemCache.fetch(player.bat)).name : "None", true)
-        .addField("Armor", player.armor ? (await itemCache.fetch(player.armor)).name : "None", true)
+        .addField("Items", items(player), true)
         .addField("Blood", player.blood ? await bloodCache.fetch(player.blood) : "Blood?", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
-        .addField("Attributes", await attributes(player), true)
-        .addField(
-            "Soul Scream",
-            soulscream(player).length > 1024
-                ? `${soulscream(player).substring(0, 1023)}…`
-                : soulscream(player), false
-        )
+        .addField("Modifications", await attributes(player), true)
         .addField("**--Stars--**", "** **", false)
-        .addField("Batting", stars(battingRating(player)))
-        .addField("Pitching", stars(pitchingRating(player)))
-        .addField("Baserunning", stars(baserunningRating(player)))
-        .addField("Defence", stars(defenceRating(player)))
-        .setFooter(`${team.slogan} | ID: ${player.id}`);
+        .addField("Batting", ratingString(player, "hitting"))
+        .addField("Pitching", ratingString(player, "pitching"))
+        .addField("Baserunning", ratingString(player, "baserunning"))
+        .addField("Defence", ratingString(player, "defense"))
+        .addField(
+            (player.permAttr.includes("RETIRED")) ? "**--Soulsong--**" : "**--Soulscream--**",
+            soulscreamString(soulscream(player), player.soul, forbidden), false
+        )
+        .setFooter(`${team.slogan} | ID: ${player.id}`)
+        .setURL(`https://www.blaseball.com/player/${player.id}`);
     
     return playerCard;
 
 }
 
 /**
- * Batting Rating of a player
- * @param {Player} player
- * @returns {Number}
+ * Create the star rating for a player
+ * @param {json} player
+ * @param {string} statCategory
+ * @returns {string}
  */
-function battingRating (player) {
+function ratingString (player, statCategory) {
 
-    let rating = (1 - player.tragicness) ** 0.01;
+    let itemBoost = 0;
 
-    rating *= (1 - player.patheticism) ** 0.05;
-    rating *= (player.thwackability * player.divinity) ** 0.35;
-    rating *= (player.moxie * player.musclitude) ** 0.075;
-    rating *= player.martyrdom ** 0.02;
+    for (const item of player.items) {
+
+        if (item.health > 0) {
+
+            itemBoost += item[`${statCategory}Rating`];
+
+        }
     
-    return rating;
-
-}
-
-/**
- * Pitching rating of a player
- * @param {player} player
- * @returns {number}
- */
-function pitchingRating (player) {
-
-    let rating = player.unthwackability ** 0.5;
-
-    rating *= player.ruthlessness ** 0.4;
-    rating *= player.overpowerment ** 0.15;
-    rating *= player.shakespearianism ** 0.1;
-    rating *= player.coldness ** 0.025;
+    }
     
-    return rating;
-
-}
-
-/**
- * Defense Rating of a player
- * @param {player} player
- * @returns {number}
- */
-function defenceRating (player) {
-
-    let rating = (player.omniscience * player.tenaciousness) ** 0.2;
-
-    rating *= (player.watchfulness * player.anticapitalism * player.chasiness) ** 0.1;
-    
-    return rating;
-
-}
-
-/**
- * Baserunning rating of a player
- * @param {player} player
- * @returns {number}
- */
-function baserunningRating (player) {
-
-    let rating = player.laserlikeness ** 0.5;
-
-    rating *= (
-        player.baseThirst * player.continuation * player.groundFriction * player.indulgence
-    ) ** 0.1;
-    
-    return rating;
+    return `${
+        stars(player[`${statCategory}Rating`] + itemBoost, player.evolution)
+    } (${
+        (player[`${statCategory}Rating`] * 5).toFixed(1)
+    }${
+        (itemBoost * 5).toFixed(1) !== 0
+            ? (itemBoost > 0 ? " + " : " - ") + Math.abs(itemBoost * 5).toFixed(1)
+            : ""
+    })`;
 
 }
 
 /**
  * Converts number to stars
  * @param {number} rating
+ * @param {number} evolution
  * @returns {string}
  */
-function stars (rating) {
+function stars (rating, evolution = 0) {
 
     const starsRating = 0.5 * Math.round(10 * rating);
 
     let starsString = "";
 
     for (let index = 0; index < Math.floor(starsRating); index++) {
+
+        if (index < evolution) {
+
+            starsString += "\u20DD";
+
+        }
 
         starsString += "★";
     
@@ -163,6 +146,40 @@ function stars (rating) {
     }
 
     return starsString;
+
+}
+
+const teamPositions = [
+    {"id": "lineup",
+        "name": "Lineup"},
+    {"id": "rotation",
+        "name": "Rotation"},
+    {"id": "bullpen",
+        "name": "Bullpen"},
+    {"id": "bench",
+        "name": "Bench"}
+];
+
+/**
+ * Get a players position
+ * @param {team} team
+ * @param {player} player
+ * @returns {string}
+ */
+function getPosition (team, player) {
+
+    for (const position of teamPositions) {
+
+        if (team[position.id]?.includes(player.id)) {
+
+            return position.siteName ?? position.name;
+
+        }
+    
+    }
+    
+    return "Not\u00a0on\u00a0roster";
+    // "Not on roster" with non-breaking spaces
 
 }
 
@@ -270,6 +287,40 @@ function soulscream (player) {
 
 }
 
+/**
+ * Formats the soulscream
+ * @param {string} soulscreamStr
+ * @param {number} soul
+ * @param {boolean} forbidden
+ * @returns {string}
+ */
+function soulscreamString (soulscreamStr, soul, forbidden) {
+
+    const maxScreamLength = (forbidden ? 1005 - soul.toString().length : 1018);
+    // 1024 minus the formatting and, if FK is on, the soul number
+    let soulString = "***";
+
+    if (soulscreamStr.length > maxScreamLength) {
+
+        soulString += `${soulscreamStr.substring(0, maxScreamLength - 1)}…`;
+    
+    } else {
+
+        soulString += (soul > 0 ? soulscreamStr : " ");
+    
+    }
+    soulString += "***";
+    if (forbidden) {
+
+        soulString += ` (||${soul}\u00a0Soul||)`;
+
+    }
+    // \u00a0 is a non-breaking space
+    
+    return soulString;
+
+}
+
 const {modCache} = require("blaseball");
 
 /**
@@ -307,11 +358,72 @@ async function attributes (player) {
 
         const attr = await modCache.fetch(attribute);
 
-        attrString += `:green_square:${attr.title} (Day)\n`;
+        attrString += `:green_square:${attr.title}\n`;
+    
+    }
+    for (const attribute of player.itemAttr) {
+
+        const attr = await modCache.fetch(attribute);
+
+        attrString += `:white_large_square: ${attr.title}\n`;
     
     }
     
     return attrString || "None";
+
+}
+
+/**
+ * Generate an item string
+ * @param {json} player
+ * @returns {string}
+ */
+function items (player) {
+
+    let itemString = "";
+
+    for (let slot = 0; slot < 4; slot++) {
+
+        itemString += `Slot ${slot + 1}: `;
+        if (slot < player.items.length) {
+
+            itemString
+                += `${player.items[slot].name} ${
+                    healthString(player.items[slot].durability, player.items[slot].health)}`;
+        
+        } else if (slot > player.evolution) {
+
+            itemString += ":lock:";
+        
+        }
+        itemString += "\n";
+    
+    }
+    
+    return itemString;
+
+}
+
+/**
+ *
+ * @param {number} durability
+ * @param {string} health
+ * @returns {string}
+ */
+function healthString (durability, health) {
+
+    if (durability === -1) {
+
+        return "**∞**";
+
+    }
+
+    /*
+     * \u26ab - MEDIUM BLACK CIRCLE
+     * \u26aa - MEDIUM WHITE CIRCLE
+     * \ufe0e - VARIATION SELECTOR-15 (forces text presentation instead of emoji)
+     */
+    return "\u26ab\ufe0e".repeat(health) + "\u26aa\ufe0e".repeat(durability - health);
 
 }
 

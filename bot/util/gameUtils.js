@@ -12,7 +12,7 @@ const Weather = {
     "4": "Sandstorm",
     "5": "Snowy",
     "6": "Acidic",
-    "7": "Eclipse",
+    "7": "Solar Eclipse",
     "8": "Glitter",
     "9": "Blooddrain",
     "10": "Peanuts",
