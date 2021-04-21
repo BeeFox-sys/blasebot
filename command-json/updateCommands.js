@@ -8,6 +8,7 @@ if (process.argv[2] === "global") {
 } else if (process.argv[2] === null) {
 
     console.log("Use either \"global\" or a guild ID as an argument to update commands");
+    // eslint-disable-next-line no-process-exit
     process.exit();
 
 }
@@ -30,7 +31,10 @@ const options = {
 
         options.body = JSON.stringify(require(`./${file}`));
     
-        await fetch(`https://discord.com/api/v8/applications/${require("../config.json").clientID}${process.argv[2] ? `/guilds/${process.argv[2]}/commands` : "/commands"}`, options).then((res) => {
+        await fetch(`https://discord.com/api/v8/applications/${
+            require("../config.json").clientID}${process.argv[2]
+            ? `/guilds/${process.argv[2]}/commands`
+            : "/commands"}`, options).then((res) => {
 
             console.log(res.status, file);
  

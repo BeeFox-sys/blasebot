@@ -54,7 +54,6 @@ rules:
   id-match: error
   implicit-arrow-linebreak: error
   indent: error
-  indent-legacy: error
   init-declarations: error
   jsx-quotes: error
   key-spacing: error
