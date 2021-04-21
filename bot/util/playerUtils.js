@@ -37,13 +37,14 @@ async function generatePlayerCard (player, forbidden) {
     if (forbidden) {
 
         playerCard.addField("Fingers", `||${player.totalFingers} Fingers||`, true);
-        playerCard.addField(
-            "Allergic to peanuts?",
-            player.peanutAllergy ? "||`Yes`||" : "||`No `||", true
-        );
 
     }
-    playerCard.addField("Fate", player.fate ?? "A roll of the dice", true)
+    playerCard
+        .addField(
+            "Allergic to peanuts?",
+            player.peanutAllergy ? "Yes" : "No", true
+        )
+        .addField("Fate", player.fate ?? "A roll of the dice", true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4)
             ? `**Base ${player.evolution}**`
             : (player.evolution === 4 ? "Home" : "Base")), true);
