@@ -452,7 +452,6 @@ const eventTypes = [
         "name": "Unholey",
         "colour": "#863490",
         "search": /compressed by gamma/iu},
-
     {"id": "CONSUMERS",
         "name": "CONSUMERS",
         "colour": "#c80c0c",
@@ -461,7 +460,6 @@ const eventTypes = [
         "name": "Item Damaged",
         "colour": "#6dc0ff",
         "search": /broke|breaks|damaged/iu},
-
     {"id": "SHAME",
         "name": "SHAME",
         "colour": "#800878",
