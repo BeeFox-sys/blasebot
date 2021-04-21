@@ -8,7 +8,7 @@ const command = {
 
         const team = await getTeam(interaction.data.options[0].options[0].value);
         const guild = await getGuild(interaction.guild_id ?? interaction.channel_id);
-        const teamCard = await generateTeamCard(team, true || guild.forbidden);
+        const teamCard = await generateTeamCard(team, false || guild.forbidden);
 
         await interactionThunk(
             interaction, client,

@@ -21,7 +21,7 @@ const command = {
 
         }
         const guild = await getGuild(interaction.guild_id ?? interaction.channel_id);
-        const playerCard = await generatePlayerCard(player, guild.forbidden);
+        const playerCard = await generatePlayerCard(player, guild.forbidden || false);
 
         await interactionThunk(interaction, client, {"embeds": [playerCard]});
     
