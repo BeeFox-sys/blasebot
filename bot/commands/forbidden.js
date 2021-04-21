@@ -48,7 +48,7 @@ const command = {
             interaction, client,
             {"content": `Now ${
                 guild.forbidden ? "showing" : "hiding"
-            } forbidden knowledge in this guild!`}
+            } forbidden knowledge in this server!`}
         );
         
     

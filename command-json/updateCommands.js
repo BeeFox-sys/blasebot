@@ -32,7 +32,7 @@ const options = {
         options.body = JSON.stringify(require(`./${file}`));
     
         await fetch(`https://discord.com/api/v8/applications/${
-            require("../config.json").clientID}${process.argv[2]
+            require("../config.json").applicationID}${process.argv[2]
             ? `/guilds/${process.argv[2]}/commands`
             : "/commands"}`, options).then((res) => {
 

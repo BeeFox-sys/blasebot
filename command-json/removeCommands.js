@@ -30,7 +30,7 @@ const options = {
 (async () => {
 
     const ids = await fetch(`https://discord.com/api/v8/applications/${
-        require("../config.json").clientID}${process.argv[2]
+        require("../config.json").applicationID}${process.argv[2]
         ? `/guilds/${process.argv[2]}`
         : ""}/commands`, options).then((res) => res.json())
         .then((res) => res.map((command) => command.id));
@@ -40,7 +40,7 @@ const options = {
 
     ids.forEach((id) => {
 
-        fetch(`https://discord.com/api/v8/applications/${require("../config.json").clientID}${
+        fetch(`https://discord.com/api/v8/applications/${require("../config.json").applicationID}${
             process.argv[2]
                 ? `/guilds/${process.argv[2]}`
                 : ""}/commands/${id}`, options).then((res) => console.log(res.status, id));
