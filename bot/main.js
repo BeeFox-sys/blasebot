@@ -78,11 +78,11 @@ client.once("ready", () => {
     console.log("The commissioner is doing a great job");
     if (client.mode === 1) {
 
-        client.user.setActivity("the waiting game | Can't connect to blasball :c");
+        client.user.setActivity("the waiting game | Can't connect to blaseball :c");
     
     } else {
 
-        client.user.setActivity("Blaseball! | /help");
+        client.user.setActivity("Blaseball! | /info");
     
     }
 
@@ -111,7 +111,7 @@ client.setInterval(() => {
     
     } else {
 
-        client.user.setActivity("Blaseball! | /help");
+        client.user.setActivity("Blaseball! | /info");
     
     }
 

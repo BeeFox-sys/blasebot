@@ -1,43 +1,40 @@
 # Blasebot
 ---
-A discord bot for blaseball
+A Discord bot for [Blaseball](https://www.blaseball.com/).
 
 ## Features
 
-* Game lookup (`bb!game [season] [day] [team playing]`)
-* Player lookup (`bb!player [full name]`)
-* Team lookup (`bb!team [team name, nickname, or emoji]`)
-* Game subscription (`bb!subscribe [team]`)
-* Game summaries (`bb!summarize [team]`)
-* Game score updates (`bb!scores [team]`)
-* Game score updates compact mode (`bb!compact [team]`)
-
-## Game Subscription
-
-Game subscription allows you to have plays and score for all games a team play sent directly to a channel of your choice. You can allow this by using `bb!subscribe [team]`. If you wish to stop having this information sent to a channel, you can use `bb!unsubscribe`. You may only have information for one team sent to a channel, and you cannot have a teams information sent to multiple channels.
-
-## Game Summaries
-
-Game summaries are similar to subscriptions. When a game ends, a score card will be sent to the selected channel, this is the same card generated with game lookups. Unlike subscriptions, you may have multiple teams summaries sent to the same channel. You can subscribe to summaries using `bb!summarize [team]` and unsubscribe with `bb!unsummarize [team]`.
+* Game lookup (`/lookup day [season] [day] [team playing]`)
+* Player lookup (`/lookup player [full name]`)
+* Team lookup (`/lookup team [team name]`)
+* Game score updates (`/subscribe scores [team]`)
+* Game summaries (`/subscribe summaries [team]`)
+* Event subscription (`/subscribe events`)
+* End-of-game betting reminders (`/subscribe bets`)
 
 ## Game Scores
 
-Game scores are also similar to subscriptions, only giving updates on scoring plays. You can subscribe to score updates using `bb!scores [team]` and unsubscribe with `bb!unscores [team]`. If you want a more compact version, use `bb!compact[team]` and `bb!uncompact[team]`.
+Game score update subscription allows you to have scoring plays for all games that a specific team play be sent directly to a channel of your choice. You can enable this by using `/subscribe scores [team]`. If you wish to stop having this information sent to a channel, you can use `/unsubscribe scores [team]`. You may only have scores for one team sent to a channel, and you cannot have a given team's scores be sent to multiple channels.
+
+## Game Summaries
+
+Game summaries are similar to score update subscriptions. When a game ends, a score card – the same style that is generated with game lookups – will be sent to the subscribed channel. Unlike game score subscriptions, you may have multiple teams' summaries sent to the same channel. You can subscribe to summaries using `/subscribe summaries [team]` and unsubscribe with `/unsubscribe summaries [team]`.
 
 ## Privacy
 
-No personal data is stored in the database, only channel IDs, guild IDs, and the ID of any teams are stored.
+No personal data is stored in the database, only channel IDs, guild IDs, and the IDs of any blaseball teams are stored.
 
 ## Forbidden Knowledge
 
-Warning! This code contains some forbidden knowledge, forbidden knowledge can demystify the game of blaseball. Look at the code at your own risk!
+Warning! This code contains some forbidden knowledge, which can demystify the game of blaseball. Look at the code at your own risk!
 
 ## Invite Bot
 
-You can invite blasebot to your guild using [this link](https://discord.com/oauth2/authorize?client_id=749154634370646067&scope=bot&permissions=18432)
+You can invite Blasebot to your server using [this link](https://discord.com/oauth2/authorize?client_id=749154634370646067&scope=bot%20applications.commands&permissions=18432). This link is also shown by using the bot's `/info` command.
 
 ## Running the bot
 
-If you wish to run the bot yourself, you will need to use node 14.5.0 minimum. To run the bot make sure to run `npm install` to install all packages. You can then configure a file named `config.json` at the top level of the directory. See `sample.config.json` for how to configure the bot.
-Blaseball uses a mongoose database to store subscriptions and summaries.
-Once everything is set up, you can run blaseball with `node bot/main` from the top directory.
+If you wish to run the bot yourself, you will need to use Node 14.5.0 minimum. To run the bot make sure to run `npm install` to install all packages. You can then configure a file named `config.json` at the top level of the directory. See `sample.config.json` for how to configure the bot. Once the config file has been created, run `node command-json/updateCommands` from the top directory to register the bot's slash commands with Discord.
+Blasebot uses a Mongoose database to store subscriptions – if you are running the bot locally, leave [MongoDB](https://www.mongodb.com/try/download/community) (`mongo`) running in the background before starting up the bot.
+
+Once everything is set up, you can run Blasebot with `node bot/main` from the top directory.
