@@ -1,4 +1,3 @@
-const {PlayerTeams} = require("../blaseball-api/players");
 const {getTeam, emojiString} = require("./teamUtils.js");
 const {MessageEmbed} = require("discord.js");
 
@@ -13,7 +12,7 @@ const {coffeeCache, bloodCache} = require("blaseball");
  */
 async function generatePlayerCard (player, forbidden) {
 
-    const team = await getTeam(PlayerTeams.get(player.id));
+    const team = await getTeam(player.leagueTeamId);
     const playerCard = new MessageEmbed()
         .setTitle(`${
             emojiString(team.emoji)

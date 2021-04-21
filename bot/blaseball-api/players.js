@@ -63,7 +63,6 @@ async function getListOfPlayers () {
 
 // PlayerCache
 const PlayerNames = new Collection();
-const PlayerTeams = new Collection();
 const PlayerCache = new NodeCache();
 
 setInterval(updatePlayerCache, 15 * 60 * 1000);
@@ -83,18 +82,6 @@ async function updatePlayerCache () {
         console.log("Team cache empty, trying again in 1 minute");
         
         return client.setTimeout(updatePlayerCache, 2000 * 60);
-    
-    }
-    for (let index = 0; index < teams.length; index++) {
-
-        const team = TeamCache.get(teams[index]);
-        const teamIDs = team.lineup.concat(team.rotation, team.bullpen, team.bench);
-
-        teamIDs.forEach((playerID) => {
-
-            PlayerTeams.set(playerID, team.id);
-        
-        });
     
     }
     
@@ -167,7 +154,6 @@ async function getPlayer (name) {
 module.exports = {
     getPlayer,
     PlayerCache,
-    PlayerTeams,
     PlayerNames,
     updatePlayerCache
 };
