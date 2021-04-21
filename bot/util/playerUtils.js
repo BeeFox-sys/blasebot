@@ -382,9 +382,16 @@ function items (player) {
 
     let itemString = "";
 
+    const slots = [
+        "1️⃣",
+        "2️⃣",
+        "3️⃣",
+        "4️⃣"
+    ];
+
     for (let slot = 0; slot < 4; slot++) {
 
-        itemString += `Slot ${slot + 1}: `;
+        itemString += `${slots[slot]}: `;
         if (slot < player.items.length) {
 
             itemString
