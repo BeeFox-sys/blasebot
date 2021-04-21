@@ -373,7 +373,7 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
 const eventTypes = [
     {"id": "REVERB",
         "name": "Reverb",
-        "colour": "#5c407d",
+        "colour": "#4d3171",
         "search": /reverb|repeat/iu},
     {"id": "FEEDBACK",
         "name": "Feedback",
