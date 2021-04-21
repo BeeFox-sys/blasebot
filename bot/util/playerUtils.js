@@ -34,38 +34,36 @@ async function generatePlayerCard (player, forbidden) {
     
     }
 
-    if (forbidden) {
-
-        playerCard.addField("Fingers", `||${player.totalFingers} Fingers||`, true);
-
-    }
     playerCard
-        .addField("Peanut Allergy", player.peanutAllergy ? "Yes" : "No", true)
-        .addField("Fate", player.fate ?? "A roll of the dice", true)
+        .addField("Current Vibe", (player.permAttr.includes("SCATTERED") ? (forbidden ? `||${vibeString(vibes(player))}||` : "** **") : vibeString(vibes(player))), true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4)
             ? `**Base ${player.evolution}**`
-            : (player.evolution === 4 ? "Home" : "Base")), true);
-    if (forbidden) {
-
-        playerCard.addField("eDensity", `||${player.eDensity.toFixed(5)} bl/m³||`, true);
-
-    }
-    playerCard.addField(
-        "Coffee Style",
-        player.coffee !== null ? (player.coffee == 7 ? "Espresso" : await coffeeCache.fetch(player.coffee)) : "Coffee?", true
-    )
-        .addField("Current Vibe", (player.permAttr.includes("SCATTERED") ? (forbidden ? `||${vibeString(vibes(player))}||` : "** **") : vibeString(vibes(player))), true)
-        .addField("Items", items(player), true)
-        .addField("Blood Type", player.blood !== null ? await bloodCache.fetch(player.blood) : "Blood?", true)
+            : (player.evolution === 4 ? "Home" : "Base")), true)
+        .addField("Peanut Allergy", player.peanutAllergy ? "Yes" : "No", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
-        .addField("Modifications", await attributes(player), true)
+        .addField("Coffee Style",
+            player.coffee !== null ? (player.coffee == 7
+                ? "Espresso"
+                : await coffeeCache.fetch(player.coffee)
+            ) : "Coffee?", true
+        )
+        .addField("Blood Type", player.blood !== null ? await bloodCache.fetch(player.blood) : "Blood?", true)
+        .addField("Fate", player.fate ?? "A roll of the dice", true)
+        if (forbidden) {
+
+            playerCard.addField("Fingers", `||${player.totalFingers} Fingers||`, true)
+                .addField("eDensity", `||${player.eDensity.toFixed(5)} bl/m³||`, true);
+
+        }
+    playerCard.addField("Modifications", await attributes(player), true)
+        .addField("Items", items(player), false)
         .addField("**--Stars--**", "** **", false)
         .addField("Batting", ratingString(player, "hitting"))
         .addField("Pitching", ratingString(player, "pitching"))
         .addField("Baserunning", ratingString(player, "baserunning"))
         .addField("Defense", ratingString(player, "defense"))
         .addField(
-            (player.permAttr.includes("RETIRED")) ? "**--Soulsong--**" : "**--Soulscream--**",
+            player.permAttr.includes("RETIRED") ? "**--Soulsong--**" : "**--Soulscream--**",
             soulscreamString(soulscream(player), player.soul, forbidden), false
         )
         .setFooter(`${team.slogan} | ID: ${player.id}`)
