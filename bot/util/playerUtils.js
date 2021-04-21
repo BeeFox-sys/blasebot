@@ -12,7 +12,7 @@ const {coffeeCache, bloodCache} = require("blaseball");
  */
 async function generatePlayerCard (player, forbidden) {
 
-    const team = await getTeam(player.leagueTeamId);
+    const team = await getTeam(player.leagueTeamId || player.tournamentTeamId);
     const playerCard = new MessageEmbed()
         .setTitle(`${
             emojiString(team.emoji)
@@ -29,8 +29,8 @@ async function generatePlayerCard (player, forbidden) {
 
         playerCard
             .addField("Tournament Team", `${
-                emojiString(tourneyTeam.emoji)} ${tourneyTeam.fullName} (${
-                getPosition(tourneyTeam, player)})`, true);
+                emojiString(tourneyTeam.emoji)} ${tourneyTeam.fullName}\n- ${
+                getPosition(tourneyTeam, player)}`, true);
     
     }
 
@@ -40,10 +40,7 @@ async function generatePlayerCard (player, forbidden) {
 
     }
     playerCard
-        .addField(
-            "Allergic to peanuts?",
-            player.peanutAllergy ? "Yes" : "No", true
-        )
+        .addField("Peanut Allergy", player.peanutAllergy ? "Yes" : "No", true)
         .addField("Fate", player.fate ?? "A roll of the dice", true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4)
             ? `**Base ${player.evolution}**`
@@ -54,19 +51,19 @@ async function generatePlayerCard (player, forbidden) {
 
     }
     playerCard.addField(
-        "Coffee",
-        player.coffee ? await coffeeCache.fetch(player.coffee) : "Coffee?", true
+        "Coffee Style",
+        player.coffee !== null ? (player.coffee == 7 ? "Espresso" : await coffeeCache.fetch(player.coffee)) : "Coffee?", true
     )
-        .addField("Vibes", vibeString(vibes(player)), true)
+        .addField("Current Vibe", (player.permAttr.includes("SCATTERED") ? (forbidden ? `||${vibeString(vibes(player))}||` : "** **") : vibeString(vibes(player))), true)
         .addField("Items", items(player), true)
-        .addField("Blood", player.blood ? await bloodCache.fetch(player.blood) : "Blood?", true)
+        .addField("Blood Type", player.blood !== null ? await bloodCache.fetch(player.blood) : "Blood?", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
         .addField("Modifications", await attributes(player), true)
         .addField("**--Stars--**", "** **", false)
         .addField("Batting", ratingString(player, "hitting"))
         .addField("Pitching", ratingString(player, "pitching"))
         .addField("Baserunning", ratingString(player, "baserunning"))
-        .addField("Defence", ratingString(player, "defense"))
+        .addField("Defense", ratingString(player, "defense"))
         .addField(
             (player.permAttr.includes("RETIRED")) ? "**--Soulsong--**" : "**--Soulscream--**",
             soulscreamString(soulscream(player), player.soul, forbidden), false
@@ -103,7 +100,7 @@ function ratingString (player, statCategory) {
     } (${
         (player[`${statCategory}Rating`] * 5).toFixed(1)
     }${
-        (itemBoost * 5).toFixed(1) !== 0
+        (itemBoost * 5).toFixed(1) != 0
             ? (itemBoost > 0 ? " + " : " - ") + Math.abs(itemBoost * 5).toFixed(1)
             : ""
     })`;
@@ -120,17 +117,20 @@ function stars (rating, evolution = 0) {
 
     const starsRating = 0.5 * Math.round(10 * rating);
 
-    let starsString = "";
+    let starsString = (evolution > 0) ? "__" : "";
 
     for (let index = 0; index < Math.floor(starsRating); index++) {
 
-        if (index < evolution) {
-
-            starsString += "\u20DD";
-
-        }
+        //if (index < evolution) {
+        //
+        //    starsString += "\u20DD";
+        //
+        //}
 
         starsString += "★";
+        if (index == evolution - 1) {
+            starsString += "__";
+        }
     
     }
     if (starsRating !== Math.floor(starsRating)) {
@@ -273,7 +273,7 @@ function soulscream (player) {
 
         for (let vj = 0; vj < 11; vj++) {
 
-            const va = (1 / 10) ** vj,
+            const va = (1 / 10) ** vi,
                 vb = trait[vj % trait.length] % va,
                 vc = Math.floor(vb / va * 10);
 
@@ -358,7 +358,7 @@ async function attributes (player) {
 
         const attr = await modCache.fetch(attribute);
 
-        attrString += `:green_square:${attr.title}\n`;
+        attrString += `:green_square: ${attr.title}\n`;
     
     }
     for (const attribute of player.itemAttr) {

@@ -103,6 +103,8 @@ async function generateTeamCard (team, forbidden) {
     const wins = standings.wins[team.id] ?? 0;
     const losses = standings.losses[team.id] ?? 0;
     const gamesPlayed = standings.gamesPlayed[team.id] ?? 0;
+    const runs = standings.runs[team.id] ?? 0;
+
     const teamCard = new MessageEmbed()
         .setTitle(`${emojiString(team.emoji)} ${team.fullName}`)
         .setColor(team.mainColor)
@@ -125,10 +127,12 @@ async function generateTeamCard (team, forbidden) {
         .addField("Level", creditLevels[team.level] || "-", true)
         .addField("eDensity", `${team.eDensity.toFixed(5)} bl/m³`, true)
         .addField("Tarot Card", tarotCards[team.card] || "---- -----", true)
+        .addField("Times Evolved", team.evolution, true)
         .addField("Been Shamed", team.totalShames, true)
         .addField("Shamed Others", team.totalShamings, true)
         .addField("Been Shamed This Season", team.seasonShames, true)
         .addField("Shamed Others This Season", team.seasonShamings, true)
+        .addField("Runs This Season", runs, true)
         .addField("Season Record", `${wins} Wins (${gamesPlayed - losses}-${losses})`, true)
         .setFooter(`${team.slogan} | ${team.shorthand} | ID: ${team.id}`);
 
@@ -174,7 +178,7 @@ async function attributes (team) {
 
         const attr = await modCache.fetch(attribute);
 
-        attrString += `:green_square:${attr.title} (Day)\n`;
+        attrString += `:green_square: ${attr.title} (Day)\n`;
 
     }
 
