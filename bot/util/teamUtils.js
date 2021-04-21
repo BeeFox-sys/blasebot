@@ -56,7 +56,7 @@ const creditLevels = {
  */
 async function getTeam (name) {
 
-    if (name === null) {
+    if (!name) {
 
         return nullTeam;
 
