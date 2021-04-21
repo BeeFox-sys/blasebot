@@ -34,11 +34,6 @@ async function generatePlayerCard (player, forbidden) {
     
     }
 
-    if (forbidden) {
-
-        playerCard.addField("Fingers", `||${player.totalFingers} Fingers||`, true);
-
-    }
     playerCard
         .addField(
             "Peanut Allergy",
@@ -47,10 +42,22 @@ async function generatePlayerCard (player, forbidden) {
         .addField("Fate", player.fate ?? "A roll of the dice", true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4)
             ? `**Base ${player.evolution}**`
-            : (player.evolution === 4 ? "Home" : "Base")), true);
+            : (player.evolution === 4 ? "Home" : "Base")), true)
+        .addField("Peanut Allergy", player.peanutAllergy ? "Yes" : "No", true)
+        .addField("Pregame Ritual", player.ritual || "** **", true)
+        .addField(
+            "Coffee Style",
+            player.coffee !== null ? (player.coffee == 7
+                ? "Espresso"
+                : await coffeeCache.fetch(player.coffee)
+            ) : "Coffee?", true
+        )
+        .addField("Blood Type", player.blood !== null ? await bloodCache.fetch(player.blood) : "Blood?", true)
+        .addField("Fate", player.fate ?? "A roll of the dice", true);
     if (forbidden) {
 
-        playerCard.addField("eDensity", `||${player.eDensity.toFixed(5)} bl/m³||`, true);
+        playerCard.addField("Fingers", `||${player.totalFingers} Fingers||`, true)
+            .addField("eDensity", `||${player.eDensity.toFixed(5)} bl/m³||`, true);
 
     }
     playerCard.addField(
@@ -68,7 +75,7 @@ async function generatePlayerCard (player, forbidden) {
         .addField("Baserunning", ratingString(player, "baserunning"))
         .addField("Defence", ratingString(player, "defense"))
         .addField(
-            (player.permAttr.includes("RETIRED")) ? "**--Soulsong--**" : "**--Soulscream--**",
+            player.permAttr.includes("RETIRED") ? "**--Soulsong--**" : "**--Soulscream--**",
             soulscreamString(soulscream(player), player.soul, forbidden), false
         )
         .setFooter(`${team.slogan} | ID: ${player.id}`)

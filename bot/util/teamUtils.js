@@ -120,8 +120,8 @@ async function generateTeamCard (team, forbidden) {
                 : "||uhhhhh...||", true);
 
     }
-    teamCard.addField("Championships", "🟡".repeat(team.championships) || "** **", true)
-        .addField("Modifications", await attributes(team) || "None", true)
+    teamCard.addField("Modifications", await attributes(team) || "None", true)
+        .addField("Championships", "🟡".repeat(team.championships) || "** **", true)
         .addField("Level", creditLevels[team.level] || "-", true)
         .addField("eDensity", `${team.eDensity.toFixed(5)} bl/m³`, true)
         .addField("Tarot Card", tarotCards[team.card] || "---- -----", true)
