@@ -56,7 +56,7 @@ async function generatePlayerCard (player, forbidden) {
 
         }
     playerCard.addField("Modifications", await attributes(player), true)
-        .addField("Items", items(player), false)
+        .addField("Items", items(player), (playerCard.fields.length % 3 != 2)) // only allow this field to be inline if it would not be the third field in the row
         .addField("**--Stars--**", "** **", false)
         .addField("Batting", ratingString(player, "hitting"))
         .addField("Pitching", ratingString(player, "pitching"))
