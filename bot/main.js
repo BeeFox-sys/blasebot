@@ -66,7 +66,7 @@ Mongoose.connection
         initCaches().then(() => {
 
             console.log("Connecting to discord...");
-            client.login(client.config.discordToken);
+            client.login(client.config.discordToken).catch(console.err);
         
         });
     
