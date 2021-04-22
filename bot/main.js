@@ -66,7 +66,7 @@ Mongoose.connection
         initCaches().then(() => {
 
             console.log("Connecting to discord...");
-            client.login(client.config.discordToken);
+            client.login(client.config.discordToken).catch(console.err);
         
         });
     
@@ -76,6 +76,7 @@ client.once("ready", () => {
 
     console.log(`Ready! Serving ${client.guilds.cache.size} blaseball communities!`);
     console.log("The commissioner is doing a great job");
+    console.log(client.user);
     if (client.mode === 1) {
 
         client.user.setActivity("the waiting game | Can't connect to blaseball :c");
@@ -85,6 +86,19 @@ client.once("ready", () => {
         client.user.setActivity("Blaseball! | /info");
     
     }
+    client.setInterval(() => {
+
+        if (client.mode === 1) {
+    
+            client.user.setActivity("the waiting game | Can't connect to blaseball :c");
+        
+        } else {
+    
+            client.user.setActivity("Blaseball! | /help");
+        
+        }
+    
+    }, 300000);
 
 });
 
@@ -103,21 +117,6 @@ client.on("message", (msg) => {
 
 });
 
-client.setInterval(() => {
-
-    if (client.mode === 1) {
-
-        client.user.setActivity("the waiting game | Can't connect to blaseball :c");
-    
-    } else {
-
-        client.user.setActivity("Blaseball! | /info");
-    
-    }
-
-}, 300000);
-
-
 // Const {interactionThink}=require("./util/interactionUtils");
 client.ws.on("INTERACTION_CREATE", async (interaction) => {
 
@@ -134,9 +133,12 @@ client.ws.on("INTERACTION_CREATE", async (interaction) => {
 
 client.on("rateLimit", (err) => {
 
-    console.error(err);
+    console.error("ratelimit hit", err);
 
 });
+
+client.on("error", console.error);
+client.on("debug", console.debug);
 
 process.on("uncaughtException", console.error);
 process.on("unhandledRejection", console.error);
