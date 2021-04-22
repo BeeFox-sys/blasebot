@@ -134,7 +134,7 @@ client.ws.on("INTERACTION_CREATE", async (interaction) => {
 
 client.on("rateLimit", (err) => {
 
-    console.error(err);
+    console.error("ratelimit hit", err);
 
 });
 

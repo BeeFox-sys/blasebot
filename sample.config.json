@@ -1,7 +1,7 @@
 {
     "discordToken":"DISCORD TOKEN",
     "dbUrl":"mongodb://localhost/blasebot",
-    "prefix":"bb!",
     "apiUrl":"https://blaseball.com/database",
-    "apiUrlEvents":"https://www.blaseball.com/events"
+    "apiUrlEvents":"https://www.blaseball.com/events",
+    "clientID":"488198342598459394"
 }
