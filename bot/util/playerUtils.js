@@ -60,15 +60,8 @@ async function generatePlayerCard (player, forbidden) {
             .addField("eDensity", `||${player.eDensity.toFixed(5)} bl/m³||`, true);
 
     }
-    playerCard.addField(
-        "Coffee",
-        player.coffee ? await coffeeCache.fetch(player.coffee) : "Coffee?", true
-    )
-        .addField("Vibes", vibeString(vibes(player)), true)
-        .addField("Items", items(player), true)
-        .addField("Blood", player.blood ? await bloodCache.fetch(player.blood) : "Blood?", true)
-        .addField("Pregame Ritual", player.ritual || "** **", true)
-        .addField("Modifications", await attributes(player), true)
+    playerCard.addField("Modifications", await attributes(player), true)
+        .addField("Items", items(player), (playerCard.fields.length % 3 != 2)) // Only allow this field to be inline if it would not be the third field in the row
         .addField("**--Stars--**", "** **", false)
         .addField("Batting", ratingString(player, "hitting"))
         .addField("Pitching", ratingString(player, "pitching"))
