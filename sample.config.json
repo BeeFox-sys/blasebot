@@ -3,6 +3,5 @@
     "applicationID":"DISCORD APPLICATION ID",
     "dbUrl":"mongodb://localhost/blasebot",
     "apiUrl":"https://blaseball.com/database",
-    "apiUrlEvents":"https://www.blaseball.com/events",
-    "clientID":"488198342598459394"
+    "apiUrlEvents":"https://www.blaseball.com/events"
 }

@@ -94,7 +94,7 @@ client.once("ready", () => {
         
         } else {
     
-            client.user.setActivity("Blaseball! | /help");
+            client.user.setActivity("Blaseball! | /info");
         
         }
     
