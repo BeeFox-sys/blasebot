@@ -140,3 +140,4 @@ client.on("rateLimit", (err) => {
 
 process.on("uncaughtException", console.error);
 process.on("unhandledRejection", console.error);
+client.on("debug", console.log);
