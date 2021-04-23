@@ -35,6 +35,12 @@ async function generatePlayerCard (player, forbidden) {
     }
 
     playerCard
+        .addField("Current Vibe", player.permAttr.includes("SCATTERED")
+            ? (forbidden ? `||${vibeString(vibes(player))}||` : "** **")
+            : vibeString(vibes(player)), true)
+        .addField("Evolution", (player.evolution > 0 && player.evolution < 4)
+            ? `**Base ${player.evolution}**`
+            : (player.evolution === 4 ? "Home" : "Base"), true)
         .addField(
             "Peanut Allergy",
             player.peanutAllergy ? "🤢" : "😋", true
@@ -45,14 +51,12 @@ async function generatePlayerCard (player, forbidden) {
             : (player.evolution === 4 ? "Home" : "Base")), true)
         .addField("Peanut Allergy", player.peanutAllergy ? "Yes" : "No", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
-        .addField(
-            "Coffee Style",
-            player.coffee !== null ? (player.coffee == 7
-                ? "Espresso"
-                : await coffeeCache.fetch(player.coffee)
-            ) : "Coffee?", true
-        )
-        .addField("Blood Type", player.blood !== null ? await bloodCache.fetch(player.blood) : "Blood?", true)
+        .addField("Coffee Style", player.coffee !== null
+            ? (player.coffee === 7 ? "Espresso" : await coffeeCache.fetch(player.coffee))
+            : "Coffee?", true)
+        .addField("Blood Type", player.blood !== null
+            ? await bloodCache.fetch(player.blood)
+            : "Blood?", true)
         .addField("Fate", player.fate ?? "A roll of the dice", true);
     if (forbidden) {
 
@@ -61,7 +65,8 @@ async function generatePlayerCard (player, forbidden) {
 
     }
     playerCard.addField("Modifications", await attributes(player), true)
-        .addField("Items", items(player), (playerCard.fields.length % 3 != 2)) // Only allow this field to be inline if it would not be the third field in the row
+        // Only allow the items field to be inline if it would not be the third field in the row
+        .addField("Items", items(player), (playerCard.fields.length % 3 !== 2))
         .addField("**--Stars--**", "** **", false)
         .addField("Batting", ratingString(player, "hitting"))
         .addField("Pitching", ratingString(player, "pitching"))
@@ -103,7 +108,7 @@ function ratingString (player, statCategory) {
     } (${
         (player[`${statCategory}Rating`] * 5).toFixed(1)
     }${
-        (itemBoost * 5).toFixed(1) !== 0
+        Math.abs(itemBoost * 5).toFixed(1) !== "0.0"
             ? (itemBoost > 0 ? " + " : " - ") + Math.abs(itemBoost * 5).toFixed(1)
             : ""
     })`;
@@ -124,10 +129,11 @@ function stars (rating, evolution = 0) {
 
     for (let index = 0; index < Math.floor(starsRating); index++) {
 
-        if (index < evolution) {
+        starsString += "★";
+        if (index === evolution - 1) {
 
-            starsString += "\u20DD";
-
+            starsString += "__";
+        
         }
 
         starsString += "★";
