@@ -5,5 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Install modules
+      run: npm install eslint
     - name: Run ESLint
-      run: npm install eslint && eslint . --ext .js,.jsx,.ts,.tsx
+      run: npx eslint .
