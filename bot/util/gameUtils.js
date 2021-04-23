@@ -16,9 +16,9 @@ async function generateGameCard (gameInput) {
     if (game.gameComplete) {
 
         winnerString = `${
-          emojiString(game.homeScore > game.awayScore ? game.homeTeamEmoji : game.awayTeamEmoji)
+            emojiString(game.homeScore > game.awayScore ? game.homeTeamEmoji : game.awayTeamEmoji)
         } ${
-          game.homeScore > game.awayScore ? game.homeTeamNickname : game.awayTeamNickname
+            game.homeScore > game.awayScore ? game.homeTeamNickname : game.awayTeamNickname
         }`;
     
     } else if (game.gameStart) {
@@ -57,8 +57,14 @@ async function generateGameCard (gameInput) {
         .addField("Inning", game.gameStart
             ? `${game.topOfInning ? "Top" : "Bottom"} of inning ${game.inning + 1}`
             : "*Game yet to start*");
+
     if (game.season !== 0) {
-        gameCard.addField("Weather", (await weatherCache.fetch(game.weather)).name ?? "Uhhhh...", true);
+
+        gameCard.addField(
+            "Weather",
+            (await weatherCache.fetch(game.weather)).name ?? "Uhhhh...", true
+        );
+
     }
 
     if (game.shame) {

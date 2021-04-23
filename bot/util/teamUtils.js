@@ -106,7 +106,11 @@ async function generateTeamCard (team, forbidden) {
     const runs = standings.runs[team.id] ?? 0;
 
     const teamCard = new MessageEmbed()
-        .setTitle(`${emojiString(team.emoji)} ${team.fullName}${team.level > 4 ? " 🔴" : ""}${team.seasAttr.includes("PARTY_TIME") ? " 🎉" : ""}`)
+        .setTitle(`${
+            emojiString(team.emoji)
+        } ${team.fullName}${
+            team.level > 4 ? " 🔴" : ""}${
+            team.seasAttr.includes("PARTY_TIME") ? " 🎉" : ""}`)
         .setColor(team.mainColor)
         .addField("Lineup", team.lineup.length ? playerList(team.lineup) : "uhhhhh...", true)
         .addField("Rotation", team.rotation.length ? playerList(team.rotation) : "uhhhhh...", true)
