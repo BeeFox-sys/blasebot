@@ -1,5 +1,3 @@
-const {Permissions} = require("discord.js");
-
 /**
  *
  * @param {Interaction} interaction

@@ -16,7 +16,7 @@ const command = {
                 ],
                 "additionalScopes": ["applications.commands"]
             // eslint-disable-next-line max-len
-            })}\nContribute on github: https://github.com/BeeFox-sys/blasebot\n\nFun fact! You can subscribe to things in your DMs or any channel you have manage channel permissions for!`
+            })}\nContribute on github: https://github.com/BeeFox-sys/blasebot\nHelp keep blasebot running: https://www.patreon.com/beefox\n\nFun fact! You can subscribe to things in your DMs or any channel you have manage channel permissions for!`
         });
     
     }

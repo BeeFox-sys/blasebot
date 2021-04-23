@@ -41,8 +41,8 @@ async function generatePlayerCard (player, forbidden) {
     }
     playerCard
         .addField(
-            "Allergic to peanuts?",
-            player.peanutAllergy ? "Yes" : "No", true
+            "Peanut Allergy",
+            player.peanutAllergy ? "🤮" : "😋", true
         )
         .addField("Fate", player.fate ?? "A roll of the dice", true)
         .addField("Evolution", ((player.evolution > 0 && player.evolution < 4)
