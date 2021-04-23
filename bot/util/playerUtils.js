@@ -41,7 +41,7 @@ async function generatePlayerCard (player, forbidden) {
             : (player.evolution === 4 ? "Home" : "Base")), true)
         .addField(
             "Peanut Allergy",
-            player.peanutAllergy ? "🤮" : "😋", true
+            player.peanutAllergy ? "🤢" : "😋", true
         )
         .addField("Pregame Ritual", player.ritual || "** **", true)
         .addField("Coffee Style",
