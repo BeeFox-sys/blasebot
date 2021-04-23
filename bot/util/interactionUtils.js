@@ -1,3 +1,5 @@
+const {Permissions} = require("discord.js");
+
 /**
  *
  * @param {Interaction} interaction
@@ -52,7 +54,7 @@ function interactionThink (interaction, client, ephemeral) {
  */
 async function interactionThunk (interaction, client, options) {
 
-    const application = await client.fetchApplication();
+    const application = await client.application;
 
 
     return client.api.webhooks(application.id, interaction.token).messages["@original"].patch({
@@ -71,7 +73,7 @@ async function interactionThunk (interaction, client, options) {
  */
 function permShift (bitfield) {
 
-    return bitfield >>> 1;
+    return BigInt(bitfield);
 
 }
 
