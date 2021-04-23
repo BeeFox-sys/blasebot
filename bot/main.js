@@ -1,7 +1,13 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 const {performance} = require("perf_hooks");
-const client = new Discord.Client({"disableMentions": "all"});
+const client = new Discord.Client({"disableMentions": "all",
+    "restGlobalRateLimit": 45,
+    "intents": [
+        Discord.Intents.FLAGS.GUILDS,
+        Discord.Intents.FLAGS.GUILD_MESSAGES,
+        Discord.Intents.FLAGS.DIRECT_MESSAGES
+    ]});
 
 client.config = require("../config.json");
 client.mode = 0;
@@ -76,7 +82,7 @@ client.once("ready", () => {
 
     console.log(`Ready! Serving ${client.guilds.cache.size} blaseball communities!`);
     console.log("The commissioner is doing a great job");
-    console.log(client.user);
+    // Console.log(client.user);
     if (client.mode === 1) {
 
         client.user.setActivity("the waiting game | Can't connect to blaseball :c");
@@ -138,7 +144,7 @@ client.on("rateLimit", (err) => {
 });
 
 client.on("error", console.error);
-client.on("debug", console.debug);
+// Client.on("debug", console.debug);
 
 process.on("uncaughtException", console.error);
 process.on("unhandledRejection", console.error);

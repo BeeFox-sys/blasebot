@@ -25,6 +25,7 @@ events.on("rawTemporal", (temporal) => {
 });
 
 const {MessageEmbed} = require("discord.js");
+const {clearChannelData} = require("./util/miscUtils");
 
 /**
  * Event for temporal Updates
@@ -91,7 +92,18 @@ async function screenTakeover (temporal) {
         const channel = await client.channels.fetch(doc.channel_id);
 
         channel.send(speakMessage)
-            .catch(console.error);
+            .catch((er) => {
+
+                switch (er.code) {
+
+                case 50013: clearChannelData(channel.id);
+                    break;
+                
+                default: console.error(er);
+                
+                }
+            
+            });
 
     }
 
@@ -133,7 +145,18 @@ events.on("gameUpdate", async (newGame, oldGame) => {
             for (const outcome of outcomes) {
 
                 channel.send(outcome)
-                    .catch(console.error);
+                    .catch((er) => {
+
+                        switch (er.code) {
+    
+                        case 50013: clearChannelData(channel.id);
+                            break;
+                    
+                        default: console.error(er);
+                    
+                        }
+                
+                    });
 
             }
 
@@ -221,7 +244,18 @@ events.on("gameUpdate", async (newGame, oldGame) => {
                         newGame.scoreUpdate
                             ? `\n\`${newGame.scoreUpdate}\``
                             : ""
-                    }`))
+                    }`).catch((er) => {
+
+                        switch (er.code) {
+        
+                        case 50013: clearChannelData(channel.id);
+                            break;
+                        
+                        default: console.error(er);
+                        
+                        }
+                    
+                    }))
                     .catch(console.error);
 
             }
@@ -280,7 +314,19 @@ events.on("gameComplete", async (game) => {
                 game.seriesIndex
             } of ${
                 game.seriesLength
-            } finished!`, summary))
+            } finished!`, summary)
+                .catch((er) => {
+
+                    switch (er.code) {
+
+                    case 50013: clearChannelData(channel.id);
+                        break;
+                
+                    default: console.error(er);
+                
+                    }
+            
+                }))
                 .catch(console.error);
 
         }
@@ -356,7 +402,19 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
                     tomorrowSchedule.length > 0
                         ? " Go Bet!"
                         : " Go catch up on some sleep!"
-                }`, oddsEmbed))
+                }`, oddsEmbed)
+                    .catch((er) => {
+
+                        switch (er.code) {
+    
+                        case 50013: clearChannelData(betchannel.id);
+                            break;
+                    
+                        default: console.error(er);
+                    
+                        }
+                
+                    }))
                 .catch(console.error);
 
         }

@@ -39,7 +39,7 @@ const command = {
         
         }
 
-        interactionRespond(interaction, client, {"ephemeral": false,
+        interactionRespond(interaction, client, {"ephemeral": true,
             "content": "You are already reciving bet reminders here"});
     
     }
