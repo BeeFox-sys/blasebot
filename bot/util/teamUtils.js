@@ -35,17 +35,17 @@ const tarotCards = {
 };
 
 const creditLevels = {
-    "0": "❌0D❌",
-    "1": "❌1D❌",
-    "2": "❌2D❌",
-    "3": "❌3D❌",
-    "4": "🟦C🟦",
-    "5": "⭐Low A⭐",
-    "6": "⭐High A⭐",
-    "7": "⭐AA⭐",
-    "8": "⭐AAA⭐",
-    "9": "⭐AAAA⭐",
-    "10": "⭐AAAAA⭐"
+    "0": "❌ 0D ❌",
+    "1": "❌ 1D ❌",
+    "2": "❌ 2D ❌",
+    "3": "❌ 3D ❌",
+    "4": "🟦 C 🟦",
+    "5": "⭐ Low A ⭐",
+    "6": "⭐ High A ⭐",
+    "7": "⭐ AA ⭐",
+    "8": "⭐ AAA ⭐",
+    "9": "⭐ AAAA ⭐",
+    "10": "⭐ AAAAA ⭐"
 };
 
 
@@ -104,7 +104,7 @@ async function generateTeamCard (team, forbidden) {
     const losses = standings.losses[team.id] ?? 0;
     const gamesPlayed = standings.gamesPlayed[team.id] ?? 0;
     const teamCard = new MessageEmbed()
-        .setTitle(`${emojiString(team.emoji)} ${team.fullName}`)
+        .setTitle(`${emojiString(team.emoji)} ${team.fullName}${team.level > 4 ? " 🔴" : ""}${team.seasAttr.includes("PARTY_TIME") ? " 🎉" : ""}`)
         .setColor(team.mainColor)
         .addField("Lineup", team.lineup.length ? playerList(team.lineup) : "uhhhhh...", true)
         .addField("Rotation", team.rotation.length ? playerList(team.rotation) : "uhhhhh...", true)
@@ -140,7 +140,7 @@ async function generateTeamCard (team, forbidden) {
 const {modCache} = require("blaseball");
 
 /**
- * Generate String
+ * Generate formatted list of a team's attributes by type
  * @param {json} team
  * @returns {string}
  */
@@ -174,7 +174,7 @@ async function attributes (team) {
 
         const attr = await modCache.fetch(attribute);
 
-        attrString += `:green_square:${attr.title} (Day)\n`;
+        attrString += `:green_square: ${attr.title}\n`;
 
     }
 
