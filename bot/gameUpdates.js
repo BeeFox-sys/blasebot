@@ -139,7 +139,8 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 
             if (!channel) {
 
-                return;
+                clearChannelData(doc.channel_id);
+                continue;
 
             }
             for (const outcome of outcomes) {
