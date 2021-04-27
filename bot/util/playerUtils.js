@@ -12,7 +12,7 @@ const {coffeeCache, bloodCache} = require("blaseball");
  */
 async function generatePlayerCard (player, forbidden) {
 
-    const team = await getTeam(player.leagueTeamId);
+    const team = await getTeam(player.leagueTeamId ?? player.tournamentTeamId);
     const playerCard = new MessageEmbed()
         .setTitle(`${
             emojiString(team.emoji)
@@ -52,7 +52,7 @@ async function generatePlayerCard (player, forbidden) {
         .addField("Peanut Allergy", player.peanutAllergy ? "Yes" : "No", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
         .addField("Coffee Style", player.coffee !== null
-            ? (player.coffee === 7 ? "Espresso" : await coffeeCache.fetch(player.coffee))
+            ? await coffeeCache.fetch(player.coffee)
             : "Coffee?", true)
         .addField("Blood Type", player.blood !== null
             ? await bloodCache.fetch(player.blood)
