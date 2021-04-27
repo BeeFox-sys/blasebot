@@ -21,7 +21,9 @@ async function generatePlayerCard (player, forbidden) {
             player.permAttr.includes("ELSEWHERE") ? " 🌫" : ""}${
             player.deceased ? " 💀" : ""}`)
         .setColor(team.mainColor)
-        .addField("Team", `${team.fullName}\n- ${getPosition(team, player)}`, true);
+        .addField("Team", `${team.fullName}${team.fullName !== "Null Team"
+            ? `\n- ${getPosition(team, player)}`
+            : ""}`, true);
 
     if (player.leagueTeamId && player.tournamentTeamId) {
 
