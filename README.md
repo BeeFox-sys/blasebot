@@ -30,7 +30,7 @@ Warning! This code contains some forbidden knowledge, which can demystify the ga
 
 ## Invite Bot
 
-You can invite Blasebot to your server using [this link](https://discord.com/oauth2/authorize?client_id=749154634370646067&scope=bot%20applications.commands&permissions=18432). This link is also shown by using the bot's `/info` command.
+You can invite Blasebot to your server using [this link](https://discord.com/oauth2/authorize?client_id=749154634370646067&scope=bot%20applications.commands&permissions=2147503104). This link is also shown by using the bot's `/info` command.
 
 ## Running the bot
 

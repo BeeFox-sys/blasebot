@@ -12,7 +12,8 @@ const command = {
                 "permissions": [
                     Permissions.FLAGS.SEND_MESSAGES,
                     Permissions.FLAGS.VIEW_CHANNEL,
-                    Permissions.FLAGS.EMBED_LINKS
+                    Permissions.FLAGS.EMBED_LINKS,
+                    2147483648n // USE_SLASH_COMMANDS
                 ],
                 "additionalScopes": ["applications.commands"]
             // eslint-disable-next-line max-len
