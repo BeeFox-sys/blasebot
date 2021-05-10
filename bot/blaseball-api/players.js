@@ -13,6 +13,7 @@ async function getPlayer (name) {
 
     if (!player) {
 
+        console.log(playerNamesCache);
         const names = playerNamesCache.keys();
     
         const playerName = name.toLowerCase();
