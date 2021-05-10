@@ -95,7 +95,8 @@ async function screenTakeover (temporal) {
             .catch((er) => {
 
                 switch (er.code) {
-
+                
+                case 50001:
                 case 50013: clearChannelData(channel.id);
                     break;
                 
@@ -150,6 +151,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 
                         switch (er.code) {
     
+                        case 50001:
                         case 50013: clearChannelData(channel.id);
                             break;
                     
@@ -249,6 +251,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 
                         switch (er.code) {
         
+                        case 50001:
                         case 50013: clearChannelData(channel.id);
                             break;
                         
@@ -320,6 +323,7 @@ events.on("gameComplete", async (game) => {
 
                     switch (er.code) {
 
+                    case 50001:
                     case 50013: clearChannelData(channel.id);
                         break;
                 
@@ -408,6 +412,7 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
 
                         switch (er.code) {
     
+                        case 50001:
                         case 50013: clearChannelData(betchannel.id);
                             break;
                     
