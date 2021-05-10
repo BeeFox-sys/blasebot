@@ -1,4 +1,5 @@
 const {MessageEmbed} = require("discord.js");
+const {emojiString} = require("./teamUtils");
 
 
 // PlayerCache
@@ -27,6 +28,7 @@ const Weather = {
     "19": "Salmon"
 };
 
+
 /**
  * Generates a game card
  * @param {game} gameInput
@@ -39,7 +41,7 @@ async function generateGameCard (gameInput) {
 
     if (game.gameComplete) {
 
-        winnerString = `${
+        winner = `${
             emojiString(game.homeScore > game.awayScore ? game.homeTeamEmoji : game.awayTeamEmoji)
         } ${
             game.homeScore > game.awayScore ? game.homeTeamNickname : game.awayTeamNickname
@@ -90,7 +92,7 @@ async function generateGameCard (gameInput) {
 
         gameCard.addField(
             "Weather",
-            (await weatherCache.fetch(game.weather)).name ?? "Uhhhh...", true
+            (await Weather[game.weather]).name ?? "Uhhhh...", true
         );
 
     }
