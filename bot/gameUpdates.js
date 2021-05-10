@@ -89,7 +89,20 @@ async function screenTakeover (temporal) {
 
     for (const doc of docs) {
 
-        const channel = await client.channels.fetch(doc.channel_id);
+        const channel = await client.channels.fetch(doc.channel_id).catch()
+            .catch((er) => {
+
+                switch (er.code) {
+            
+                case 50001:
+                case 50013: clearChannelData(channel.id);
+                    break;
+            
+                default: console.error(er);
+            
+                }
+        
+            });
 
         channel.send(speakMessage)
             .catch((er) => {
