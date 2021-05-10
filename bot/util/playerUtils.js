@@ -70,8 +70,25 @@ async function generatePlayerCard (player, forbidden) {
         .addField("Baserunning", ratingString(player, "baserunning"))
         .addField("Defense", ratingString(player, "defense"))
         .addField(
-            player.permAttr.includes("RETIRED") ? "**--Soulsong--**" : "**--Soulscream--**",
-            soulscreamString(soulscream(player), player.soul, forbidden), false
+            checkAttrs(player, ["RETIRED"])
+                ? "**--Soulsong--**"
+                : checkAttrs(player, [
+                    "REPLICA",
+                    "DUST"
+                ])
+                    ? "**--Serial--**"
+                    : "**--Soulscream--**",
+            soulscreamString(
+                soulscream(
+                    player,
+                    checkAttrs(player, [
+                        "REPLICA",
+                        "DUST"
+                    ])
+                ),
+                player.soul,
+                forbidden
+            ), false
         )
         .setFooter(`${team.slogan} | ID: ${player.id}`)
         .setURL(`https://www.blaseball.com/player/${player.id}`);
@@ -245,23 +262,37 @@ function vibeString (vibe) {
 /**
  * Soulscream Generator
  * @param {player} player
+ * @param {boolean} serial
  * @returns {string}
  */
-function soulscream (player) {
+function soulscream (player, serial) {
 
     let scream = "";
-    const letter = [
-        "A",
-        "E",
-        "I",
-        "O",
-        "U",
-        "X",
-        "H",
-        "A",
-        "E",
-        "I"
-    ];
+    const letter = serial
+        ? [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        ]
+        : [
+            "A",
+            "E",
+            "I",
+            "O",
+            "U",
+            "X",
+            "H",
+            "A",
+            "E",
+            "I"
+        ];
     const trait = [
         player.pressurization,
         player.divinity,
@@ -281,6 +312,12 @@ function soulscream (player) {
             scream += letter[vc];
         
         }
+
+    }
+    
+    if (serial) {
+
+        return `\`${scream}\``;
 
     }
     
@@ -432,6 +469,31 @@ function healthString (durability, health) {
      * \ufe0e - VARIATION SELECTOR-15 (forces text presentation instead of emoji)
      */
     return "\u26ab\ufe0e".repeat(health) + "\u26aa\ufe0e".repeat(durability - health);
+
+}
+
+/**
+ *
+ * @param {player} player
+ * @param {array} attrs
+ * @returns {boolean}
+ */
+function checkAttrs (player, attrs) {
+
+    for (const attr of attrs) {
+
+        if (player.gameAttr.includes(attr)
+        || player.weekAttr.includes(attr)
+        || player.seasAttr.includes(attr)
+        || player.permAttr.includes(attr)) {
+
+            return true;
+
+        }
+    
+    }
+    
+    return false;
 
 }
 
