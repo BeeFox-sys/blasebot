@@ -41,12 +41,18 @@ require("./gameUpdates");
 const Mongoose = require.main.require("mongoose");
 const process = require("process");
 const {exit} = require("process");
+const {events} = require("blaseball");
 
-Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
-    "useNewUrlParser": true,
-    "useUnifiedTopology": true,
-    "useFindAndModify": false,
-    "useCreateIndex": true
+events.on("ready", () => {
+
+    console.log("Connected to blaseball");
+    Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
+        "useNewUrlParser": true,
+        "useUnifiedTopology": true,
+        "useFindAndModify": false,
+        "useCreateIndex": true
+    });
+
 });
 Mongoose.connection
     .on("error", (error) => {
