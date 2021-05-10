@@ -1,7 +1,8 @@
 const {MessageEmbed} = require("discord.js");
 const {weatherCache} = require("blaseball");
 
-const {emojiString} = require("./teamUtils.js");
+const {emojiString} = require("./teamUtils");
+
 
 /**
  * Generates a game card
