@@ -552,8 +552,10 @@ function subscriptionError (error, channel) {
 
     switch (error.code) {
     
-    case 50001:
-    case 50013: clearChannelData(channel.id);
+    case 50001: // Cannot GET Channel
+    case 50007: // Cannot POST User
+    case 50013: // Cannot POST Channel
+        clearChannelData(channel.id);
         break;
     
     default: console.error(error);
