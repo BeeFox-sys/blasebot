@@ -79,13 +79,7 @@ async function generatePlayerCard (player, forbidden) {
                     ? "**--Serial--**"
                     : "**--Soulscream--**",
             soulscreamString(
-                soulscream(
-                    player,
-                    checkAttrs(player, [
-                        "REPLICA",
-                        "DUST"
-                    ])
-                ),
+                soulscream(player),
                 player.soul,
                 forbidden
             ), false
@@ -262,13 +256,16 @@ function vibeString (vibe) {
 /**
  * Soulscream Generator
  * @param {player} player
- * @param {boolean} serial
  * @returns {string}
  */
-function soulscream (player, serial) {
-
+function soulscream (player) {
+    
     let scream = "";
-    const letter = serial
+
+    const letter = checkAttrs(player, [
+        "REPLICA",
+        "DUST"
+    ])
         ? [
             "0",
             "1",
@@ -315,7 +312,16 @@ function soulscream (player, serial) {
 
     }
     
-    if (serial) {
+    if (checkAttrs(player, ["NEGITIVE"])) {
+
+        scream = `~~${scream.split("").reverse()
+            .join("")}~~`;
+
+    }
+    if (checkAttrs(player, [
+        "REPLICA",
+        "DUST"
+    ])) {
 
         return `\`${scream}\``;
 
