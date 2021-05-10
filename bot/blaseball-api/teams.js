@@ -11,7 +11,7 @@ const {performance} = require("perf_hooks");
  */
 async function getAllTeams () {
 
-    return await fetch(`${client.config.apiUrl}/allTeams`)
+    return await fetch(`${process.env.apiUrl}/allTeams`)
         .then((res) => {
 
             if (!res.ok) {

@@ -13,7 +13,7 @@ const {TeamCache} = require("./teams");
  */
 async function getPlayers (players) {
 
-    return await fetch(`${client.config.apiUrl}/players?ids=${players.join(",")}`)
+    return await fetch(`${process.env.apiUrl}/players?ids=${players.join(",")}`)
         .then((res) => {
 
             if (!res.ok) {

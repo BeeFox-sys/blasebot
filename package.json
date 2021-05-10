@@ -12,6 +12,7 @@
     "@pm2/io": "^4.3.5",
     "blaseball": "git+https://github.com/BeeFox-sys/node-blaseball.git",
     "discord.js": "git+https://github.com/discordjs/discord.js.git",
+    "dotenv": "^9.0.1",
     "eventsource": "^1.1.0",
     "mongoose": "^5.12.5",
     "node-cache": "^5.1.2",

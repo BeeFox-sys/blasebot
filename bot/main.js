@@ -9,7 +9,7 @@ const client = new Discord.Client({"disableMentions": "all",
         Discord.Intents.FLAGS.DIRECT_MESSAGES
     ]});
 
-client.config = require("../config.json");
+require("dotenv").config();
 client.mode = 0;
 global.client = client;
 // Const { messageError } = require("./util/miscUtils");
@@ -52,7 +52,7 @@ const Mongoose = require.main.require("mongoose");
 const process = require("process");
 const {exit} = require("process");
 
-Mongoose.connect(process.env.DB_URL || client.config.dbUrl, {
+Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
     "useNewUrlParser": true,
     "useUnifiedTopology": true,
     "useFindAndModify": false,
@@ -72,7 +72,7 @@ Mongoose.connection
         initCaches().then(() => {
 
             console.log("Connecting to discord...");
-            client.login(client.config.discordToken).catch(console.err);
+            client.login(process.env.discordToken).catch(console.err);
         
         });
     

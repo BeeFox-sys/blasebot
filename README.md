@@ -4,7 +4,7 @@ A Discord bot for [Blaseball](https://www.blaseball.com/).
 
 ## Features
 
-* Game lookup (`/lookup day [season] [day] [team playing]`)
+* Game lookup (`/lookup day [season] [day] <team playing>`)
 * Player lookup (`/lookup player [full name]`)
 * Team lookup (`/lookup team [team name]`)
 * Game score updates (`/subscribe scores [team]`)
@@ -34,7 +34,11 @@ You can invite Blasebot to your server using [this link](https://discord.com/oau
 
 ## Running the bot
 
-If you wish to run the bot yourself, you will need to use Node 14.5.0 minimum. To run the bot make sure to run `npm install` to install all packages. You can then configure a file named `config.json` at the top level of the directory. See `sample.config.json` for how to configure the bot. Once the config file has been created, run `node command-json/updateCommands` from the top directory to register the bot's slash commands with Discord.
+### With Docker
+To run the bot with docker, firstly you must copy `sample.env` to `.env` and fill in the relevant fields, docker will override `dbUrl` so you do not need to worry about that one! After that, you can simply run `docker-compose up --build`, this will start the container.
+
+### Without Docker
+If you wish to run the bot without docker, you will need to use Node 14.5.0 minimum. To run the bot make sure to run `npm install` to install all packages. You can then configure a file named `config.json` at the top level of the directory. See `sample.config.json` for how to configure the bot. Once the config file has been created, run `node command-json/updateCommands` from the top directory to register the bot's slash commands with Discord.
 Blasebot uses a Mongoose database to store subscriptions – if you are running the bot locally, leave [MongoDB](https://www.mongodb.com/try/download/community) (`mongo`) running in the background before starting up the bot.
 
 Once everything is set up, you can run Blasebot with `node bot/main` from the top directory.
