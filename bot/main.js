@@ -128,11 +128,11 @@ client.ws.on("INTERACTION_CREATE", async (interaction) => {
 });
 
 
-client.on("rateLimit", (err) => {
+// Client.on("rateLimit", (err) => {
 
-    console.error("ratelimit hit", err);
+//     //console.error("ratelimit hit", err);
 
-});
+// });
 
 client.on("error", console.error);
 // Client.on("debug", console.debug);

@@ -89,35 +89,11 @@ async function screenTakeover (temporal) {
 
     for (const doc of docs) {
 
-        const channel = await client.channels.fetch(doc.channel_id).catch()
-            .catch((er) => {
-
-                switch (er.code) {
-            
-                case 50001:
-                case 50013: clearChannelData(channel.id);
-                    break;
-            
-                default: console.error(er);
-            
-                }
-        
-            });
+        const channel = await client.channels.fetch(doc.channel_id)
+            .catch((error) => subscriptionError(error, channel));
 
         channel.send(speakMessage)
-            .catch((er) => {
-
-                switch (er.code) {
-                
-                case 50001:
-                case 50013: clearChannelData(channel.id);
-                    break;
-                
-                default: console.error(er);
-                
-                }
-            
-            });
+            .catch((error) => subscriptionError(error, channel));
 
     }
 
@@ -149,7 +125,8 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 
         for (const doc of docs) {
 
-            const channel = await client.channels.fetch(doc.channel_id).catch(console.error);
+            const channel = await client.channels.fetch(doc.channel_id)
+                .catch((error) => subscriptionError(error, channel));
 
             if (!channel) {
 
@@ -160,19 +137,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
             for (const outcome of outcomes) {
 
                 channel.send(outcome)
-                    .catch((er) => {
-
-                        switch (er.code) {
-    
-                        case 50001:
-                        case 50013: clearChannelData(channel.id);
-                            break;
-                    
-                        default: console.error(er);
-                    
-                        }
-                
-                    });
+                    .catch((error) => subscriptionError(error, channel));
 
             }
 
@@ -260,19 +225,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
                         newGame.scoreUpdate
                             ? `\n\`${newGame.scoreUpdate}\``
                             : ""
-                    }`).catch((er) => {
-
-                        switch (er.code) {
-        
-                        case 50001:
-                        case 50013: clearChannelData(channel.id);
-                            break;
-                        
-                        default: console.error(er);
-                        
-                        }
-                    
-                    }))
+                    }`).catch((error) => subscriptionError(error, channel)))
                     .catch(console.error);
 
             }
@@ -332,19 +285,7 @@ events.on("gameComplete", async (game) => {
             } of ${
                 game.seriesLength
             } finished!`, summary)
-                .catch((er) => {
-
-                    switch (er.code) {
-
-                    case 50001:
-                    case 50013: clearChannelData(channel.id);
-                        break;
-                
-                    default: console.error(er);
-                
-                    }
-            
-                }))
+                .catch((error) => subscriptionError(error, channel)))
                 .catch(console.error);
 
         }
@@ -421,19 +362,7 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
                         ? " Go Bet!"
                         : " Go catch up on some sleep!"
                 }`, oddsEmbed)
-                    .catch((er) => {
-
-                        switch (er.code) {
-    
-                        case 50001:
-                        case 50013: clearChannelData(betchannel.id);
-                            break;
-                    
-                        default: console.error(er);
-                    
-                        }
-                
-                    }))
+                    .catch((error) => subscriptionError(error, channel)))
                 .catch(console.error);
 
         }
@@ -613,3 +542,22 @@ client.on("channelDelete", (channel) => {
     eventsCol.deleteMany({"channel_id": id}).catch(console.error);
 
 });
+
+/**
+ *
+ * @param {error} error
+ * @param {channel} channel
+ */
+function subscriptionError (error, channel) {
+
+    switch (error.code) {
+    
+    case 50001:
+    case 50013: clearChannelData(channel.id);
+        break;
+    
+    default: console.error(error);
+    
+    }
+
+}
