@@ -33,18 +33,8 @@ const commandLoadEnd = performance.now();
 
 // eslint-disable-next-line max-len
 console.log(`Loaded ${loadedCommands} root commands in ${Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
-const {updateTeamCache} = require("./blaseball-api/teams");
-const {updatePlayerCache} = require("./blaseball-api/players");
 
-/**
- * Initates Caches
- */
-async function initCaches () {
 
-    await updateTeamCache();
-    await updatePlayerCache();
-
-}
 require("./gameUpdates");
 
 // Setup Mongoose
@@ -68,13 +58,8 @@ Mongoose.connection
     .once("open", () => {
 
         console.log("Connected to database");
-        console.log("Initaliszing Caches");
-        initCaches().then(() => {
-
-            console.log("Connecting to discord...");
-            client.login(process.env.discordToken).catch(console.err);
-        
-        });
+        console.log("Connecting to discord...");
+        client.login(process.env.discordToken).catch(console.err);
     
     });
 // Client Ready

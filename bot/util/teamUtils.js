@@ -1,4 +1,4 @@
-const {TeamCache, TeamNames} = require("../blaseball-api/teams");
+const {TeamCache} = require("../blaseball-api/teams");
 const {PlayerCache} = require("../blaseball-api/players");
 const {games} = require("blaseball");
 const {MessageEmbed} = require("discord.js");
@@ -51,43 +51,18 @@ const creditLevels = {
 
 /**
  * Get team
- * @param {teamName} name
+ * @param {teamName} id
  * @returns {json} team
  */
-async function getTeam (name) {
+async function getTeam (id) {
 
-    if (!name) {
+    if (!id) {
 
         return nullTeam;
 
     }
 
-    let team = name ? TeamCache.get(name) : nullTeam;
-
-    if (!team || team.fullName === nullTeam.fullName) {
-
-        const nameLowercase = name.toLowerCase();
-        const teamName = TeamNames.findKey((teamData) => teamData.lowercase === nameLowercase
-        || teamData.location === nameLowercase
-        || teamData.nickname === nameLowercase
-        || teamData.shorthand === nameLowercase
-        || teamData.emoji === nameLowercase);
-
-        if (!teamName) {
-
-            return null;
-
-        }
-        team = TeamCache.get(teamName);
-
-    }
-    if (!team || team.fullName === nullTeam.fullName) {
-
-        return null;
-
-    }
-
-    return team;
+    return id ? TeamCache.get(id) : nullTeam;
 
 }
 
