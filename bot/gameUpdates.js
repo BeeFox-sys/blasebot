@@ -40,13 +40,13 @@ async function screenTakeover (temporal) {
     case 0: speak = {
         "name": "The Shelled One",
         "colour": "#FF0000",
-        "url": "https://game-icons.net/iucons/ffffff/000000/1x1/rihlsul/peanut.png"
+        "url": "https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png"
     };
         break;
     case 1: speak = {
         "name": "The Monitor",
         "colour": "#5988ff",
-        "url": "https://game-icons.net/iucons/ffffff/000000/1x1/delapouite/giant-squid.png"
+        "url": "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
     };
         break;
     case 2: speak = {
@@ -64,13 +64,13 @@ async function screenTakeover (temporal) {
     case 4: speak = {
         "name": "The Microphone",
         "colour": "#c50c55",
-        "url": "https://www.blaseball.wiki/iumages/8/88/Tgb_feedback.png"
+        "url": "https://www.blaseball.wiki/images/8/88/Tgb_feedback.png"
     };
         break;
     case 5: speak = {
         "name": "Lōotcrates",
         "colour": "#707070",
-        "url": "https://iuk.imagekit.io/beefox/blaseball/Lootcrates.png"
+        "url": "https://ik.imagekit.io/beefox/blaseball/Lootcrates.png"
     };
         break;
     default: speak = {
@@ -432,7 +432,7 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
 const eventTypes = [
     {"id": "REVERB",
         "name": "Reverb",
-        "colour": "#61b3ff",
+        "colour": "#4d3171",
         "search": /reverb|repeat/iu},
     {"id": "FEEDBACK",
         "name": "Feedback",

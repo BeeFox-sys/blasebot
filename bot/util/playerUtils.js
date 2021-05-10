@@ -31,8 +31,8 @@ async function generatePlayerCard (player, forbidden) {
 
         playerCard
             .addField("Tournament Team", `${
-                emojiString(tourneyTeam.emoji)} ${tourneyTeam.fullName} (${
-                getPosition(tourneyTeam, player)})`, true);
+                emojiString(tourneyTeam.emoji)} ${tourneyTeam.fullName}\n- ${
+                getPosition(tourneyTeam, player)}`, true);
     
     }
 
@@ -47,11 +47,6 @@ async function generatePlayerCard (player, forbidden) {
             "Peanut Allergy",
             player.peanutAllergy ? "🤢" : "😋", true
         )
-        .addField("Fate", player.fate ?? "A roll of the dice", true)
-        .addField("Evolution", ((player.evolution > 0 && player.evolution < 4)
-            ? `**Base ${player.evolution}**`
-            : (player.evolution === 4 ? "Home" : "Base")), true)
-        .addField("Peanut Allergy", player.peanutAllergy ? "Yes" : "No", true)
         .addField("Pregame Ritual", player.ritual || "** **", true)
         .addField("Coffee Style", player.coffee !== null
             ? await coffeeCache.fetch(player.coffee)
@@ -73,7 +68,7 @@ async function generatePlayerCard (player, forbidden) {
         .addField("Batting", ratingString(player, "hitting"))
         .addField("Pitching", ratingString(player, "pitching"))
         .addField("Baserunning", ratingString(player, "baserunning"))
-        .addField("Defence", ratingString(player, "defense"))
+        .addField("Defense", ratingString(player, "defense"))
         .addField(
             player.permAttr.includes("RETIRED") ? "**--Soulsong--**" : "**--Soulscream--**",
             soulscreamString(soulscream(player), player.soul, forbidden), false
@@ -127,7 +122,7 @@ function stars (rating, evolution = 0) {
 
     const starsRating = 0.5 * Math.round(10 * rating);
 
-    let starsString = "";
+    let starsString = (evolution > 0) ? "__" : "";
 
     for (let index = 0; index < Math.floor(starsRating); index++) {
 
@@ -137,8 +132,6 @@ function stars (rating, evolution = 0) {
             starsString += "__";
         
         }
-
-        starsString += "★";
     
     }
     if (starsRating !== Math.floor(starsRating)) {
@@ -281,7 +274,7 @@ function soulscream (player) {
 
         for (let vj = 0; vj < 11; vj++) {
 
-            const va = (1 / 10) ** vj,
+            const va = (1 / 10) ** vi,
                 vb = trait[vj % trait.length] % va,
                 vc = Math.floor(vb / va * 10);
 
@@ -366,7 +359,7 @@ async function attributes (player) {
 
         const attr = await modCache.fetch(attribute);
 
-        attrString += `:green_square:${attr.title}\n`;
+        attrString += `:green_square: ${attr.title}\n`;
     
     }
     for (const attribute of player.itemAttr) {

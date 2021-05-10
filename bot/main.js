@@ -123,21 +123,6 @@ client.on("message", (msg) => {
 
 });
 
-client.setInterval(() => {
-
-    if (client.mode === 1) {
-
-        client.user.setActivity("the waiting game | Can't connect to blaseball :c");
-    
-    } else {
-
-        client.user.setActivity("Blaseball! | /info");
-    
-    }
-
-}, 300000);
-
-
 // Const {interactionThink}=require("./util/interactionUtils");
 client.ws.on("INTERACTION_CREATE", async (interaction) => {
 
