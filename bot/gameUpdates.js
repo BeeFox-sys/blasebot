@@ -126,7 +126,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
         for (const doc of docs) {
 
             const channel = await client.channels.fetch(doc.channel_id)
-                .catch((error) => subscriptionError(error, channel));
+                .catch((error) => subscriptionError(error, doc.channel_id));
 
             if (!channel) {
 
