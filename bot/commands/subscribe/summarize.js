@@ -27,7 +27,7 @@ const command = {
         const team = await getTeam(interaction.data.options[0].options[0].value);
 
         const docs
-         = await Summaries.find({"guild_id": interaction.guild_id ?? interaction.channel_id,
+         = await Summaries.find({"channel_id": interaction.channel_id,
              "team": team.id});
 
         if (docs.length > 0) {

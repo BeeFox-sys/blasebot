@@ -21,8 +21,9 @@ const command = {
         
         }
 
-        const docs = await EventsCol.find({"guild_id": interaction.guild_id,
-            "channel_id": interaction.channel_id});
+        const docs = await EventsCol.find({
+            "channel_id": interaction.channel_id
+        });
 
         if (docs.length === 0) {
 
