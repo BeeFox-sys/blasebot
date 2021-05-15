@@ -90,10 +90,10 @@ async function screenTakeover (temporal) {
     for (const doc of docs) {
 
         const channel = await client.channels.fetch(doc.channel_id)
-            .catch((error) => subscriptionError(error, channel));
+            .catch((error) => subscriptionError(error, channel.channel_id));
 
         channel.send(speakMessage)
-            .catch((error) => subscriptionError(error, channel));
+            .catch((error) => subscriptionError(error, channel.channel_id));
 
     }
 
@@ -137,7 +137,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
             for (const outcome of outcomes) {
 
                 channel.send(outcome)
-                    .catch((error) => subscriptionError(error, channel));
+                    .catch((error) => subscriptionError(error, channel.channel_id));
 
             }
 
@@ -225,7 +225,8 @@ events.on("gameUpdate", async (newGame, oldGame) => {
                         newGame.scoreUpdate
                             ? `\n\`${newGame.scoreUpdate}\``
                             : ""
-                    }`).catch((error) => subscriptionError(error, channel)))
+                    }`)
+                        .catch((error) => subscriptionError(error, channel.channel_id)))
                     .catch(console.error);
 
             }
@@ -285,7 +286,7 @@ events.on("gameComplete", async (game) => {
             } of ${
                 game.seriesLength
             } finished!`, summary)
-                .catch((error) => subscriptionError(error, channel)))
+                .catch((error) => subscriptionError(error, channel.channel_id)))
                 .catch(console.error);
 
         }
@@ -362,7 +363,7 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
                         ? " Go Bet!"
                         : " Go catch up on some sleep!"
                 }`, oddsEmbed)
-                    .catch((error) => subscriptionError(error, channel)))
+                    .catch((error) => subscriptionError(error, channel.channel_id.channel_id)))
                 .catch(console.error);
 
         }
@@ -564,7 +565,7 @@ function subscriptionError (error, channel) {
     case 10003: // Cannot GET Channel
     case 50007: // Cannot POST User
     case 50013: // Cannot POST Channel
-        clearChannelData(channel.id);
+        clearChannelData(channel);
         break;
     
     default: console.error(error);
