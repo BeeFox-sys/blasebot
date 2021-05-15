@@ -554,9 +554,9 @@ client.on("channelDelete", (channel) => {
 /**
  *
  * @param {error} error
- * @param {channel} channel
+ * @param {channel} channel_id
  */
-function subscriptionError (error, channel) {
+function subscriptionError (error, channel_id) {
 
     switch (error.code) {
     
@@ -564,7 +564,7 @@ function subscriptionError (error, channel) {
     case 10003: // Cannot GET Channel
     case 50007: // Cannot POST User
     case 50013: // Cannot POST Channel
-        clearChannelData(channel);
+        clearChannelData(channel_id);
         break;
     
     default: console.error(error);
