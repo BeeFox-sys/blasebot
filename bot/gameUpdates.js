@@ -56,7 +56,7 @@ async function screenTakeover (temporal) {
     };
         break;
     case 3: speak = {
-        "name": "Tarot Draw",
+        "name": "The Reader",
         "colour": "#a16dc3",
         "url": ""
     };
@@ -422,7 +422,6 @@ const eventTypes = [
         "name": "Glitter",
         "colour": "#ff94ff",
         "search": /gained/iu},
-
     {"id": "UNSTABLE",
         "name": "Unstable",
         "colour": "#eaabff",
@@ -470,7 +469,7 @@ const eventTypes = [
     {"id": "ITEMDAMAGE",
         "name": "Item Damaged",
         "colour": "#6dc0ff",
-        "search": /broke|breaks|damaged/iu},
+        "search": /broke|break|damaged/iu},
     {"id": "FAX",
         "name": "Fax Machine",
         "colour": "#C0C0C0",
