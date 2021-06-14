@@ -90,10 +90,10 @@ async function screenTakeover (temporal) {
     for (const doc of docs) {
 
         const channel = await client.channels.fetch(doc.channel_id)
-            .catch((error) => subscriptionError(error, channel.channel_id));
+            .catch((error) => subscriptionError(error, doc.channel_id));
 
         channel.send(speakMessage)
-            .catch((error) => subscriptionError(error, channel.channel_id));
+            .catch((error) => subscriptionError(error, doc.channel_id));
 
     }
 
