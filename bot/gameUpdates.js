@@ -141,7 +141,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
             for (const outcome of outcomes) {
 
                 channel.send(outcome)
-                    .catch((error) => subscriptionError(error, channel.channel_id));
+                    .catch((error) => subscriptionError(error, outcome.channel_id));
 
             }
 
@@ -230,7 +230,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
                             ? `\n\`${newGame.scoreUpdate}\``
                             : ""
                     }`)
-                        .catch((error) => subscriptionError(error, channel.channel_id)))
+                        .catch((error) => subscriptionError(error, compactSubscription.channel_id)))
                     .catch(console.error);
 
             }
@@ -290,7 +290,7 @@ events.on("gameComplete", async (game) => {
             } of ${
                 game.seriesLength
             } finished!`, summary)
-                .catch((error) => subscriptionError(error, channel.channel_id)))
+                .catch((error) => subscriptionError(error, summarySubscription.channel_id)))
                 .catch(console.error);
 
         }
@@ -355,9 +355,9 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
             }
 
         }
-        for (const channel of docs) {
+        for (const doc of docs) {
 
-            client.channels.fetch(channel.channel_id)
+            client.channels.fetch(doc.channel_id)
                 .then((betchannel) => betchannel.send(`All Season ${
                     sim().season + 1
                 } Day ${
@@ -367,7 +367,7 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
                         ? " Go Bet!"
                         : " Go catch up on some sleep!"
                 }`, oddsEmbed)
-                    .catch((error) => subscriptionError(error, channel.channel_id.channel_id)))
+                    .catch((error) => subscriptionError(error, doc.channel_id)))
                 .catch(console.error);
 
         }
