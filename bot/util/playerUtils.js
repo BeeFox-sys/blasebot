@@ -166,7 +166,9 @@ const teamPositions = [
     {"id": "bullpen",
         "name": "Bullpen"},
     {"id": "bench",
-        "name": "Bench"}
+        "name": "Bench"},
+    {"id": "shadows",
+        "name": "Shadows"}
 ];
 
 /**
