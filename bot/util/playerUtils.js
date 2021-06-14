@@ -21,9 +21,9 @@ async function generatePlayerCard (player, forbidden) {
             player.permAttr.includes("ELSEWHERE") ? " 🌫" : ""}${
             player.deceased ? " 💀" : ""}`)
         .setColor(team.mainColor)
-        .addField("Team", `${team.fullName}${team.fullName !== "Null Team"
-            ? `\n- ${getPosition(team, player)}`
-            : ""}`, true);
+        .addField("Team", team.fullName === "Null Team"
+            ? "Null Team"
+            : `${team.fullName}\n- ${getPosition(team, player)}`, true);
 
     if (player.leagueTeamId && player.tournamentTeamId) {
 
@@ -33,7 +33,7 @@ async function generatePlayerCard (player, forbidden) {
             .addField("Tournament Team", `${
                 emojiString(tourneyTeam.emoji)} ${tourneyTeam.fullName}\n- ${
                 getPosition(tourneyTeam, player)}`, true);
-    
+
     }
 
     playerCard
@@ -72,10 +72,7 @@ async function generatePlayerCard (player, forbidden) {
         .addField(
             checkAttrs(player, ["RETIRED"])
                 ? "**--Soulsong--**"
-                : checkAttrs(player, [
-                    "REPLICA",
-                    "DUST"
-                ])
+                : checkAttrs(player, ["REPLICA"])
                     ? "**--Serial--**"
                     : "**--Soulscream--**",
             soulscreamString(
@@ -262,34 +259,22 @@ function soulscream (player) {
     
     let scream = "";
 
-    const letter = checkAttrs(player, [
+    let isSerial = checkAttrs(player, [
         "REPLICA",
         "DUST"
-    ])
-        ? [
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9"
-        ]
-        : [
-            "A",
-            "E",
-            "I",
-            "O",
-            "U",
-            "X",
-            "H",
-            "A",
-            "E",
-            "I"
-        ];
+    ]);
+    const letter = [
+        "A",
+        "E",
+        "I",
+        "O",
+        "U",
+        "X",
+        "H",
+        "A",
+        "E",
+        "I"
+    ];
     const trait = [
         player.pressurization,
         player.divinity,
@@ -306,22 +291,19 @@ function soulscream (player) {
                 vb = trait[vj % trait.length] % va,
                 vc = Math.floor(vb / va * 10);
 
-            scream += letter[vc];
+            scream += isSerial ? vc : letter[vc];
         
         }
 
     }
     
-    if (checkAttrs(player, ["NEGITIVE"])) {
+    if (checkAttrs(player, ["NEGATIVE"])) {
 
         scream = `~~${scream.split("").reverse()
             .join("")}~~`;
 
     }
-    if (checkAttrs(player, [
-        "REPLICA",
-        "DUST"
-    ])) {
+    if (isSerial) {
 
         return `\`${scream}\``;
 
@@ -439,7 +421,7 @@ function items (player) {
         if (slot < player.items.length) {
 
             itemString
-                += `${player.items[slot].name} ${
+                += `[${player.items[slot].name}](https://www.blaseball.com/item/${player.items[slot].id}) ${
                     healthString(player.items[slot].durability, player.items[slot].health)}`;
         
         } else if (slot > player.evolution) {
