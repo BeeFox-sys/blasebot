@@ -103,7 +103,7 @@ async function generateTeamCard (team, forbidden) {
         .addField("Championships", "🟡".repeat(team.championships) || "** **", true);
     if (forbidden) {
 
-        teamCard.addField("Underchampionships", "🟡".repeat(team.underchampionships) || "** **", true);
+        teamCard.addField("Underchampionships", "🟣".repeat(team.underchampionships) || "** **", true);
 
     }
     teamCard.addField("Level", creditLevels[team.level] || "-", true);
