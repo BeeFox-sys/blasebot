@@ -261,7 +261,7 @@ function soulscream (player) {
     
     let scream = "";
 
-    let isSerial = checkAttrs(player, [
+    const isSerial = checkAttrs(player, [
         "REPLICA",
         "DUST"
     ]);
@@ -422,9 +422,13 @@ function items (player) {
         itemString += `${slots[slot]}: `;
         if (slot < player.items.length) {
 
-            itemString
-                += `[${player.items[slot].name}](https://www.blaseball.com/item/${player.items[slot].id}) ${
-                    healthString(player.items[slot].durability, player.items[slot].health)}`;
+            itemString += `[${
+                player.items[slot].name
+            }](https://www.blaseball.com/item/${
+                player.items[slot].id
+            }) ${
+                healthString(player.items[slot].durability, player.items[slot].health)
+            }`;
         
         } else if (slot > player.evolution) {
 
