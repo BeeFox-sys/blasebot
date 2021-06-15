@@ -88,29 +88,38 @@ async function generateTeamCard (team, forbidden) {
             team.seasAttr.includes("PARTY_TIME") ? " 🎉" : ""}${
             team.deceased ? " 💀" : ""}`)
         .setColor(team.mainColor)
-        .addField(`Lineup (${team.lineup?.length ?? 0})`, team.lineup?.length ? playerList(team.lineup) : "*Empty*", true)
-        .addField(`Rotation (${team.rotation?.length ?? 0})`, team.rotation?.length ? playerList(team.rotation) : "*Empty*", true)
+        .addField(`Lineup (${team.lineup?.length ?? 0})`, team.lineup?.length
+            ? playerList(team.lineup)
+            : "*Empty*", true)
+        .addField(`Rotation (${team.rotation?.length ?? 0})`, team.rotation?.length
+            ? playerList(team.rotation)
+            : "*Empty*", true)
         .setURL(`https://www.blaseball.com/team/${team.id}`);
 
     if (forbidden) {
 
         teamCard.addField(`Shadows (${team.shadows?.length ?? 0})`, team.shadows?.length
             ? `||${playerList(team.shadows)}||`
-            : "*Empty*", true)
+            : "*Empty*", true);
 
     }
     teamCard.addField("Modifications", await attributes(team) || "None", true)
         .addField("Championships", "🟡".repeat(team.championships) || "** **", true);
     if (forbidden) {
 
-        teamCard.addField("Underchampionships", "🟣".repeat(team.underchampionships) || "** **", true);
+        teamCard.addField(
+            "Underchampionships",
+            "🟣".repeat(team.underchampionships) || "** **",
+            true
+        );
 
     }
     teamCard.addField("Level", creditLevels[team.level] || "-", true);
     if (forbidden && team.imPosition) {
 
-        let imPosX = team.imPosition[0].toFixed(3);
-        let imPosY = (1 - team.imPosition[1]).toFixed(3);
+        const imPosX = team.imPosition[0].toFixed(3);
+        const imPosY = (1 - team.imPosition[1]).toFixed(3);
+
         teamCard.addField("imPosition", `||X: ${imPosX}\nY: ${imPosY}||`, true);
 
     }

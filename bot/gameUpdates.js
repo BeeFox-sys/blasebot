@@ -569,7 +569,7 @@ function subscriptionError (error, channel_id) {
     switch (error.code) {
     
     case 50001: // Missing Channel Access
-    // Case 10003: // Cannot GET Channel
+    // Case 10003: // Cannot GET Channel // eslint-disable-line no-fallthrough
     case 50007: // Cannot POST User
     case 50013: // Cannot POST Channel
         clearChannelData(channel_id);
