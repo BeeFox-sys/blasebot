@@ -261,10 +261,7 @@ function soulscream (player) {
     
     let scream = "";
 
-    const isSerial = checkAttrs(player, [
-        "REPLICA",
-        "DUST"
-    ]);
+    const isSerial = checkAttrs(player, ["REPLICA"]);
     const letter = [
         "A",
         "E",
