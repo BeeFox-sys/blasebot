@@ -162,7 +162,9 @@ events.on("gameUpdate", async (newGame, oldGame) => {
         return;
 
     }
-    if (oldGame.homeScore !== newGame.homeScore || oldGame.awayScore !== newGame.awayScore || newGame.scoreUpdate?.length > 0) {
+    if (oldGame.homeScore !== newGame.homeScore
+        || oldGame.awayScore !== newGame.awayScore
+        || newGame.scoreUpdate?.length > 0) {
 
         try {
 
