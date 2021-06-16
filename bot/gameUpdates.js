@@ -162,7 +162,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
         return;
 
     }
-    if (oldGame.homeScore !== newGame.homeScore || oldGame.awayScore !== newGame.awayScore) {
+    if (oldGame.homeScore !== newGame.homeScore || oldGame.awayScore !== newGame.awayScore || newGame.scoreUpdate?.length > 0) {
 
         try {
 
@@ -185,6 +185,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 
             for (const compactSubscription of docs) {
 
+                // Anti double posting
                 if (
                     compactSubscription.team === newGame.awayTeam
                     && docs.find((doc) => doc.team === newGame.homeTeam
@@ -193,8 +194,9 @@ events.on("gameUpdate", async (newGame, oldGame) => {
                     continue;
 
                 }
-                // Anti double posting
+
                 const hometeamscore = oldGame.homeScore !== newGame.homeScore;
+                const awayteamscore = oldGame.awayScore !== newGame.awayScore;
 
                 client.channels.fetch(compactSubscription.channel_id)
                     .then((channel) => channel.send(`**${
@@ -208,11 +210,11 @@ events.on("gameUpdate", async (newGame, oldGame) => {
                             ? String.fromCodePoint(newGame.awayTeamEmoji)
                             : newGame.awayTeamEmoji
                     } ${
-                        !hometeamscore ? "**" : ""
+                        awayteamscore ? "**" : ""
                     }${
                         newGame.awayScore
                     }${
-                        !hometeamscore ? "**" : ""
+                        awayteamscore ? "**" : ""
                     } ${
                         Number(newGame.homeTeamEmoji)
                             ? String.fromCodePoint(newGame.homeTeamEmoji)
