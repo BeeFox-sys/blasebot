@@ -486,6 +486,10 @@ const eventTypes = [
         "name": "Peanut Mister",
         "colour": "#f3ff54",
         "search": /cured of their peanut allergy/iu},
+    {"id": "TUNNELSTEAL",
+        "name": "Item Stolen",
+        "colour": "#342e26",
+        "search": /stole/u},
     {"id": "SHAME",
         "name": "SHAME",
         "colour": "#800878",
@@ -573,7 +577,8 @@ function subscriptionError (error, channel_id) {
     switch (error.code) {
     
     case 50001: // Missing Channel Access
-    // Case 10003: // Cannot GET Channel // eslint-disable-line no-fallthrough
+    // eslint-disable-next-line capitalized-comments
+    // case 10003: // Cannot GET Channel // eslint-disable-line no-fallthrough
     case 50007: // Cannot POST User
     case 50013: // Cannot POST Channel
         clearChannelData(channel_id);
