@@ -115,12 +115,12 @@ async function generateTeamCard (team, forbidden) {
 
     }
     teamCard.addField("Level", creditLevels[team.level] || "-", true);
-    if (forbidden && team.imPosition) {
+    if (team.imPosition) {
 
         const imPosX = team.imPosition[0].toFixed(3);
         const imPosY = (1 - team.imPosition[1]).toFixed(3);
 
-        teamCard.addField("imPosition", `||X: ${imPosX}\nY: ${imPosY}||`, true);
+        teamCard.addField("imPosition", `X: ${imPosX}\nY: ${imPosY}`, true);
 
     }
     teamCard.addField("eDensity", `${team.eDensity.toFixed(5)} bl/m³`, true)
