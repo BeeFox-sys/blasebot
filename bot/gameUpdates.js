@@ -489,7 +489,7 @@ const eventTypes = [
     {"id": "TUNNELSTEAL",
         "name": "Item Stolen",
         "colour": "#342e26",
-        "search": /stole/u},
+        "search": /.* stole .*!/u},
     {"id": "SHAME",
         "name": "SHAME",
         "colour": "#800878",
