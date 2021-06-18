@@ -104,17 +104,12 @@ async function generateTeamCard (team, forbidden) {
 
     }
     teamCard.addField("Modifications", await attributes(team) || "None", true)
-        .addField("Championships", "🟡".repeat(team.championships) || "** **", true);
-    if (forbidden) {
-
-        teamCard.addField(
+        .addField("Championships", "🟡".repeat(team.championships) || "** **", true)
+        .addField(
             "Underchampionships",
-            "🟣".repeat(team.underchampionships) || "** **",
-            true
-        );
-
-    }
-    teamCard.addField("Level", creditLevels[team.level] || "-", true);
+            "🟣".repeat(team.underchampionships) || "** **", true
+        )
+        .addField("Level", creditLevels[team.level] || "-", true);
     if (team.imPosition) {
 
         const imPosX = team.imPosition[0].toFixed(3);
