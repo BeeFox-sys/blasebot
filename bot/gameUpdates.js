@@ -157,7 +157,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 // Compact Scores
 events.on("gameUpdate", async (newGame, oldGame) => {
 
-    if (!oldGame || newGame.gameComplete) {
+    if (!oldGame || newGame.gameComplete || (oldGame.hasOwnProperty('playCount') && oldGame.playCount === newGame.playCount)) {
 
         return;
 
