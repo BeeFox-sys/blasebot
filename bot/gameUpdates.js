@@ -1,5 +1,6 @@
 const {client} = global;
 const {generateGameCard} = require("./util/gameUtils");
+const {emojiString} = require("./util/teamUtils");
 
 const {
     subscriptions,
@@ -11,6 +12,7 @@ const {
 } = require("./schemas/subscription");
 
 const {events, sim, games} = require("blaseball");
+
 
 // -- Temporal --
 
@@ -103,11 +105,128 @@ async function screenTakeover (temporal) {
 
 }
 
-/*
- *  --- Game Updates ---
- * Outcomes
+/**
+ * Generates and sends a game update message to subscribed channels
+ * @param {json} newGame
+ * @param {json} [oldGame=null]
+ * @param {json} [overrideNew={}]
  */
+async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}) {
 
+    Object.assign(newGame, overrideNew ?? {});
+
+    try {
+
+        const docs = await compacts.find({
+            "$or": [
+                {
+                    "team": newGame.homeTeam
+                },
+                {
+                    "team": newGame.awayTeam
+                }
+            ]
+        });
+
+        if (docs.length === 0) {
+
+            return;
+
+        }
+
+        for (const compactSubscription of docs) {
+
+            // Anti double posting
+            if (
+                compactSubscription.team === newGame.awayTeam
+                && docs.find((doc) => doc.team === newGame.homeTeam
+                && doc.channel_id === compactSubscription.channel_id)) {
+
+                continue;
+
+            }
+
+            const hometeamscored = oldGame && oldGame.homeScore !== newGame.homeScore;
+            const awayteamscored = oldGame && oldGame.awayScore !== newGame.awayScore;
+
+            const message = `**${
+                (newGame.topOfInning || newGame.inning === -1)
+                    ? "Top"
+                    : "Bottom"
+            } of ${
+                Math.max(newGame.inning + 1, 1)
+            }** | ${
+                emojiString(newGame.awayTeamEmoji)
+            } ${
+                awayteamscored ? "**" : ""
+            }${
+                newGame.awayScore
+            }${
+                awayteamscored ? "**" : ""
+            } ${
+                emojiString(newGame.homeTeamEmoji)
+            } ${
+                hometeamscored ? "**" : ""
+            }${
+                newGame.homeScore
+            }${
+                hometeamscored ? "**" : ""
+            }\n>>> ${
+                newGame.lastUpdate
+            }${
+                newGame.scoreUpdate
+                    ? `\n**\`${newGame.scoreUpdate}\`**`
+                    : ""
+            }`;
+
+            client.channels.fetch(compactSubscription.channel_id)
+                .then((channel) => {
+                  
+                    channel.send(message)
+                        .catch((error) => subscriptionError(
+                            error,
+                            compactSubscription.channel_id
+                        ));
+
+                })
+                .catch(console.error);
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+}
+
+// --- Game Start ---
+
+// Compact Scores ("Play ball!")
+events.on("gameStart", async (game) => {
+
+    /*
+     * The bot will sometimes miss updates, so hardcode the message unless the actual update has a
+     * score update.
+     */
+    await sendScoreUpdateMessage(game, null, game?.scoreUpdate && game.scoreUpdate.length > 0
+        ? null
+        : {
+            "topOfInning": true,
+            "inning": 0,
+            "homeScore": 0,
+            "awayScore": 0,
+            "lastUpdate": "Play ball!",
+            "scoreUpdate": null
+        });
+
+});
+
+
+// --- Game Updates ---
+
+// Outcomes
 events.on("gameUpdate", async (newGame, oldGame) => {
 
     try {
@@ -117,6 +236,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
             return;
 
         }
+
         const outcomes = handleEvents(newGame, oldGame.outcomes.length);
 
         if (!outcomes.length) {
@@ -154,6 +274,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
     }
 
 });
+
 // Compact Scores
 events.on("gameUpdate", async (newGame, oldGame) => {
 
@@ -164,88 +285,12 @@ events.on("gameUpdate", async (newGame, oldGame) => {
         return;
 
     }
+
     if (oldGame.homeScore !== newGame.homeScore
         || oldGame.awayScore !== newGame.awayScore
         || newGame.scoreUpdate?.length > 0) {
 
-        try {
-
-            const docs = await compacts.find({
-                "$or": [
-                    {
-                        "team": newGame.homeTeam
-                    },
-                    {
-                        "team": newGame.awayTeam
-                    }
-                ]
-            });
-
-            if (docs.length === 0) {
-
-                return;
-
-            }
-
-            for (const compactSubscription of docs) {
-
-                // Anti double posting
-                if (
-                    compactSubscription.team === newGame.awayTeam
-                    && docs.find((doc) => doc.team === newGame.homeTeam
-                    && doc.channel_id === compactSubscription.channel_id)) {
-
-                    continue;
-
-                }
-
-                const hometeamscore = oldGame.homeScore !== newGame.homeScore;
-                const awayteamscore = oldGame.awayScore !== newGame.awayScore;
-
-                client.channels.fetch(compactSubscription.channel_id)
-                    .then((channel) => channel.send(`**${
-                        newGame.topOfInning
-                            ? "Top"
-                            : "Bottom"
-                    } of ${
-                        newGame.inning + 1
-                    }** | ${
-                        Number(newGame.awayTeamEmoji)
-                            ? String.fromCodePoint(newGame.awayTeamEmoji)
-                            : newGame.awayTeamEmoji
-                    } ${
-                        awayteamscore ? "**" : ""
-                    }${
-                        newGame.awayScore
-                    }${
-                        awayteamscore ? "**" : ""
-                    } ${
-                        Number(newGame.homeTeamEmoji)
-                            ? String.fromCodePoint(newGame.homeTeamEmoji)
-                            : newGame.homeTeamEmoji
-                    } ${
-                        hometeamscore ? "**" : ""
-                    }${
-                        newGame.homeScore
-                    }${
-                        hometeamscore ? "**" : ""
-                    }\n>>> ${
-                        newGame.lastUpdate
-                    }${
-                        newGame.scoreUpdate
-                            ? `\n\`${newGame.scoreUpdate}\``
-                            : ""
-                    }`)
-                        .catch((error) => subscriptionError(error, compactSubscription.channel_id)))
-                    .catch(console.error);
-
-            }
-
-        } catch (err) {
-
-            console.error(err);
-
-        }
+        await sendScoreUpdateMessage(newGame, oldGame);
 
     }
 
@@ -308,6 +353,7 @@ events.on("gameComplete", async (game) => {
     }
 
 });
+
 // Bet
 events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
 
@@ -341,13 +387,9 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
                 oddsEmbed.addField(
 
                     `${
-                        Number(game.awayTeamEmoji)
-                            ? String.fromCodePoint(game.awayTeamEmoji)
-                            : game.awayTeamEmoji
+                        emojiString(game.awayTeamEmoji)
                     } v. ${
-                        Number(game.homeTeamEmoji)
-                            ? String.fromCodePoint(game.homeTeamEmoji)
-                            : game.homeTeamEmoji
+                        emojiString(game.homeTeamEmoji)
                     }`,
 
                     `${!underlineHome ? "__" : ""}**${
