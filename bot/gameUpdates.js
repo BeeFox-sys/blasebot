@@ -39,6 +39,11 @@ async function screenTakeover (temporal) {
 
     switch (temporal.doc.gamma) {
 
+    case -1: speak = {
+        "colour": "#ffffff",
+        "formatting": "*"
+    };
+        break;
     case 0: speak = {
         "name": "The Shelled One",
         "colour": "#FF0000",
@@ -71,8 +76,9 @@ async function screenTakeover (temporal) {
         break;
     case 5: speak = {
         "name": "Lōotcrates",
-        "colour": "#707070",
-        "url": "https://ik.imagekit.io/beefox/blaseball/Lootcrates.png"
+        "colour": "#b3b3b3",
+        "url": "https://ik.imagekit.io/beefox/blaseball/Lootcrates.png",
+        "formatting": "*"
     };
         break;
     default: speak = {
@@ -83,9 +89,21 @@ async function screenTakeover (temporal) {
 
     }
 
-    const speakMessage = new MessageEmbed().setTitle(temporal.doc.zeta)
-        .setColor(speak.colour)
-        .setAuthor(speak.name, speak.url, "https://blaseball.com");
+    const speakMessage = new MessageEmbed()
+        .setTitle(`${
+            speak.formatting ?? ""
+        }${
+            temporal.doc.zeta
+        }${
+            speak.formatting ?? ""
+        }`)
+        .setColor(speak.colour);
+
+    if (speak.name) {
+
+        speakMessage.setAuthor(speak.name, speak.url, "https://blaseball.com");
+
+    }
     // If(bossFights.length > 0)speakMessage.setFooter(`Season [${sim().season+1}] Day [X]`);
     const docs = await eventsCol.find({});
 
