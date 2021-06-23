@@ -193,7 +193,7 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
                 newGame.lastUpdate
             }${
                 newGame.scoreUpdate
-                    ? `\n**\`${newGame.scoreUpdate}\`**`
+                    ? `\n*\`${newGame.scoreUpdate}\`*`
                     : ""
             }`;
 
