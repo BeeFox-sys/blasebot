@@ -249,7 +249,7 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 
     try {
 
-        if (!oldGame || newGame.gameComplete) {
+        if (!oldGame || newGame.outcomes?.length === oldGame.outcomes?.length) {
 
             return;
 
