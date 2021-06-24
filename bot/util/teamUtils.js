@@ -93,8 +93,7 @@ async function generateTeamCard (team, forbidden) {
             : "*Empty*", true)
         .addField(`Rotation (${team.rotation?.length ?? 0})`, team.rotation?.length
             ? playerList(team.rotation)
-            : "*Empty*", true)
-        .setURL(`https://www.blaseball.com/team/${team.id}`);
+            : "*Empty*", true);
 
     if (forbidden) {
 
@@ -127,7 +126,8 @@ async function generateTeamCard (team, forbidden) {
         .addField("Shamed Others This Season", team.seasonShamings, true)
         .addField("Runs This Season", runs, true)
         .addField("Season Record", `${wins} Wins (${gamesPlayed - losses}-${losses})`, true)
-        .setFooter(`${team.slogan} | ${team.shorthand} | ID: ${team.id}`);
+        .setFooter(`${team.slogan} | ${team.shorthand} | ID: ${team.id}`)
+        .setURL(`https://www.blaseball.com/team/${team.id}`);
 
     return teamCard;
 
