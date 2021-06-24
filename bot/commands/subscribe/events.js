@@ -46,7 +46,7 @@ const command = {
         
         interactionRespond(
             interaction, client,
-            {"content": "Subscribed this channel to outcomes for all games!"}
+            {"content": "Subscribed this channel to events in all games!"}
         );
         
     
