@@ -554,7 +554,7 @@ const eventTypes = [
     {"id": "PEANUTMISTER",
         "name": "Peanut Mister",
         "colour": "#f3ff54",
-        "search": /cured of their peanut allergy/iu},
+        "search": /cured of their peanut allergy|no longer superallergic/iu},
     {"id": "CONSUMERS",
         "name": "CONSUMERS",
         "colour": "#c80c0c",
