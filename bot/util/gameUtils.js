@@ -12,19 +12,26 @@ const {emojiString} = require("./teamUtils");
 async function generateGameCard (gameInput) {
 
     const game = {...gameInput};
+    let winner = null;
     let winnerString = "";
+    const underbracket = game.state?.postseason?.bracket === 1;
 
     if (game.gameComplete) {
 
+        winner = (underbracket
+            ? (game.homeScore < game.awayScore)
+            : (game.homeScore > game.awayScore))
+            ? "home"
+            : "away";
         winnerString = `${
-            emojiString(game.homeScore > game.awayScore ? game.homeTeamEmoji : game.awayTeamEmoji)
+            emojiString(winner === "home" ? game.homeTeamEmoji : game.awayTeamEmoji)
         } ${
-            game.homeScore > game.awayScore ? game.homeTeamNickname : game.awayTeamNickname
+            winner === "home" ? game.homeTeamNickname : game.awayTeamNickname
         }`;
     
     } else if (game.gameStart) {
 
-        winnerString = "[*Game in progress*](https://www.blaseball.com/)";
+        winnerString = "[*Game in progress*](https://www.blaseball.com/league)";
 
     } else {
 
@@ -38,6 +45,7 @@ async function generateGameCard (gameInput) {
     }${
         "E".repeat((Math.random() * 5) + 1)
     }${"!".repeat((Math.random() * 5) + 1)}`;
+    
     const gameCard = new MessageEmbed()
         .setTitle(`${
             emojiString(game.awayTeamEmoji)} __${game.awayTeamName
@@ -49,12 +57,22 @@ async function generateGameCard (gameInput) {
             game.shame ? `\n${shame}` : ""}\nID: ${game.id}`)
         .addField(`${game.awayTeamNickname} Odds`, `${Math.round(game.awayOdds * 100)}%`, true)
         .addField(`${game.homeTeamNickname} Odds`, `${Math.round(game.homeOdds * 100)}%`, true)
-        .addField("Game", `${game.seriesIndex} of ${game.seriesLength}`, true)
+        .addField("Game", game.isPostseason
+            ? `${game.seriesIndex} (First to +/-${game.seriesLength})`
+            : `${game.seriesIndex} of ${game.seriesLength}`, true)
         .addField(`${game.awayTeamNickname} Pitcher`, game.awayPitcherName || "*Undecided*", true)
         .addField(`${game.homeTeamNickname} Pitcher`, game.homePitcherName || "*Undecided*", true)
-        .addField("Winner", winnerString, true)
-        .addField(`${game.awayTeamNickname} Score`, game.awayScore, true)
-        .addField(`${game.homeTeamNickname} Score`, game.homeScore, true)
+        .addField(underbracket ? "Unwinner" : "Winner", winnerString, true)
+        .addField(`${game.awayTeamNickname} Score`, `${
+            winner === "away" ? "**" : ""
+        }${game.awayScore}${
+            winner === "away" ? "**" : ""
+        }`, true)
+        .addField(`${game.homeTeamNickname} Score`, `${
+            winner === "home" ? "**" : ""
+        }${game.homeScore}${
+            winner === "home" ? "**" : ""
+        }`, true)
         .addField("Inning", game.gameStart
             ? `${game.topOfInning ? "Top" : "Bottom"} of inning ${game.inning + 1}`
             : "*Game yet to start*");
