@@ -111,7 +111,7 @@ async function generateGameCard (gameInput) {
 
     if (links.length > 0) {
 
-        gameCard.addField("Game Logs", links.join("\n"));
+        gameCard.addField("Game Logs", links.join(" **·** "));
 
     }
 
