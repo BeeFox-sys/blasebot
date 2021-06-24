@@ -90,13 +90,15 @@ async function screenTakeover (temporal) {
     }
 
     const speakMessage = new MessageEmbed()
-        .setTitle(`${
-            speak.formatting ?? ""
-        }${
-            temporal.doc.zeta
-        }${
-            speak.formatting ?? ""
-        }`)
+        .setTitle(temporal.doc.zeta
+            ? `${
+                speak.formatting ?? ""
+            }${
+                temporal.doc.zeta.replace(/\*/gu, "\\*").replace(/_/gu, "\\_")
+            }${
+                speak.formatting ?? ""
+            }`
+            : "")
         .setColor(speak.colour);
 
     if (speak.name) {
@@ -164,8 +166,8 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
 
             }
 
-            const hometeamscored = oldGame && oldGame.homeScore !== newGame.homeScore;
-            const awayteamscored = oldGame && oldGame.awayScore !== newGame.awayScore;
+            const homeDiff = oldGame ? newGame.homeScore - oldGame.homeScore : 0;
+            const awayDiff = oldGame ? newGame.awayScore - oldGame.awayScore : 0;
 
             const message = `**${
                 (newGame.topOfInning || newGame.inning === -1)
@@ -176,19 +178,19 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
             }** | ${
                 emojiString(newGame.awayTeamEmoji)
             } ${
-                awayteamscored ? "**" : ""
+                awayDiff > 0 ? "**" : (awayDiff < 0 ? "*" : "")
             }${
                 newGame.awayScore
             }${
-                awayteamscored ? "**" : ""
-            } ${
+                awayDiff > 0 ? "**" : (awayDiff < 0 ? "*" : "")
+            }, ${
                 emojiString(newGame.homeTeamEmoji)
             } ${
-                hometeamscored ? "**" : ""
+                homeDiff > 0 ? "**" : (homeDiff < 0 ? "*" : "")
             }${
                 newGame.homeScore
             }${
-                hometeamscored ? "**" : ""
+                homeDiff > 0 ? "**" : (homeDiff < 0 ? "*" : "")
             }\n>>> ${
                 newGame.lastUpdate
             }${
