@@ -316,10 +316,9 @@ events.on("gameUpdate", async (newGame, oldGame) => {
 
 });
 
-/*
- * -- Post Game --
- * Summary
- */
+// -- Post Game --
+
+// Summary
 events.on("gameComplete", async (game) => {
 
     try {
@@ -358,8 +357,10 @@ events.on("gameComplete", async (game) => {
                 game.homeTeamName
             } Game ${
                 game.seriesIndex
-            } of ${
-                game.seriesLength
+            }${
+                game.isPostseason
+                    ? ""
+                    : ` of ${game.seriesLength}`
             } finished!`, summary)
                 .catch((error) => subscriptionError(error, summarySubscription.channel_id)))
                 .catch(console.error);
