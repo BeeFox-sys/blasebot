@@ -635,7 +635,8 @@ function handleEvents (game, index) {
         const embed = new MessageEmbed()
             .setTitle(event.flavor)
             .setColor(event.eventType.colour)
-            .setFooter(`${game.awayTeamNickname} vs ${game.homeTeamNickname}\n`
+            .setFooter(`${emojiString(game.awayTeamEmoji)}\u{FE0F} ${game.awayTeamNickname} vs ${
+                emojiString(game.homeTeamEmoji)}\u{FE0F} ${game.homeTeamNickname}\n`
             + `Season ${game.season + 1} Day ${game.day + 1}`);
 
         embeds.push(embed);
