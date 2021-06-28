@@ -81,7 +81,7 @@ async function generateGameCard (gameInput) {
 
         gameCard.addField(
             "Weather",
-            (await weatherCache.fetch(game.weather)).name ?? "Uhhhh...", true
+            (await weatherCache.fetch(game.weather))?.name ?? "Uhhhh...", true
         );
 
     }
