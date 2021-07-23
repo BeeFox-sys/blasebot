@@ -394,7 +394,7 @@ async function attributes (player) {
     
     }
     
-    return attrString || "None";
+    return attrString || "*None*";
 
 }
 
