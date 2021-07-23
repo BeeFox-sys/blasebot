@@ -224,24 +224,27 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
 // --- Game Start ---
 
 // Compact Scores ("Play ball!")
-events.on("gameStart", async (game) => {
-
-    /*
-     * The bot will sometimes miss updates, so hardcode the message unless the actual update has a
-     * score update.
-     */
-    await sendScoreUpdateMessage(game, null, game?.scoreUpdate && game.scoreUpdate.length > 0
-        ? null
-        : {
-            "topOfInning": true,
-            "inning": 0,
-            "homeScore": 0,
-            "awayScore": 0,
-            "lastUpdate": "Play ball!",
-            "scoreUpdate": null
-        });
-
-});
+// eslint-disable-next-line capitalized-comments
+/*
+ *events.on("gameStart", async (game) => {
+ *
+ *    /*
+ *     * The bot will sometimes miss updates, so hardcode the message unless the actual update has a
+ *     * score update.
+ *     * /
+ *    await sendScoreUpdateMessage(game, null, game?.scoreUpdate && game.scoreUpdate.length > 0
+ *        ? null
+ *        : {
+ *            "topOfInning": true,
+ *            "inning": 0,
+ *            "homeScore": 0,
+ *            "awayScore": 0,
+ *            "lastUpdate": "Play ball!",
+ *            "scoreUpdate": null
+ *        });
+ *
+ *});
+ */
 
 
 // --- Game Updates ---
