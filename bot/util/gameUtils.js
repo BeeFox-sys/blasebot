@@ -116,7 +116,7 @@ async function generateGameCard (gameInput) {
 
     if (game.season >= 11 || game.tournament >= 1) {
 
-        links.push(`[Blaseball](https://www.blaseball.com/game/${game.id})`);
+        links.push(`[Feed](https://www.blaseball.com/game/${game.id})`);
 
     }
     links.push(`[Reblase](https://reblase.sibr.dev/game/${game.id})`);
