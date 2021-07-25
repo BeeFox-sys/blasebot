@@ -141,18 +141,19 @@ async function generateTeamCard (team, forbidden) {
             "🟣".repeat(team.underchampionships) || "** **", true
         )
         .addField("Level", creditLevels[team.level] ?? creditLevels.default, true);
-    if (team.imPosition) {
-
-        const imPosX = team.imPosition[0].toFixed(3);
-        const imPosY = (1 - team.imPosition[1]).toFixed(3);
-
-        teamCard.addField("imPosition", `X: ${imPosX}\nY: ${imPosY}`, true);
-
-    }
-    teamCard.addField("eDensity", `${team.eDensity.toFixed(5)} bl/m³`, true);
     if (leagueTeams.includes(team.id)) {
 
-        teamCard.addField("Tarot Card", tarotCards[team.card] ?? tarotCards.default, true);
+        if (team.imPosition) {
+
+            const imPosX = team.imPosition[0].toFixed(3);
+            const imPosY = (1 - team.imPosition[1]).toFixed(3);
+
+            teamCard.addField("imPosition", `X: ${imPosX}\nY: ${imPosY}`, true);
+
+        }
+
+        teamCard.addField("eDensity", `${team.eDensity.toFixed(5)} bl/m³`, true)
+            .addField("Tarot Card", tarotCards[team.card] ?? tarotCards.default, true);
 
     }
     teamCard.addField("Times Evolved", team.evolution, true)
