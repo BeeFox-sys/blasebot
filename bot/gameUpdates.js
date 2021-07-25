@@ -82,7 +82,7 @@ async function screenTakeover (temporal) {
     };
         break;
     case 6: speak = {
-        "name": "???",
+        "name": "Namerifeht",
         "colour": "#e83a00",
         "url": ""
     };
