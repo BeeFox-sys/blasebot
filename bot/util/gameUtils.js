@@ -14,20 +14,32 @@ async function generateGameCard (gameInput) {
     const game = {...gameInput};
     let winner = null;
     let winnerString = "";
-    const underbracket = game.state?.postseason?.bracket === 1;
+    const isUnderbracket = game.state?.postseason?.bracket === 1;
 
     if (game.gameComplete) {
 
-        winner = (underbracket
-            ? (game.homeScore < game.awayScore)
-            : (game.homeScore > game.awayScore))
-            ? "home"
-            : "away";
-        winnerString = `${
-            emojiString(winner === "home" ? game.homeTeamEmoji : game.awayTeamEmoji)
-        } ${
-            winner === "home" ? game.homeTeamNickname : game.awayTeamNickname
-        }`;
+        if (game.state?.game_cancelled) {
+
+            winnerString = "*Cancelled*";
+
+        } else if (game.homeScore === game.awayScore) {
+
+            winnerString = "*Tied game*";
+
+        } else {
+
+            winner = (isUnderbracket
+                ? (game.homeScore < game.awayScore)
+                : (game.homeScore > game.awayScore))
+                ? "home"
+                : "away";
+            winnerString = `${
+                emojiString(winner === "home" ? game.homeTeamEmoji : game.awayTeamEmoji)
+            } ${
+                winner === "home" ? game.homeTeamNickname : game.awayTeamNickname
+            }`;
+
+        }
     
     } else if (game.gameStart) {
 
@@ -62,7 +74,7 @@ async function generateGameCard (gameInput) {
             : `${game.seriesIndex} of ${game.seriesLength}`, true)
         .addField(`${game.awayTeamNickname} Pitcher`, game.awayPitcherName || "*Undecided*", true)
         .addField(`${game.homeTeamNickname} Pitcher`, game.homePitcherName || "*Undecided*", true)
-        .addField(underbracket ? "Unwinner" : "Winner", winnerString, true)
+        .addField(isUnderbracket ? "Unwinner" : "Winner", winnerString, true)
         .addField(`${game.awayTeamNickname} Score`, `${
             winner === "away" ? "**" : ""
         }${game.awayScore}${
@@ -104,7 +116,7 @@ async function generateGameCard (gameInput) {
 
     if (game.season >= 11 || game.tournament >= 1) {
 
-        links.push(`[Blaseball](https://www.blaseball.com/game/${game.id})`);
+        links.push(`[Feed](https://www.blaseball.com/game/${game.id})`);
 
     }
     links.push(`[Reblase](https://reblase.sibr.dev/game/${game.id})`);

@@ -229,24 +229,27 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
 // --- Game Start ---
 
 // Compact Scores ("Play ball!")
-events.on("gameStart", async (game) => {
-
-    /*
-     * The bot will sometimes miss updates, so hardcode the message unless the actual update has a
-     * score update.
-     */
-    await sendScoreUpdateMessage(game, null, game?.scoreUpdate && game.scoreUpdate.length > 0
-        ? null
-        : {
-            "topOfInning": true,
-            "inning": 0,
-            "homeScore": 0,
-            "awayScore": 0,
-            "lastUpdate": "Play ball!",
-            "scoreUpdate": null
-        });
-
-});
+// eslint-disable-next-line capitalized-comments
+/*
+ *events.on("gameStart", async (game) => {
+ *
+ *    /*
+ *     * The bot will sometimes miss updates, so hardcode the message unless the actual update has a
+ *     * score update.
+ *     * /
+ *    await sendScoreUpdateMessage(game, null, game?.scoreUpdate && game.scoreUpdate.length > 0
+ *        ? null
+ *        : {
+ *            "topOfInning": true,
+ *            "inning": 0,
+ *            "homeScore": 0,
+ *            "awayScore": 0,
+ *            "lastUpdate": "Play ball!",
+ *            "scoreUpdate": null
+ *        });
+ *
+ *});
+ */
 
 
 // --- Game Updates ---
@@ -500,10 +503,6 @@ const eventTypes = [
         "name": "Salmon",
         "colour": "#ba7b97",
         "search": /salmon/iu},
-    {"id": "GLITTER",
-        "name": "Glitter",
-        "colour": "#ff94ff",
-        "search": /gained/iu},
     {"id": "UNSTABLE",
         "name": "Unstable",
         "colour": "#eaabff",
@@ -575,15 +574,23 @@ const eventTypes = [
     {"id": "ITEMDROPPED",
         "name": "Item Dropped",
         "colour": "#6dc0ff",
-        "search": /\bdropped\b/iu},
+        "search": /\bdropped\b|\bditched\b/iu},
+    {"id": "GLITTER",
+        "name": "Glitter",
+        "colour": "#ff94ff",
+        "search": /gained/iu},
     {"id": "PRIZEMATCH",
         "name": "Prize Match",
         "colour": "#c63f3d",
-        "search": /won the prize match/iu},
+        "search": /won the prize match|gained the prized/iu},
     {"id": "YOLKED",
         "name": "Yolked",
         "colour": "#ebdb34",
         "search": /a consumer!/iu},
+    {"id": "STEELED",
+        "name": "Steeled",
+        "colour": "#dbdbdb",
+        "search": /steeled .* countered/iu},
     {"id": "TUNNELSTEAL",
         "name": "Item Stolen",
         "colour": "#342e26",
@@ -604,6 +611,10 @@ const eventTypes = [
         "name": "The Fifth Base",
         "colour": "#4a001a",
         "search": /.* (?:took|placed) The Fifth Base (?:from|in) .*/u},
+    {"id": "NIGHTSHIFT",
+        "name": "Night Shift",
+        "colour": "#000000",
+        "search": /in a night shift/iu},
     {"id": "SHAME",
         "name": "SHAME",
         "colour": "#800878",
