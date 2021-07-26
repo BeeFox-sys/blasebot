@@ -470,6 +470,10 @@ events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
 
 
 const eventTypes = [
+    {"id": "JOINED",
+        "name": "Joined Team",
+        "colour": "#4c77b0",
+        "search": /joined the/iu},
     {"id": "REVERB",
         "name": "Reverb",
         "colour": "#4d3171",
