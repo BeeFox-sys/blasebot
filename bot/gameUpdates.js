@@ -81,6 +81,11 @@ async function screenTakeover (temporal) {
         "formatting": "*"
     };
         break;
+    case 6: speak = {
+        "colour": "#ea5b23",
+        "formatting": "**"
+    };
+        break;
     default: speak = {
         "name": "???",
         "colour": "#666666",
