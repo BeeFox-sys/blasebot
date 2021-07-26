@@ -604,7 +604,7 @@ const eventTypes = [
         "search": /a consumer!/iu},
     {"id": "STEELED",
         "name": "Steeled",
-        "colour": "#dbdbdb",
+        "colour": "#313c47",
         "search": /steeled .* countered/iu},
     {"id": "TUNNELSTEAL",
         "name": "Item Stolen",
