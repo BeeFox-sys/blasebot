@@ -82,9 +82,8 @@ async function screenTakeover (temporal) {
     };
         break;
     case 6: speak = {
-        "name": "Namerifeht",
-        "colour": "#e83a00",
-        "url": ""
+        "colour": "#ea5b23",
+        "formatting": "**"
     };
         break;
     default: speak = {
