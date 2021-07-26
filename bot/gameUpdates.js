@@ -13,86 +13,97 @@ const {
 
 const {events, sim, games} = require("blaseball");
 
+const {MessageEmbed} = require("discord.js");
+const {clearChannelData} = require("./util/miscUtils");
+
 
 // -- Temporal --
 
 events.on("rawTemporal", (temporal) => {
 
-    if (temporal.doc.epsilon) {
+    if (temporal.doc?.epsilon) { // Fullscreen message
 
-        screenTakeover(temporal);
+        bigDeal(temporal);
+
+    } else if (temporal.doc?.zeta && (sim().attr?.includes("SUPERNOVA")
+        || sim().attr?.includes("UBERHOLE"))) { // Standings page coin supernova text
+
+        bigDeal(temporal, 2); // 2 is hard-coded in the js
+
+    } else if (temporal.doc?.zeta && sim().phase === 14) { // Boss fight text
+
+        bigDeal(temporal);
 
     }
 
 });
 
-const {MessageEmbed} = require("discord.js");
-const {clearChannelData} = require("./util/miscUtils");
-
 /**
- * Event for temporal Updates
- * @param {json} temporal - temporal object
+ * Returns info for a Big Deal being
+ * @param {number} id
+ * @returns {json}
  */
-async function screenTakeover (temporal) {
+function beingInfo (id) {
 
-    let speak = {};
+    switch (id) {
 
-    switch (temporal.doc.gamma) {
-
-    case -1: speak = {
+    case -1: return {
         "colour": "#ffffff",
         "formatting": "*"
     };
-        break;
-    case 0: speak = {
+    case 0: return {
         "name": "The Shelled One",
         "colour": "#FF0000",
         "url": "https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png"
     };
-        break;
-    case 1: speak = {
+    case 1: return {
         "name": "The Monitor",
         "colour": "#5988ff",
         "url": "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
     };
-        break;
-    case 2: speak = {
+    case 2: return {
         "name": "Boss",
         "colour": "#ffbe00",
         "url": "https://d35iw2jmbg6ut8.cloudfront.net/static/media/Equity.c533a2ae.png"
     };
-        break;
-    case 3: speak = {
+    case 3: return {
         "name": "The Reader",
         "colour": "#a16dc3",
         "url": ""
     };
-        break;
-    case 4: speak = {
+    case 4: return {
         "name": "The Microphone",
         "colour": "#c50c55",
         "url": "https://www.blaseball.wiki/images/8/88/Tgb_feedback.png"
     };
-        break;
-    case 5: speak = {
+    case 5: return {
         "name": "Lōotcrates",
         "colour": "#b3b3b3",
         "url": "https://ik.imagekit.io/beefox/blaseball/Lootcrates.png",
         "formatting": "*"
     };
-        break;
-    case 6: speak = {
+    case 6: return {
         "colour": "#ea5b23",
         "formatting": "**"
     };
-        break;
-    default: speak = {
+    default: return {
         "name": "???",
         "colour": "#666666",
         "url": ""
     };
 
     }
+
+}
+
+/**
+ * Event for temporal Updates
+ * @param {json} temporal - temporal object
+ * @param {number} being - being id to override temporal
+ */
+async function bigDeal (temporal, being = null) {
+
+    const speak = beingInfo(being ?? temporal.doc.gamma);
 
     const speakMessage = new MessageEmbed()
         .setTitle(temporal.doc.zeta
