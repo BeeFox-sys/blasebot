@@ -2,7 +2,6 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const {performance} = require("perf_hooks");
 const client = new Discord.Client({
-    "disableMentions": "all",
     "restGlobalRateLimit": 45,
     "intents": [
         Discord.Intents.FLAGS.GUILDS,
