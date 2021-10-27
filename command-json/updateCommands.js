@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 
+require("dotenv").config();
 
 if (process.argv[2] === "global") {
 
@@ -20,7 +21,7 @@ const options = {
     "method": "POST",
     "headers": {
         "Content-Type": "application/json",
-        "Authorization": `Bot ${require("../config.json").discordToken}`
+        "Authorization": `Bot ${process.env.discordToken}`
     }
 };
 
@@ -32,10 +33,11 @@ const options = {
         options.body = JSON.stringify(require(`./${file}`));
     
         await fetch(`https://discord.com/api/v8/applications/${
-            require("../config.json").applicationID}${process.argv[2]
+            process.env.applicationID}${process.argv[2]
             ? `/guilds/${process.argv[2]}/commands`
             : "/commands"}`, options).then((res) => {
 
+            console.log(res);
             console.log(res.status, file);
  
         });

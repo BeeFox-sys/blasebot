@@ -5,7 +5,6 @@ const client = new Discord.Client({"disableMentions": "all",
     "restGlobalRateLimit": 45,
     "intents": [
         Discord.Intents.FLAGS.GUILDS,
-        Discord.Intents.FLAGS.GUILD_MESSAGES,
         Discord.Intents.FLAGS.DIRECT_MESSAGES
     ]});
 
