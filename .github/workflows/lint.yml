@@ -8,4 +8,4 @@ jobs:
     - name: Install modules
       run: npm install eslint
     - name: Run ESLint
-      run: npx eslint -c ./.eslintrc.yml .
+      run: npx eslint -c ./.eslintrc.yml --fix .
