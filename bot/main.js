@@ -83,7 +83,7 @@ client.once("ready", () => {
         client.user.setActivity("Blaseball! | /info");
     
     }
-    client.setInterval(() => {
+    client.timerloop = setInterval(() => {
 
         if (client.mode === 1) {
     
