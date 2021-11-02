@@ -41,18 +41,13 @@ require("./gameUpdates");
 const Mongoose = require.main.require("mongoose");
 const process = require("process");
 const {exit} = require("process");
-const {events} = require("blaseball");
+// Const {events} = require("blaseball");
 
-events.on("ready", () => {
-
-    console.log("Connected to blaseball");
-    Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
-        "useNewUrlParser": true,
-        "useUnifiedTopology": true,
-        "useFindAndModify": false,
-        "useCreateIndex": true
-    });
-
+Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
+    "useNewUrlParser": true,
+    "useUnifiedTopology": true,
+    "useFindAndModify": false,
+    "useCreateIndex": true
 });
 Mongoose.connection
     .on("error", (error) => {
@@ -80,7 +75,7 @@ client.once("ready", () => {
     
     } else {
 
-        client.user.setActivity("Blaseball! | /info");
+        client.user.setActivity("Short Circuts!");
     
     }
     client.timerloop = setInterval(() => {
@@ -91,7 +86,7 @@ client.once("ready", () => {
         
         } else {
     
-            client.user.setActivity("Blaseball! | /info");
+            client.user.setActivity("Short Circuts!");
         
         }
     
@@ -99,23 +94,8 @@ client.once("ready", () => {
 
 });
 
-client.on("message", (msg) => {
-
-    if (msg.author.bot) {
-
-        return;
-
-    }
-    if ((/.*love.*blasebot/iu).test(msg.cleanContent)) {
-
-        msg.reply("❤ And I love you ❤");
-
-    }
-
-});
-
 // Const {interactionThink}=require("./util/interactionUtils");
-client.ws.on("INTERACTION_CREATE", async (interaction) => {
+client.on("interactionCreate", async (interaction) => {
 
     /*
      *  Console.log(interaction.data.name);
@@ -123,7 +103,12 @@ client.ws.on("INTERACTION_CREATE", async (interaction) => {
      * transfer to correct command or handler
      *  interactionThink(interaction, client);
      */
-    client.commands[interaction.data.name](interaction, client);
+    interaction.reply({
+        "content":
+            "Blasebot is currently in life support mode, as such commands are avalible. functionality will return by the time the next full season occurs!\nIf you desperatly need updates to the subscriptions, please contact Beefox over in SIBR's blasebot channel!",
+        "ephemeral": true
+    });
+
 
 });
 

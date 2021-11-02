@@ -1,5 +1,5 @@
 const {client} = global;
-const {generateGameCard} = require("./util/gameUtils");
+// Const {generateGameCard} = require("./util/gameUtils");
 const {emojiString} = require("./util/teamUtils");
 
 const {
@@ -11,135 +11,41 @@ const {
     eventsCol
 } = require("./schemas/subscription");
 
-const {events, sim, games} = require("blaseball");
+// Const {events, sim, games} = require("blaseball");
 
-const {MessageEmbed} = require("discord.js");
 const {clearChannelData} = require("./util/miscUtils");
 
+// Current: Original
+const TrueTeam = {
+    "8d7ba290-5f87-403c-81e3-cf5a2b6a6082": "c73b705c-40ad-4633-a6ed-d357ee2e2bcf", // Lift
+    "d82a1a80-dff3-4767-bab6-484b2eb7aee1": "a37f9158-7f82-46bc-908c-c9e2dda7c33b", // Jazz Hands
+    "16d1fd9b-c62b-4bed-b68a-b3a2d6e21524": "ca3f1c8c-c025-4d8e-8eef-5be6accbeb16", // Firefighters
+    "86f4485a-a6db-470b-82f5-e95e6b353537": "747b8e4a-7e50-4638-a973-ea7950a3e739", // Tigers
+    "23a2cea4-5df7-4ed0-bb2c-b8c297518ada": "57ec08cc-0411-4643-b304-0e80dbc15ac7", // Wild Wings
+    "44d9dc46-7e81-4e21-acff-c0f5dd399ae3": "d9f89a8a-c563-493e-9d64-78e4f9a55d4a", // Georgias
 
-// -- Temporal --
+    "2957236a-6077-4012-a445-8c5be111afd0": "878c1bf6-0d21-4659-bfee-916c8314d69c", // Tacos
+    "89796ffb-843a-4163-8dec-1bef229c68cb": "b63be8c2-576a-4d6e-8daf-814f8bcea96f", // Dale
+    "93e71a0e-80fc-46b7-beaf-d204c425fe03": "3f8bbb15-61c0-4e3f-8e4a-907a5fb1565e", // Flowers
+    "57d3f614-f8d3-4dfd-b486-075f823fdb0b": "f02aeae2-5e6a-4098-9842-02d2273f25c7", // Sunbeams
+    "6526d5df-6a9c-48e1-ba50-12dec0d8b22f": "9debc64f-74b7-4ae1-a4d6-fce0144b6ea5", // Spies
+    "74aea6b6-34f9-48f4-b298-7345e1f9f7cb": "bb4a9de5-c924-4923-a0cb-9d1445f1ee5d", // Worms
 
-events.on("rawTemporal", (temporal) => {
+    "b069fdc6-2204-423a-932c-09037adcd845": "36569151-a2fb-43c1-9df7-2df512424c82", // Millennials
+    "0b672007-ebfb-476d-8fdb-fb66bad78df2": "b024e975-1c4a-4575-8936-a3754a08806a", // Steaks
+    "b320131f-da0d-43e1-9b98-f936a0ee417a": "b72f3061-f573-40d7-832a-5ad475bd7909", // Lovers
+    "76d3489f-c7c4-4cb9-9c58-b1e1bab062d1": "23e4cbc1-e9cd-47fa-a35b-bfa06f726cb7", // Pies
+    "2dc7a1fa-3ae6-47ed-8c92-5d80167959f5": "105bc3ff-1320-4e37-8ef0-8d595cb95dd0", // Garages
+    "e11df0cc-3a95-4159-9a84-fecbbf23ae05": "46358869-dce9-4a01-bfba-ac24fc56f57e", // Mechanics
 
-    if (temporal.doc?.epsilon) { // Fullscreen message
+    "effdbd8d-a54f-4049-a3c8-b5f944e5278b": "979aee4a-6d80-4863-bf1c-ee1a78e06024", // Hawai'i Fridays
+    "8981c839-cbcf-47e3-a74e-8731dcff24fe": "eb67ae5e-c4bf-46ca-bbbc-425cd34182ff", // Moist Talkers
+    "75667373-b350-499b-b86e-5518b6f9f6ab": "bfd38797-8404-4b38-8b82-341da28b1f83", // Shoe Thieves
+    "a01f0ade-0186-464d-8c68-e19a29cb66f0": "7966eb04-efcc-499b-8f03-d13916330531", // Magic
+    "b7df2ea6-f4e8-4e6b-8c98-f730701f3717": "adc5b394-8f76-416d-9ce9-813706877b84", // Breath Mints
+    "b35926d4-22a3-4419-8fab-686c41687055": "8d87c468-699a-47a8-b40d-cfb73a5660ad" // Crabs
+};
 
-        bigDeal(temporal);
-
-    } else if (temporal.doc?.zeta && (sim().attr?.includes("SUPERNOVA")
-        || sim().attr?.includes("UBERHOLE"))) { // Standings page coin supernova text
-
-        bigDeal(temporal, 2); // 2 is hard-coded in the js
-
-    } else if (temporal.doc?.zeta && sim().phase === 14) { // Boss fight text
-
-        bigDeal(temporal);
-
-    }
-
-});
-
-/**
- * Returns info for a Big Deal being
- * @param {number} id
- * @returns {json}
- */
-function beingInfo (id) {
-
-    switch (id) {
-
-    case -1: return {
-        "colour": "#ffffff",
-        "formatting": "*"
-    };
-    case 0: return {
-        "name": "The Shelled One",
-        "colour": "#FF0000",
-        "url": "https://game-icons.net/icons/ffffff/000000/1x1/rihlsul/peanut.png"
-    };
-    case 1: return {
-        "name": "The Monitor",
-        "colour": "#5988ff",
-        "url": "https://game-icons.net/icons/ffffff/000000/1x1/delapouite/giant-squid.png"
-    };
-    case 2: return {
-        "name": "Boss",
-        "colour": "#ffbe00",
-        "url": "https://d35iw2jmbg6ut8.cloudfront.net/static/media/Equity.c533a2ae.png"
-    };
-    case 3: return {
-        "name": "The Reader",
-        "colour": "#a16dc3",
-        "url": ""
-    };
-    case 4: return {
-        "name": "The Microphone",
-        "colour": "#c50c55",
-        "url": "https://www.blaseball.wiki/images/8/88/Tgb_feedback.png"
-    };
-    case 5: return {
-        "name": "Lōotcrates",
-        "colour": "#b3b3b3",
-        "url": "https://ik.imagekit.io/beefox/blaseball/Lootcrates.png",
-        "formatting": "*"
-    };
-    case 6: return {
-        "colour": "#ea5b23",
-        "formatting": "**"
-    };
-    default: return {
-        "name": "???",
-        "colour": "#666666",
-        "url": ""
-    };
-
-    }
-
-}
-
-/**
- * Event for temporal Updates
- * @param {json} temporal - temporal object
- * @param {number} being - being id to override temporal
- */
-async function bigDeal (temporal, being = null) {
-
-    const speak = beingInfo(being ?? temporal.doc.gamma);
-
-    const speakMessage = new MessageEmbed()
-        .setTitle(temporal.doc.zeta
-            ? `${
-                speak.formatting ?? ""
-            }${
-                temporal.doc.zeta.replace(/\*/gu, "\\*").replace(/_/gu, "\\_")
-            }${
-                speak.formatting ?? ""
-            }`
-            : "")
-        .setColor(speak.colour);
-
-    if (speak.name) {
-
-        speakMessage.setAuthor(speak.name, speak.url, "https://blaseball.com");
-
-    }
-    // If(bossFights.length > 0)speakMessage.setFooter(`Season [${sim().season+1}] Day [X]`);
-    const docs = await eventsCol.find({});
-
-    for (const doc of docs) {
-
-        const channel = await client.channels.fetch(doc.channel_id)
-            .catch((error) => subscriptionError(error, doc.channel_id));
-
-        if (channel) {
-
-            channel.send(speakMessage)
-                .catch((error) => subscriptionError(error, doc.channel_id));
-        
-        }
-    
-    }
-
-}
 
 /**
  * Generates and sends a game update message to subscribed channels
@@ -149,6 +55,7 @@ async function bigDeal (temporal, being = null) {
  */
 async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}) {
 
+
     Object.assign(newGame, overrideNew ?? {});
 
     try {
@@ -156,10 +63,10 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
         const docs = await compacts.find({
             "$or": [
                 {
-                    "team": newGame.homeTeam
+                    "team": TrueTeam[newGame.homeTeam]
                 },
                 {
-                    "team": newGame.awayTeam
+                    "team": TrueTeam[newGame.awayTeam]
                 }
             ]
         });
@@ -174,8 +81,8 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
 
             // Anti double posting
             if (
-                compactSubscription.team === newGame.awayTeam
-                && docs.find((doc) => doc.team === newGame.homeTeam
+                compactSubscription.team === TrueTeam[newGame.awayTeam]
+                && docs.find((doc) => doc.team === TrueTeam[newGame.homeTeam]
                 && doc.channel_id === compactSubscription.channel_id)) {
 
                 continue;
@@ -237,460 +144,121 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
 
 }
 
-// --- Game Start ---
+const EventSource = require("eventsource");
+const streamData = new EventSource("https://api.blaseball.com/events/streamData");
 
-// Compact Scores ("Play ball!")
-// eslint-disable-next-line capitalized-comments
+streamData.onmessage = compactScores;
+
 /*
- *events.on("gameStart", async (game) => {
- *
- *    /*
- *     * The bot will sometimes miss updates, so hardcode the message unless the actual update has a
- *     * score update.
- *     * /
- *    await sendScoreUpdateMessage(game, null, game?.scoreUpdate && game.scoreUpdate.length > 0
- *        ? null
- *        : {
- *            "topOfInning": true,
- *            "inning": 0,
- *            "homeScore": 0,
- *            "awayScore": 0,
- *            "lastUpdate": "Play ball!",
- *            "scoreUpdate": null
- *        });
- *
- *});
+ * streamData.onopen = () => console.log("Connected to Blaseball");
+ * streamData.onerror = console.error;
  */
 
-
-// --- Game Updates ---
-
-// Outcomes
-events.on("gameUpdate", async (newGame, oldGame) => {
-
-    try {
-
-        if (!oldGame || newGame.outcomes?.length === oldGame.outcomes?.length) {
-
-            return;
-
-        }
-
-        const outcomes = handleEvents(newGame, oldGame.outcomes.length);
-
-        if (!outcomes.length) {
-
-            return;
-
-        }
-
-        const docs = await eventsCol.find({});
-
-        for (const doc of docs) {
-
-            const channel = await client.channels.fetch(doc.channel_id)
-                .catch((error) => subscriptionError(error, doc.channel_id));
-
-            if (!channel) {
-
-                clearChannelData(doc.channel_id);
-                continue;
-
-            }
-            for (const outcome of outcomes) {
-
-                channel.send(outcome)
-                    .catch((error) => subscriptionError(error, outcome.channel_id));
-
-            }
-
-        }
-
-    } catch (err) {
-
-        console.error(err);
-
-    }
-
-});
+let oldGames = null;
+let oldData = null;
+let currentJson = null;
+const equal = require("deep-equal");
+const diff = require("deep-diff");
 
 // Compact Scores
-events.on("gameUpdate", async (newGame, oldGame) => {
+/**
+ *
+ * @param {Objext} recievedData
+ *
+ */
+async function compactScores (recievedData) {
 
-    if (!oldGame
-        || newGame.gameComplete
-        || (oldGame.playCount && oldGame.playCount === newGame.playCount)) {
+    const cleanData = JSON.parse(recievedData.data);
 
+    // Debounce
+    if (!oldData || equal(cleanData, oldData)) {
+
+        // eslint-disable-next-line no-eq-null
+        /*
+         * console.log(
+         *     "- Debounce.\n| Old Data exists:",
+         *     (oldData !== null),
+         *     "\n| Old data is same as previous:",
+         *     equal(cleanData, oldData)
+         * );
+         */
+        oldData = cleanData;
+        if (cleanData.value) {
+
+            currentJson = cleanData.value;
+            // console.log(currentJson);
+        
+        }
+        
+        return;
+
+    }
+    oldData = cleanData;
+
+    const newJson = currentJson;
+
+    // Diff
+    if (cleanData.value) {
+
+        currentJson = cleanData.value;
+        
+    } else if (cleanData.delta) {
+        
+        // const newDiff = diff.applyDiff(currentJson, cleanData.delta);
+
+        // eslint-disable-next-line guard-for-in
+        for (const patch in cleanData.delta) {
+
+            diff.applyChange(newJson, {}, patch);
+        
+        }
+
+        // console.log("Applyed Diff");
+        currentJson = newJson;
+
+    } else {
+        
+        console.log("Unkown JSON key, skipping update");
+        
         return;
 
     }
 
-    if (oldGame.homeScore !== newGame.homeScore
-        || oldGame.awayScore !== newGame.awayScore
-        || newGame.scoreUpdate?.length > 0) {
+    const localOldGames = oldGames;
 
-        await sendScoreUpdateMessage(newGame, oldGame);
+    const {schedule} = newJson.games;
 
+    for (const newGame of schedule) {
+        
+        
+        const oldGame
+            = localOldGames?.find((potentialOldGame) => potentialOldGame.id === newGame.id)
+            ?? null;
+
+
+        if (
+            !oldGame
+            || newGame.gameComplete
+            || (oldGame.playCount && oldGame.playCount === newGame.playCount)
+        ) {
+
+            continue;
+        
+        }
+
+
+        if (
+            oldGame.homeScore !== newGame.homeScore
+            || oldGame.awayScore !== newGame.awayScore
+            || newGame.scoreUpdate?.length > 0
+        ) {
+            
+            await sendScoreUpdateMessage(newGame, oldGame);
+
+        }
+    
     }
-
-});
-
-// -- Post Game --
-
-// Summary
-events.on("gameComplete", async (game) => {
-
-    try {
-
-        const summary = await generateGameCard(game);
-        const docs = await summaries.find({
-            "$or": [
-                {
-                    "team": game.homeTeam
-                },
-                {
-                    "team": game.awayTeam
-                }
-            ]
-        });
-
-        if (docs.length === 0) {
-
-            return;
-
-        }
-
-        for (const summarySubscription of docs) {
-
-            if (summarySubscription.team === game.awayTeam
-                && docs.find((doc) => doc.team === game.homeTeam
-                && doc.channel_id === summarySubscription.channel_id)) {
-
-                continue;
-
-            }
-
-            client.channels.fetch(summarySubscription.channel_id).then((channel) => channel.send(`${
-                game.awayTeamName
-            } v. ${
-                game.homeTeamName
-            } Game ${
-                game.seriesIndex
-            }${
-                game.isPostseason
-                    ? ""
-                    : ` of ${game.seriesLength}`
-            } finished!`, summary)
-                .catch((error) => subscriptionError(error, summarySubscription.channel_id)))
-                .catch(console.error);
-
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-});
-
-// Bet
-events.on("gamesFinished", async (todaySchedule, tomorrowSched) => {
-
-    console.log("All games finished!");
-    try {
-
-        const docs = await betReminders.find({})
-            .catch(console.error);
-
-        if (tomorrowSched.length === 0) {
-
-            // eslint-disable-next-line no-promise-executor-return
-            await new Promise((resolve) => setTimeout(resolve, 30000));
-
-        }
-        const {tomorrowSchedule} = games();
-
-        const oddsEmbed = new MessageEmbed().setTitle(`Season ${
-            sim().season + 1
-        } Day ${
-            sim().day + 2
-        } Odds:`);
-
-        if (tomorrowSchedule.length > 0) {
-
-            for (const game of tomorrowSchedule) {
-
-                const underlineHome
-                = Math.round(game.awayOdds * 100) < Math.round(game.homeOdds * 100);
-
-                oddsEmbed.addField(
-
-                    `${
-                        emojiString(game.awayTeamEmoji)
-                    } v. ${
-                        emojiString(game.homeTeamEmoji)
-                    }`,
-
-                    `${!underlineHome ? "__" : ""}**${
-                        Math.round(game.awayOdds * 100)}%**${
-                        !underlineHome ? "__" : ""} | ${
-                        underlineHome ? "__" : ""}**${
-                        Math.round(game.homeOdds * 100)}%**${underlineHome ? "__" : ""}`,
-                    true
-                );
-
-            }
-
-        }
-        for (const doc of docs) {
-
-            client.channels.fetch(doc.channel_id)
-                .then((betchannel) => betchannel.send(`All Season ${
-                    sim().season + 1
-                } Day ${
-                    sim().day + 1
-                } Games Complete!${
-                    tomorrowSchedule.length > 0
-                        ? " Go Bet!"
-                        : " Go catch up on some sleep!"
-                }`, oddsEmbed)
-                    .catch((error) => subscriptionError(error, doc.channel_id)))
-                .catch(console.error);
-
-        }
-
-    } catch (err) {
-
-        console.error(err);
-
-    }
-
-});
-
-
-const eventTypes = [
-    {"id": "JOINED",
-        "name": "Joined Team",
-        "colour": "#4c77b0",
-        "search": /joined the/iu},
-    {"id": "REVERB",
-        "name": "Reverb",
-        "colour": "#4d3171",
-        "search": /reverb|repeat/iu},
-    {"id": "FEEDBACK",
-        "name": "Feedback",
-        "colour": "#ff007b",
-        "search": /flicker|feedback/iu},
-    {"id": "INCINERATION",
-        "name": "Incineration",
-        "colour": "#fefefe",
-        "search": /rogue umpire/iu},
-    {"id": "PEANUT",
-        "name": "Peanut",
-        "colour": "#c4aa70",
-        "search": /stray peanut/iu},
-    {"id": "BLOOD DRAIN",
-        "name": "Blooddrain",
-        "colour": "#ff1f3c",
-        "search": /blooddrain/iu},
-    {"id": "BIRD",
-        "name": "Birds",
-        "colour": "#8e5fad",
-        "search": /birds/iu},
-    {"id": "BLACKHOLE",
-        "name": "Black Hole",
-        "colour": "#00374a",
-        "search": /black hole/iu},
-    {"id": "SUN2",
-        "name": "Sun 2",
-        "colour": "#fdff9c",
-        "search": /sun 2/iu},
-    {"id": "SUN30",
-        "name": "Sun 30",
-        "colour": "#ffca4f",
-        "search": /sun 30/iu},
-    {"id": "SMITHY",
-        "name": "Item Repaired",
-        "colour": "#B0581E",
-        "search": /repaired|smithy/iu},
-    {"id": "SALMON",
-        "name": "Salmon",
-        "colour": "#ba7b97",
-        "search": /salmon/iu},
-    {"id": "UNSTABLE",
-        "name": "Unstable",
-        "colour": "#eaabff",
-        "search": /unstable|instability /iu},
-    {"id": "PARTY",
-        "name": "Party Time",
-        "colour": "#ff66f9",
-        "search": /party/iu},
-    {"id": "REDHOT",
-        "name": "Red Hot",
-        "colour": "#e32600",
-        "search": /red hot/iu},
-    {"id": "PERCOLATED",
-        "name": "Percolated",
-        "colour": "#96afd4",
-        "search": /percolated/iu},
-    {"id": "HONEYROASTED",
-        "name": "Shelled",
-        "colour": "#ffda75",
-        "search": /tasted the infinite/iu},
-    {"id": "ELSEWHERE",
-        "name": "Elsewhere",
-        "colour": "#bdb3c3",
-        "search": /elsewhere/iu},
-    {"id": "ECHO",
-        "name": "Echo",
-        "colour": "#9c2c46",
-        "search": /echo/iu},
-    {"id": "OBSERVED",
-        "name": "Observed",
-        "colour": "#9a7b4f",
-        "search": /observed/iu},
-    {"id": "SUNDIALED",
-        "name": "Sun Dialed",
-        "colour": "#ffe100",
-        "search": /catches some rays/iu},
-    {"id": "UNHOLEY",
-        "name": "Unholey",
-        "colour": "#863490",
-        "search": /compressed by gamma/iu},
-    {"id": "FAX",
-        "name": "Fax Machine",
-        "colour": "#8b5cad",
-        "search": /replaced by incoming fax/iu},
-    {"id": "VOICEMAIL",
-        "name": "Voicemail",
-        "colour": "#465aab",
-        "search": /replaced by incoming voicemail/iu},
-    {"id": "UNDERTAKER",
-        "name": "Undertaker",
-        "colour": "#163321",
-        "search": /flipped .* negative/iu},
-    {"id": "PEANUTMISTER",
-        "name": "Peanut Mister",
-        "colour": "#f3ff54",
-        "search": /cured of their peanut allergy|no longer superallergic/iu},
-    {"id": "CONSUMERS",
-        "name": "CONSUMERS",
-        "colour": "#c80c0c",
-        "search": /consumers/iu},
-    {"id": "ITEMDAMAGE",
-        "name": "Item Damaged",
-        "colour": "#6dc0ff",
-        "search": /\bdamaged\b/iu},
-    {"id": "ITEMBREAK",
-        "name": "Item Broken",
-        "colour": "#6dc0ff",
-        "search": /\bbroke\b|\bbreaks?\b/iu},
-    {"id": "ITEMDROPPED",
-        "name": "Item Dropped",
-        "colour": "#6dc0ff",
-        "search": /\bdropped\b|\bditched\b/iu},
-    {"id": "GLITTER",
-        "name": "Glitter",
-        "colour": "#ff94ff",
-        "search": /gained/iu},
-    {"id": "PRIZEMATCH",
-        "name": "Prize Match",
-        "colour": "#c63f3d",
-        "search": /won the prize match|gained the prized/iu},
-    {"id": "YOLKED",
-        "name": "Yolked",
-        "colour": "#ebdb34",
-        "search": /a consumer!/iu},
-    {"id": "STEELED",
-        "name": "Steeled",
-        "colour": "#313c47",
-        "search": /steeled .* countered/iu},
-    {"id": "TUNNELSTEAL",
-        "name": "Item Stolen",
-        "colour": "#342e26",
-        "search": /.* stole .*!/u},
-    {"id": "TRADER",
-        "name": "Trader",
-        "colour": "#205c6b",
-        "search": /trader .* traded their/iu},
-    {"id": "TRAITOR",
-        "name": "Traitor",
-        "colour": "#63212c",
-        "search": /traitor .* traded their/iu},
-    {"id": "THIEVESGUILD",
-        "name": "Phantom Thieves' Guild",
-        "colour": "#ff2e5f",
-        "search": /thieves' guild/iu},
-    {"id": "FIFTHBASE",
-        "name": "The Fifth Base",
-        "colour": "#4a001a",
-        "search": /.* (?:took|placed) The Fifth Base (?:from|in) .*/u},
-    {"id": "NIGHTSHIFT",
-        "name": "Night Shift",
-        "colour": "#000000",
-        "search": /in a night shift/iu},
-    {"id": "SHAME",
-        "name": "SHAME",
-        "colour": "#800878",
-        "search": /were shamed|shamed the/iu},
-    {"id": "UNKNOWN",
-        "name": "Unknown Event",
-        "colour": "#010101"}
-];
-
-/**
- * Handles game events
- * @param {game} game
- * @param {intager} index
- * @returns {void}
- */
-function handleEvents (game, index) {
-
-    const gameEvents = [];
-
-    for (let ind = index; ind < game.outcomes.length; ind++) {
-
-        const outcome = game.outcomes[ind];
-        let type = null;
-
-        for (const eventType of eventTypes) {
-
-            if (eventType.search?.test(outcome)) {
-
-                type = eventType;
-
-            }
-
-        }
-        if (!type) {
-
-            type = eventTypes.find((event) => event.id === "UNKNOWN");
-
-        }
-        gameEvents.push({
-            "id": game.id,
-            "eventType": type,
-            "flavor": outcome
-        });
-
-    }
-    const embeds = [];
-
-    for (const event of gameEvents) {
-
-        const embed = new MessageEmbed()
-            .setTitle(event.flavor)
-            .setColor(event.eventType.colour)
-            .setFooter(`${emojiString(game.awayTeamEmoji)}\u{FE0F} ${game.awayTeamNickname} vs ${
-                emojiString(game.homeTeamEmoji)}\u{FE0F} ${game.homeTeamNickname}\n`
-            + `Season ${game.season + 1} Day ${game.day + 1}`);
-
-        embeds.push(embed);
-
-    }
-
-    return embeds;
+    oldGames = schedule;
 
 }
 
