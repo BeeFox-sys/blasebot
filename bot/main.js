@@ -14,26 +14,6 @@ client.mode = 0;
 global.client = client;
 // Const { messageError } = require("./util/miscUtils");
 
-console.log("Loading commands...");
-const commandLoadStart = performance.now();
-
-client.commands = {};
-const commandFiles = fs.readdirSync("./bot/commands").filter((file) => file.endsWith(".js"));
-let loadedCommands = 0;
-
-for (const file of commandFiles) {
-
-    const command = require(`./commands/${file}`);
-
-    client.commands[command.action] = command.execute;
-    loadedCommands++;
-
-}
-const commandLoadEnd = performance.now();
-
-// eslint-disable-next-line max-len
-console.log(`Loaded ${loadedCommands} root commands in ${Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
-
 
 require("./gameUpdates");
 
