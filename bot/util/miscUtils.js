@@ -1,10 +1,10 @@
-const {scores,
+import {scores,
     subscriptions,
     summaries,
     betReminders,
     compacts,
-    eventsCol} = require("../schemas/subscription");
-
+    eventsCol} from "../schemas/subscription.js";
+    
 
 /**
  * Clears all data from channel
@@ -21,7 +21,7 @@ function clear (channelID) {
 
 }
 
-module.exports = {
-    "clearChannelData": clear
+export {
+    clear as clearChannelData
 };
 

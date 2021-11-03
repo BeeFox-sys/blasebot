@@ -1,11 +1,11 @@
-const nullTeam = {
+export const nullTeam = {
     "emoji": 10067,
     "mainColor": "#999999",
     "fullName": "Null Team",
     "slogan": "I AM ERROR"
 };
 
-const tarotCards = {
+export const tarotCards = {
     "-1": "Fool",
     "0": "I The Magician",
     "1": "II The High Priestess",
@@ -30,7 +30,7 @@ const tarotCards = {
     "default": "----"
 };
 
-const creditLevels = {
+export const creditLevels = {
     "0": "❌ 0D ❌",
     "1": "❌ 1D ❌",
     "2": "❌ 2D ❌",
@@ -45,7 +45,7 @@ const creditLevels = {
     "default": "-"
 };
 
-const leagueTeams = [
+export const leagueTeams = [
     "c73b705c-40ad-4633-a6ed-d357ee2e2bcf", // Lift
     "a37f9158-7f82-46bc-908c-c9e2dda7c33b", // Jazz Hands
     "ca3f1c8c-c025-4d8e-8eef-5be6accbeb16", // Firefighters
@@ -80,17 +80,8 @@ const leagueTeams = [
  * @param {string} emoji
  * @returns {string}
  */
-function emojiString (emoji) {
+export function emojiString (emoji) {
 
     return Number(emoji) ? String.fromCodePoint(emoji) : emoji;
 
 }
-
-
-module.exports = {
-    nullTeam,
-    tarotCards,
-    creditLevels,
-    leagueTeams,
-    emojiString
-};

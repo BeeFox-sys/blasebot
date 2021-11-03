@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+import Mongoose from "mongoose";
 
 
 // Guild_id can either be a guild id OR a DM channel id
@@ -9,6 +9,4 @@ const guild = new Mongoose.Schema({
 });
 
 
-module.exports = {
-    "guilds": Mongoose.model("guilds", guild)
-};
+export const guilds = Mongoose.model("guilds", guild);

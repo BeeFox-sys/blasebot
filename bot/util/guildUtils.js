@@ -1,5 +1,5 @@
-const {"guilds": Guilds} = require("../schemas/guildsettings");
-const NodeCache = require("node-cache");
+import {guilds as Guilds} from "../schemas/guildsettings.js";
+import NodeCache from "node-cache";
 
 const guildCache = new NodeCache({"stdTTL": 60 * 60});
 
@@ -8,7 +8,7 @@ const guildCache = new NodeCache({"stdTTL": 60 * 60});
  * @param {snowflake} id
  * @returns {doc}
  */
-async function getGuild (id) {
+export async function getGuild (id) {
 
     if (guildCache.has(id)) {
 
@@ -35,7 +35,7 @@ async function getGuild (id) {
  * @param {guildDoc} guild
  * @returns {guildDoc}
  */
-async function saveGuild (guild) {
+export async function saveGuild (guild) {
 
     const guildSaved = await guild.save();
 
@@ -44,8 +44,3 @@ async function saveGuild (guild) {
     return guildSaved;
 
 }
-
-module.exports = {
-    getGuild,
-    saveGuild
-};

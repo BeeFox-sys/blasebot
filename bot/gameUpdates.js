@@ -1,19 +1,21 @@
 const {client} = global;
 // Const {generateGameCard} = require("./util/gameUtils");
-const {emojiString} = require("./util/teamUtils");
 
-const {
+import {emojiString} from "../bot/util/teamUtils.js";
+
+
+import {
     subscriptions,
     summaries,
     scores,
     betReminders,
     compacts,
     eventsCol
-} = require("./schemas/subscription");
+} from "../bot/schemas/subscription.js";
 
 // Const {events, sim, games} = require("blaseball");
 
-const {clearChannelData} = require("./util/miscUtils");
+import {clearChannelData} from "../bot/util/miscUtils.js";
 
 // Current: Original
 const TrueTeam = {
@@ -144,7 +146,7 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
 
 }
 
-const EventSource = require("eventsource");
+import EventSource from "eventsource";
 const streamData = new EventSource("https://api.blaseball.com/events/streamData");
 
 streamData.onmessage = compactScores;
@@ -157,8 +159,9 @@ streamData.onmessage = compactScores;
 let oldGames = null;
 let oldData = null;
 let currentJson = null;
-const equal = require("deep-equal");
-const diff = require("deep-diff");
+
+import equal from "deep-equal";
+import diff from "deep-diff";
 
 // Compact Scores
 /**
@@ -263,19 +266,6 @@ async function compactScores (recievedData) {
 }
 
 // Handle channel deletions
-client.on("channelDelete", (channel) => {
-
-    const {id} = channel;
-
-    scores.deleteMany({"channel_id": id}).catch(console.error);
-    subscriptions.deleteMany({"channel_id": id}).catch(console.error);
-    summaries.deleteMany({"channel_id": id}).catch(console.error);
-    betReminders.deleteMany({"channel_id": id}).catch(console.error);
-    compacts.deleteMany({"channel_id": id}).catch(console.error);
-    eventsCol.deleteMany({"channel_id": id}).catch(console.error);
-
-});
-
 /**
  *
  * @param {error} error
@@ -298,3 +288,4 @@ function subscriptionError (error, channel_id) {
     }
 
 }
+console.log("Hello World");

@@ -1,6 +1,6 @@
-const fs = require("fs");
-const Discord = require("discord.js");
-const {performance} = require("perf_hooks");
+import fs from "fs";
+import Discord from "discord.js";
+import {performance} from "perf_hooks";
 const client = new Discord.Client({
     "restGlobalRateLimit": 45,
     "intents": [
@@ -9,18 +9,37 @@ const client = new Discord.Client({
     ]
 });
 
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 client.mode = 0;
 global.client = client;
-// Const { messageError } = require("./util/miscUtils");
+
+console.log("Loading commands...");
+const commandLoadStart = performance.now();
+
+client.commands = {};
+const commandFiles = fs.readdirSync("./bot/commands").filter((file) => file.endsWith(".js"));
+let loadedCommands = 0;
+
+for (const file of commandFiles) {
+
+    const command = import(`./commands/${file}`);
+
+    client.commands[command.action] = command.execute;
+    loadedCommands++;
+
+}
+const commandLoadEnd = performance.now();
+
+// eslint-disable-next-line max-len
+console.log(`Loaded ${loadedCommands} root commands in ${Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
 
 
-require("./gameUpdates");
+import "../bot/gameUpdates.js";
 
 // Setup Mongoose
-const Mongoose = require.main.require("mongoose");
-const process = require("process");
-const {exit} = require("process");
+import Mongoose from "mongoose";
+import process, {exit} from "process";
 // Const {events} = require("blaseball");
 
 Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
@@ -43,64 +62,12 @@ Mongoose.connection
         client.login(process.env.discordToken).catch(console.err);
     
     });
-// Client Ready
-client.once("ready", () => {
 
-    console.log(`Ready! Serving ${client.guilds.cache.size} blaseball communities!`);
-    console.log("The commissioner is doing a great job");
-    // Console.log(client.user);
-    if (client.mode === 1) {
+client.on("ready", () => {
 
-        client.user.setActivity("the waiting game | Can't connect to blaseball :c");
-    
-    } else {
-
-        client.user.setActivity("Short Circuts!");
-    
-    }
-    client.timerloop = setInterval(() => {
-
-        if (client.mode === 1) {
-    
-            client.user.setActivity("the waiting game | Can't connect to blaseball :c");
-        
-        } else {
-    
-            client.user.setActivity("Short Circuts!");
-        
-        }
-    
-    }, 300000);
+    console.log("ready");
 
 });
-
-// Const {interactionThink}=require("./util/interactionUtils");
-client.on("interactionCreate", async (interaction) => {
-
-    /*
-     *  Console.log(interaction.data.name);
-     *  console.log(interaction);
-     * transfer to correct command or handler
-     *  interactionThink(interaction, client);
-     */
-    interaction.reply({
-        "content":
-            "Blasebot is currently in life support mode, as such commands are avalible. functionality will return by the time the next full season occurs!\nIf you desperatly need updates to the subscriptions, please contact Beefox over in SIBR's blasebot channel!",
-        "ephemeral": true
-    });
-
-
-});
-
-
-// Client.on("rateLimit", (err) => {
-
-//     //console.error("ratelimit hit", err);
-
-// });
-
-client.on("error", console.error);
-// Client.on("debug", console.debug);
 
 process.on("uncaughtException", console.error);
 process.on("unhandledRejection", console.error);

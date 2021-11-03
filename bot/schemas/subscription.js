@@ -1,4 +1,4 @@
-const Mongoose = require("mongoose");
+import Mongoose from "mongoose";
 
 
 const subscription = new Mongoose.Schema({
@@ -36,11 +36,11 @@ const events = new Mongoose.Schema({
 
 subscription.index("team");
 
-module.exports = {
-    "subscriptions": Mongoose.model("subscriptions", subscription),
-    "summaries": Mongoose.model("summaries", summary),
-    "scores": Mongoose.model("scores", score),
-    "compacts": Mongoose.model("compacts", compact),
-    "betReminders": Mongoose.model("bets", bet),
-    "eventsCol": Mongoose.model("events", events)
-};
+
+export const subscriptions = Mongoose.model("subscriptions", subscription);
+export const summaries = Mongoose.model("summaries", summary);
+export const scores = Mongoose.model("scores", score);
+export const compacts = Mongoose.model("compacts", compact);
+export const betReminders = Mongoose.model("bets", bet);
+export const eventsCol = Mongoose.model("events", events);
+
