@@ -47,6 +47,18 @@ const TrueTeam = {
 };
 
 
+const propositions = [
+    "i think",
+    "pretty sure",
+    "probably",
+    "im sure its fine",
+    "this is correct?",
+    "im trying my best",
+    "hmm",
+    "right?",
+    "yeah?"
+];
+
 /**
  * Generates and sends a game update message to subscribed channels
  * @param {json} newGame
@@ -124,12 +136,23 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
 
             client.channels.fetch(compactSubscription.channel_id)
                 .then((channel) => {
-                  
-                    channel.send(message)
+
+                    const proposition = `\n*${propositions[Math.floor(Math.random() * propositions.length)]}*`;
+
+                    channel.send(`${message}`)
                         .catch((error) => subscriptionError(
                             error,
                             compactSubscription.channel_id
                         ));
+                    if (Math.random() > 0.9) {
+
+                        channel.send(`${proposition}`)
+                            .catch((error) => subscriptionError(
+                                error,
+                                compactSubscription.channel_id
+                            ));
+                    
+                    }
 
                 })
                 .catch(console.error);
