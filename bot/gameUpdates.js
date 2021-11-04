@@ -140,19 +140,24 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
                     const proposition = `\n*${propositions[Math.floor(Math.random() * propositions.length)]}*`;
 
                     channel.send(`${message}`)
+                        .then(() => {
+
+                            if (Math.random() > 0.9) {
+
+                                channel.send(`${proposition}`)
+                                    .catch((error) => subscriptionError(
+                                        error,
+                                        compactSubscription.channel_id
+                                    ));
+                            
+                            }
+                        
+                        })
                         .catch((error) => subscriptionError(
                             error,
                             compactSubscription.channel_id
                         ));
-                    if (Math.random() > 0.9) {
-
-                        channel.send(`${proposition}`)
-                            .catch((error) => subscriptionError(
-                                error,
-                                compactSubscription.channel_id
-                            ));
                     
-                    }
 
                 })
                 .catch(console.error);
