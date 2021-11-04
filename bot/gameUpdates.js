@@ -140,9 +140,9 @@ async function sendScoreUpdateMessage (newGame, oldGame = null, overrideNew = {}
                     const proposition = `\n*${propositions[Math.floor(Math.random() * propositions.length)]}*`;
 
                     channel.send(`${message}`)
-                        .then(() => {
+                        .then((sentMessage) => {
 
-                            if (Math.random() > 0.9) {
+                            if (Math.random() > 0.9 && sentMessage.guildId != "706414667958059078") {
 
                                 channel.send(`${proposition}`)
                                     .catch((error) => subscriptionError(
