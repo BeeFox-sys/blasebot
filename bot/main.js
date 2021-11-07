@@ -1,4 +1,4 @@
-import fs from "fs";
+import {readdir} from "fs/promises";
 import Discord from "discord.js";
 import {performance} from "perf_hooks";
 const client = new Discord.Client({
@@ -14,25 +14,33 @@ dotenv.config();
 client.mode = 0;
 global.client = client;
 
-console.log("Loading commands...");
-const commandLoadStart = performance.now();
 
-client.commands = {};
-const commandFiles = fs.readdirSync("./bot/commands").filter((file) => file.endsWith(".js"));
-let loadedCommands = 0;
+(async () => {
 
-for (const file of commandFiles) {
+    console.log("Loading commands...");
+    const commandLoadStart = performance.now();
 
-    const command = import(`./commands/${file}`);
+    client.commands = {};
+    const commandFiles = await readdir("./bot/commands")
+        .then((res) => res.filter((file) => file.endsWith(".js")));
+    let loadedCommands = 0;
+    
 
-    client.commands[command.action] = command.execute;
-    loadedCommands++;
+    for (const file of commandFiles) {
 
-}
-const commandLoadEnd = performance.now();
+        const command = await import(`./commands/${file}`);
+
+        client.commands[command.action] = command.execute;
+        loadedCommands++;
+
+    }
+    const commandLoadEnd = performance.now();
+
+    console.log(`Loaded ${loadedCommands} root commands in ${Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
+
+})();
 
 // eslint-disable-next-line max-len
-console.log(`Loaded ${loadedCommands} root commands in ${Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
 
 
 import "../bot/gameUpdates.js";
