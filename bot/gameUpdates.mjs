@@ -1,7 +1,7 @@
 const {client} = global;
 // Const {generateGameCard} = require("./util/gameUtils");
 
-import {emojiString} from "../bot/util/teamUtils.js";
+import {emojiString} from "../bot/util/teamUtils.mjs";
 
 
 import {
@@ -11,11 +11,11 @@ import {
     betReminders,
     compacts,
     eventsCol
-} from "../bot/schemas/subscription.js";
+} from "../bot/schemas/subscription.mjs";
 
 // Const {events, sim, games} = require("blaseball");
 
-import {clearChannelData} from "../bot/util/miscUtils.js";
+import {clearChannelData} from "../bot/util/miscUtils.mjs";
 
 // Current: Original
 const TrueTeam = {

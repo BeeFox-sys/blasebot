@@ -1,4 +1,4 @@
-import {guilds as Guilds} from "../schemas/guildsettings.js";
+import {guilds as Guilds} from "../schemas/guildsettings.mjs";
 import NodeCache from "node-cache";
 
 const guildCache = new NodeCache({"stdTTL": 60 * 60});

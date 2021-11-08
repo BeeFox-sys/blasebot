@@ -22,7 +22,7 @@ global.client = client;
 
     client.commands = {};
     const commandFiles = await readdir("./bot/commands")
-        .then((res) => res.filter((file) => file.endsWith(".js")));
+        .then((res) => res.filter((file) => file.endsWith(".mjs")));
     let loadedCommands = 0;
     
 
@@ -43,7 +43,7 @@ global.client = client;
 // eslint-disable-next-line max-len
 
 
-import "../bot/gameUpdates.js";
+import "./gameUpdates.mjs";
 
 // Setup Mongoose
 import Mongoose from "mongoose";
@@ -56,6 +56,7 @@ Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
     "useFindAndModify": false,
     "useCreateIndex": true
 });
+
 Mongoose.connection
     .on("error", (error) => {
 

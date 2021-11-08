@@ -3,7 +3,7 @@ import {scores,
     summaries,
     betReminders,
     compacts,
-    eventsCol} from "../schemas/subscription.js";
+    eventsCol} from "../schemas/subscription.mjs";
     
 
 /**
