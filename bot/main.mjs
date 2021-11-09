@@ -2,7 +2,7 @@ import {readdir} from "fs/promises";
 import Discord from "discord.js";
 import {performance} from "perf_hooks";
 const client = new Discord.Client({
-    "restGlobalRateLimit": 45,
+    "restGlobalRateLimit": 48,
     "intents": [
         Discord.Intents.FLAGS.GUILDS,
         Discord.Intents.FLAGS.DIRECT_MESSAGES
@@ -11,9 +11,6 @@ const client = new Discord.Client({
 
 import dotenv from "dotenv";
 dotenv.config();
-client.mode = 0;
-global.client = client;
-
 
 (async () => {
 
@@ -36,19 +33,16 @@ global.client = client;
     }
     const commandLoadEnd = performance.now();
 
-    console.log(`Loaded ${loadedCommands} root commands in ${Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
+    console.log(`Loaded ${loadedCommands} root commands in ${
+        Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
 
 })();
 
-// eslint-disable-next-line max-len
-
-
-import "./gameUpdates.mjs";
+import "./event_distribution/game_loop.mjs";
 
 // Setup Mongoose
 import Mongoose from "mongoose";
 import process, {exit} from "process";
-// Const {events} = require("blaseball");
 
 Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
     "useNewUrlParser": true,
@@ -80,3 +74,8 @@ client.on("ready", () => {
 
 process.on("uncaughtException", console.error);
 process.on("unhandledRejection", console.error);
+
+
+export {
+    client
+};
