@@ -154,11 +154,12 @@ module.exports = {
 
         await bulkTeam.execute();
 
-        await db.collection("guilds").updateMany({}, {"$rename": {"forbidden": "forbidden_knowledge"}});
+        await db.collection("guilds")
+            .updateMany({}, {"$rename": {"forbidden": "forbidden_knowledge"}});
 
     },
 
-    down (db, client) {
+    down (db) {
 
         db.collection("channels").drop();
         db.collection("team_subscriptions").drop();
@@ -166,23 +167,3 @@ module.exports = {
     
     }
 };
-
-
-/*
- * .forEach((doc) => {
- *     db.collection("channels").update({"channel_id": doc.channel_id}, {
- *         "channel_id": doc.channel_id,
- *         "guild_id": doc.guild_id,
- *         "$setOnInsert": {
- *             "commands_enabled": true,
- *             "sub_bets": false,
- *             "sub_weather": false,
- *             "sub_items": false,
- *             "sub_modifications": false,
- *             "sub_changes": false,
- *             "sub_takeover": false,
- *             "sub_misc": false
- *         }
- *     }, {"upsert": true});
- * });
- */
