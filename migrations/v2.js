@@ -154,12 +154,15 @@ module.exports = {
 
         await bulkTeam.execute();
 
+        await db.collection("guilds").updateMany({}, {"$rename": {"forbidden": "forbidden_knowledge"}});
+
     },
 
     down (db, client) {
 
         db.collection("channels").drop();
         db.collection("team_subscriptions").drop();
+        db.collection("guilds").updateMany({}, {"$rename": {"forbidden_knowledge": "forbidden"}});
     
     }
 };
