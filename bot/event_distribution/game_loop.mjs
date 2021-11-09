@@ -41,8 +41,8 @@ async function loopData () {
 
     if (data) {
         
-        console.log("Loop Time: ", this_loop.toISOString());
-        event_sorting(data);
+        // console.log("Loop Time: ", this_loop.toISOString());
+        event_sorting(data, this_loop);
 
     }
 

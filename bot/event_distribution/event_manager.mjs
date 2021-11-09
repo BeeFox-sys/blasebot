@@ -1,27 +1,39 @@
 import {event_flags} from "../util/game.mjs";
 import {emojiString} from "../util/team.mjs";
 
+
+const last_100 = [];
+
 /**
  *
- * @param {Array<FeedItem>}events
+ * @param {Array<FeedItem>} events
+ * @param {Date} loop_date
  */
-export async function event_sorting (events) {
+export async function event_sorting (events, loop_date) {
     
     events.forEach((event) => {
 
-        // console.log(event_types[event.type] ?? "Unknown Event", " - ", event.description);
+        if (last_100.includes(event.id)) {
+            
+            return;
 
-        // console.log
+        }
     
         if (event.type === event_flags.RUNS_SCORED) {
 
-            console.log(`${
+            console.log(`: ${loop_date.toISOString()} ~ ${event.created}\n${
                 emojiString(event.metadata.homeEmoji)} ${event.metadata.homeScore} - ${
-                emojiString(event.metadata.awayEmoji)} ${event.metadata.awayScore}\n| ${event.description}`);
+                emojiString(event.metadata.awayEmoji)} ${event.metadata.awayScore}\n| ${
+                event.description}`);
         
         }
 
     });
+
+    const newIDs = events.map((event) => event.id);
+
+    last_100.unshift(...newIDs);
+    last_100.splice(100);
 
 }
 
