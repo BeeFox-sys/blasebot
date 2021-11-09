@@ -71,6 +71,7 @@ rules:
   max-len: 
     - warn
     - 100
+    - ignoreComments: true
   max-nested-callbacks: error
   max-params: error
   max-statements-per-line: error
