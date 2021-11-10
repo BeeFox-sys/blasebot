@@ -13,6 +13,8 @@ export async function event_sorting (events, loop_date) {
     
     events.forEach((event) => {
 
+
+        // we shouldn't need this dedupe, however reduancies are important
         if (last_100.includes(event.id)) {
             
             return;

@@ -22,8 +22,6 @@ async function loopData () {
 
     const this_loop = previous_loop;
 
-    previous_loop = new Date();
-
     // Fetch new feed entries from blaseball
     const data_promise = fetch(
         `https://api.blaseball.com/database/feed/global?start=${
@@ -35,15 +33,28 @@ async function loopData () {
 
     const response = await data_promise;
     
-    // Null if not valid json
+    // null if not valid json
     const data = await response.json()
         .catch(() => null);
 
-    if (data) {
+    // we can still get valid json error messages, so those are skipped
+    if (data && Array.isArray(data)) {
         
-        // console.log("Loop Time: ", this_loop.toISOString());
         event_sorting(data, this_loop);
 
+        if (data.length > 0) {
+
+            // Due to how this function is called, there will never be a race condition for this variable, see the comment where this function is called
+            // eslint-disable-next-line require-atomic-updates
+            previous_loop = new Date(Date.parse(data[data.length - 1].created));
+
+        }
+
+    } else if (data) {
+
+        // if data is valid json but not an array, it is an error message, as this endpoint returns an array
+        console.error(data);
+    
     }
 
 
