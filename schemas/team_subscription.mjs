@@ -1,4 +1,4 @@
-import {Mongoose} from "mongoose";
+import Mongoose from "mongoose";
 
 const team_subscription_schema = new Mongoose.Schema({
     "channel_id": String,
@@ -13,4 +13,4 @@ const team_subscription_schema = new Mongoose.Schema({
 });
 
 export default team_subscription_schema;
-export const model = Mongoose.model("channels", team_subscription_schema);
+export const model = Mongoose.model("team_subscriptions", team_subscription_schema);

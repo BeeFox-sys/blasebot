@@ -1,3 +1,6 @@
+import fetch from "node-fetch";
+import {fetch_options} from "./misc.mjs";
+
 export const event_flags = {
     "RUNS_SCORED": 209
 };
@@ -57,3 +60,33 @@ export const event_catagories = {
         27 // Mild pitch
     ]
 };
+
+
+/**
+ *
+ * @param {Array} events_array - array of event IDs
+ * @returns {Promise} - Array of events via json
+ */
+export async function get_events (events_array) {
+
+    return fetch(
+        `https://api.blaseball.com/database/feed?ids=${events_array.join(",")}`,
+        fetch_options
+    )
+        .then((result) => result.json())
+        .catch(() => null);
+
+}
+
+/**
+ *
+ * @param id - Game ID
+ * @returns {Promise} - Game Json
+ */
+export async function get_game (id) {
+
+    return fetch(`https://api.blaseball.com/database/gameById/${id}`)
+        .then((result) => result.json())
+        .catch(() => null);
+
+}

@@ -1,18 +1,11 @@
 import fetch from "node-fetch";
 import {event_sorting} from "../event_distribution/event_manager.mjs";
+import {fetch_options} from "../util/misc.mjs";
 
 
 // Initalize the current time so that the first request doesn't get events covered by a previous instance of blasebot
 
 let previous_loop = new Date();
-
-const fetch_options = {
-    "method": "GET",
-    "headers": {
-        "User-Agent": "Blasebot"
-    }
-
-};
 
 // Loop!
 /**

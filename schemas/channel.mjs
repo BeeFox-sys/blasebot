@@ -1,4 +1,4 @@
-import {Mongoose} from "mongoose";
+import Mongoose from "mongoose";
 
 const channel_schema = new Mongoose.Schema({
     "channel_id": String,

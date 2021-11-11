@@ -60,9 +60,6 @@ rules:
   jsx-quotes: error
   key-spacing: error
   keyword-spacing: error
-  linebreak-style:
-    - error
-    - unix
   lines-around-comment: error
   lines-around-directive: error
   lines-between-class-members: error
@@ -188,7 +185,9 @@ rules:
   padding-line-between-statements: error
   prefer-arrow-callback: error
   prefer-const: error
-  prefer-destructuring: error
+  prefer-destructuring: 
+    - error
+    - object: true
   prefer-exponentiation-operator: error
   prefer-named-capture-group: error
   prefer-numeric-literals: error

@@ -1,3 +1,15 @@
+console.log(`       ▞▚
+      ▞  ▚
+     ▞    ▚
+     ▚    ▞
+   ▞▚ ▚  ▞ \x1b[5m▟▙\x1b[0m
+  ▞  ▚ ▚▞ \x1b[5m▟██▙\x1b[0m
+ ▞    ▚  \x1b[5m▟████▙\x1b[0m
+ ▚    ▞  \x1b[5m▜████▛\x1b[0m
+  ▚  ▞    \x1b[5m▜██▛\x1b[0m
+   ▚▞      \x1b[5m▜▛\x1b[0m  
+\x1b[1mBlasebot Loading\x1b[0m`);
+
 import {readdir} from "fs/promises";
 import Discord from "discord.js";
 import {performance} from "perf_hooks";

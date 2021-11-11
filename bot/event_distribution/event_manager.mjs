@@ -1,6 +1,9 @@
 import {event_flags} from "../util/game.mjs";
-import {emojiString} from "../util/team.mjs";
+import EventEmitter from "events";
+import {score_event} from "../event_distribution/event_score.mjs";
+import {client} from "../main.mjs";
 
+export const event_stream = new EventEmitter();
 
 const last_100 = [];
 
@@ -9,8 +12,16 @@ const last_100 = [];
  * @param {Array<FeedItem>} events
  * @param {Date} loop_date
  */
-export async function event_sorting (events, loop_date) {
+export async function event_sorting (events) {
+
     
+    // Don't handle events until connected to discord
+    if (!client.isReady()) {
+        
+        return;
+
+    }
+
     events.forEach((event) => {
 
 
@@ -22,12 +33,9 @@ export async function event_sorting (events, loop_date) {
         }
     
         if (event.type === event_flags.RUNS_SCORED) {
+            
+            score_event(event);
 
-            console.log(`: ${loop_date.toISOString()} ~ ${event.created}\n${
-                emojiString(event.metadata.homeEmoji)} ${event.metadata.homeScore} - ${
-                emojiString(event.metadata.awayEmoji)} ${event.metadata.awayScore}\n| ${
-                event.description}`);
-        
         }
 
     });
@@ -38,6 +46,3 @@ export async function event_sorting (events, loop_date) {
     last_100.splice(100);
 
 }
-
-import EventEmitter from "events";
-export const event_stream = new EventEmitter();
