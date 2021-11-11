@@ -61,7 +61,7 @@ export async function score_event (event) {
             .join("\n")
     }\n\n\`${event.metadata.update}\``.trim();
     
-    const score = `**${game.topOfInning ? "Top" : "Bottom"} of ${game.inning}** | ${score_by_home
+    const score = `**${game.topOfInning ? "Top" : "Bottom"} of ${game.inning + 1}** | ${score_by_home
         ? (`${emoji_string(game.awayTeamEmoji)} ${event.metadata.awayScore} @ **${
             event.metadata.homeScore}** ${emoji_string(game.homeTeamEmoji)}`)
 
