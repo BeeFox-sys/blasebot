@@ -1,5 +1,5 @@
-import {fetch_options} from "../util/misc.mjs";
 import fetch from "node-fetch";
+import {fetch_options} from "../util/misc.mjs";
 
 export const nullTeam = {
     "emoji": 10067,

@@ -10,9 +10,15 @@ console.log(`       ▞▚
    ▚▞      \x1b[5m▜▛\x1b[0m  
 \x1b[1mBlasebot Loading\x1b[0m`);
 
-import {readdir} from "fs/promises";
 import Discord from "discord.js";
+import dotenv from "dotenv";
+import {readdir} from "fs/promises";
+// Setup Mongoose
+import Mongoose from "mongoose";
 import {performance} from "perf_hooks";
+import process, {exit} from "process";
+import "./event_distribution/game_loop.mjs";
+
 const client = new Discord.Client({
     "restGlobalRateLimit": 48,
     "intents": [
@@ -21,7 +27,6 @@ const client = new Discord.Client({
     ]
 });
 
-import dotenv from "dotenv";
 dotenv.config();
 
 (async () => {
@@ -50,11 +55,6 @@ dotenv.config();
 
 })();
 
-import "./event_distribution/game_loop.mjs";
-
-// Setup Mongoose
-import Mongoose from "mongoose";
-import process, {exit} from "process";
 
 Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
     "useNewUrlParser": true,

@@ -2,7 +2,9 @@ import fetch from "node-fetch";
 import {fetch_options} from "./misc.mjs";
 
 export const event_flags = {
-    "RUNS_SCORED": 209
+    "RUNS_SCORED": 209,
+    "INCINERATION": 54,
+    "INCINERATION_BLOCKED": 55
 };
 
 export const event_types = {

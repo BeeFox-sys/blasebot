@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import {event_sorting} from "../event_distribution/event_manager.mjs";
+import {event_sorting} from "../event_distribution/event_distributor.mjs";
 import {fetch_options} from "../util/misc.mjs";
 
 
