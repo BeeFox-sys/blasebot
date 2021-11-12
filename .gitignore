@@ -4,4 +4,4 @@ logs/
 bot/data/
 .env
 npm-debug.log
-backup-mongo-2021-11-08
+backup-*

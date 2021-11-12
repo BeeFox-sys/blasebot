@@ -1,10 +1,11 @@
 env:
   node: true
-  commonjs: true
+  commonjs: false
   es2020: true
 extends: 'eslint:recommended'
 parserOptions:
   ecmaVersion: 12
+  sourceType: module
 rules:
   accessor-pairs: error
   array-bracket-newline: error
@@ -59,9 +60,6 @@ rules:
   jsx-quotes: error
   key-spacing: error
   keyword-spacing: error
-  linebreak-style:
-    - error
-    - unix
   lines-around-comment: error
   lines-around-directive: error
   lines-between-class-members: error
@@ -70,6 +68,7 @@ rules:
   max-len: 
     - warn
     - 100
+    - ignoreComments: true
   max-nested-callbacks: error
   max-params: error
   max-statements-per-line: error
@@ -186,7 +185,9 @@ rules:
   padding-line-between-statements: error
   prefer-arrow-callback: error
   prefer-const: error
-  prefer-destructuring: error
+  prefer-destructuring: 
+    - error
+    - object: true
   prefer-exponentiation-operator: error
   prefer-named-capture-group: error
   prefer-numeric-literals: error

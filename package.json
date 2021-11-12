@@ -2,7 +2,8 @@
   "name": "blasebot",
   "version": "0.1.0",
   "description": "A discordbot for blaseball",
-  "main": "bot/main.js",
+  "main": "bot/main.mjs",
+  "module":"node12",
   "scripts": {
     "update": "git pull && pm2 restart blasebot"
   },
@@ -17,6 +18,7 @@
     "discord.js": "^13.3.1",
     "dotenv": "^9.0.1",
     "eventsource": "^1.1.0",
+    "migrate-mongo": "^8.2.3",
     "mongoose": "^5.12.5",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1"
