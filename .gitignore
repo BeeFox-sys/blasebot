@@ -5,3 +5,4 @@ bot/data/
 .env
 npm-debug.log
 backup-*
+package-lock.json

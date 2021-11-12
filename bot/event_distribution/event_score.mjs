@@ -102,6 +102,7 @@ export async function score_event (event) {
 
                         switch (error.code) {
 
+                        case 50001:
                         case 10003:
                             sub.delete();
                             break;
@@ -117,6 +118,7 @@ export async function score_event (event) {
 
                 switch (error.code) {
 
+                case 50001:
                 case 10003:
                     sub.delete();
                     break;
