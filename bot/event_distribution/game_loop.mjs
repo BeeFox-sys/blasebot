@@ -21,33 +21,38 @@ async function loopData () {
             this_loop.toISOString()
         }&sort=1`,
         fetch_options
-    );
-
-
-    const response = await data_promise;
-    
-    // null if not valid json
-    const data = await response.json()
+    )
         .catch(() => null);
 
-    // we can still get valid json error messages, so those are skipped
-    if (data && Array.isArray(data)) {
+    const response = await data_promise;
+
+    // maybe catch response errors?
+    if (response !== null) {
+
+        // null if not valid json
+        const data = await response.json()
+            .catch(() => null);
+
+        // we can still get valid json error messages, so those are skipped
+        if (data && Array.isArray(data)) {
         
-        event_sorting(data, this_loop);
+            event_sorting(data, this_loop);
 
-        if (data.length > 0) {
+            if (data.length > 0) {
 
-            // Due to how this function is called, there will never be a race condition for this variable, see the comment where this function is called
-            // eslint-disable-next-line require-atomic-updates
-            previous_loop = new Date(Date.parse(data[data.length - 1].created));
+                // Due to how this function is called, there will never be a race condition for this variable, see the comment where this function is called
+                // eslint-disable-next-line require-atomic-updates
+                previous_loop = new Date(Date.parse(data[data.length - 1].created));
 
+            }
+
+        } else if (data) {
+
+            // if data is valid json but not an array, it is an error message, as this endpoint returns an array
+            console.error(data);
+    
         }
 
-    } else if (data) {
-
-        // if data is valid json but not an array, it is an error message, as this endpoint returns an array
-        console.error(data);
-    
     }
 
 
