@@ -1,18 +1,20 @@
+/* eslint-disable object-property-newline*/
+
 import Mongoose from "mongoose";
 
 const channel_schema = new Mongoose.Schema({
     "channel_id": String,
     "guild_id": String,
-    "sub_bets": Boolean,
-    "bet_interval": Number,
-    "commands_enabled": Boolean,
-    "sub_weather": Boolean,
-    "sub_items": Boolean,
-    "sub_modifications": Boolean,
-    "sub_changes": Boolean,
-    "sub_takeover": Boolean,
-    "sub_incineration": Boolean,
-    "sub_misc": Boolean
+    "sub_bets": {"type": Boolean, "default": false},
+    "bet_interval": {"type": Number, "defualt": 8},
+    "commands_enabled": {"type": Boolean, "default": true},
+    "sub_weather": {"type": Boolean, "default": false},
+    "sub_items": {"type": Boolean, "default": false},
+    "sub_modifications": {"type": Boolean, "default": false},
+    "sub_changes": {"type": Boolean, "default": false},
+    "sub_takeover": {"type": Boolean, "default": false},
+    "sub_incineration": {"type": Boolean, "default": false},
+    "sub_misc": {"type": Boolean, "default": false}
 });
 
 export default channel_schema;

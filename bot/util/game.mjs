@@ -288,7 +288,7 @@ export async function get_events (events_array) {
 
 /**
  *
- * @param id - Game ID
+ * @param {string} id - Game ID
  * @returns {Promise} - Game Json
  */
 export async function get_game (id) {

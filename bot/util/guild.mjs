@@ -1,5 +1,9 @@
 import NodeCache from "node-cache";
-import {guilds as Guilds} from "../schemas/guildsettings.mjs";
+import {model as Guilds} from "../../schemas/guild.mjs";
+import {model as TeamSubs} from "../../schemas/team_subscription.mjs";
+import {model as ChannelSubs} from "../../schemas/channel.mjs";
+// eslint-disable-next-line no-unused-vars
+import {Model} from "mongoose";
 
 const guildCache = new NodeCache({"stdTTL": 60 * 60});
 
@@ -42,5 +46,50 @@ export async function saveGuild (guild) {
     guildCache.set(guildSaved.guild_id, guildSaved);
     
     return guildSaved;
+
+}
+
+/**
+ *
+ * @param {String} channel_id
+ * @param {String} team_id
+ * @returns {Model}
+ */
+export async function getTeamSub (channel_id, team_id) {
+
+    let teamSub = await TeamSubs.findOne({channel_id,
+        team_id});
+
+    if (!teamSub) {
+
+        teamSub = new TeamSubs({
+            channel_id,
+            team_id
+        });
+
+    }
+    
+    return teamSub;
+
+}
+
+/**
+ *
+ * @param {*} channel_id
+ * @returns {Model}
+ */
+export async function getChannelSub (channel_id) {
+
+    let channelSub = await ChannelSubs.findOne({channel_id});
+
+    if (!channelSub) {
+
+        channelSub = new ChannelSubs({
+            channel_id
+        });
+
+    }
+    
+    return channelSub;
 
 }

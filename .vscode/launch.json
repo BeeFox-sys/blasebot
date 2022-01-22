@@ -12,7 +12,7 @@
                 "<node_internals>/**"
             ],
             "args": ["--trace-warnings"],
-            "program": "${workspaceFolder}\\bot\\main.mjs"
+            "program": "${workspaceFolder}/bot/main.mjs"
         }
     ]
 }

@@ -1,7 +1,9 @@
 import {incineration_event} from "./events/event_incineration.mjs";
 import {client} from "../main.mjs";
-import {event_flags} from "../util/game.mjs";
 import {score_event} from "./events/event_score.mjs";
+
+import * as EventList from "../event_catagories/index.mjs";
+
 
 const last_100 = [];
 
@@ -20,6 +22,8 @@ export async function event_sorting (events) {
 
     }
 
+    // console.log(events);
+
     events.forEach((event) => {
 
 
@@ -30,19 +34,21 @@ export async function event_sorting (events) {
 
         }
     
-        switch (event.type) {
+        switch (true) {
 
-        case event_flags.RUNS_SCORED:
+        case EventList.scores.includes(event.type):
             score_event(event);
             break;
 
-        case event_flags.INCINERATION_BLOCKED:
-        case event_flags.INCINERATION:
+        case EventList.incineration.includes(event.type):
             incineration_event(event);
             break;
 
+        case event.type:
+            break;
+
         default:
-                
+        
         }
 
     });

@@ -6,6 +6,16 @@ extends: 'eslint:recommended'
 parserOptions:
   ecmaVersion: 12
   sourceType: module
+  ecmaFeatures:
+    jsx: true
+settings:
+  import/resolver:
+    node:
+      extentions: [".js",".mjs"]
+  import/extentions:
+    ignorePackages:
+      mjs: never
+      js: never
 rules:
   accessor-pairs: error
   array-bracket-newline: error
@@ -70,7 +80,9 @@ rules:
     - 100
     - ignoreComments: true
   max-nested-callbacks: error
-  max-params: error
+  max-params: 
+    - warn
+    - 5
   max-statements-per-line: error
   multiline-comment-style: error
   multiline-ternary: 

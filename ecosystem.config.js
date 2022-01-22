@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {"apps": [
     {"name": "blasebot",
         "script": "bot/main.mjs",

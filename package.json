@@ -3,18 +3,21 @@
   "version": "0.1.0",
   "description": "A discordbot for blaseball",
   "main": "bot/main.mjs",
-  "module":"node12",
+  "module": "node12",
   "scripts": {
     "update": "git pull && pm2 restart blasebot"
   },
   "author": "Beefox",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@discordjs/builders": "^0.11.0",
     "@discordjs/collection": "^0.2.4",
+    "@discordjs/rest": "^0.2.0-canary.0",
     "@pm2/io": "^4.3.5",
     "blaseball": "^1.3.0",
     "deep-diff": "^1.0.2",
     "deep-equal": "^2.0.5",
+    "discord-api-types": "^0.26.1",
     "discord.js": "^13.3.1",
     "dotenv": "^9.0.1",
     "eventsource": "^1.1.0",
@@ -22,5 +25,8 @@
     "mongoose": "^5.12.5",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.7.0"
   }
 }

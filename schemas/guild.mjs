@@ -1,8 +1,9 @@
+/* eslint-disable object-property-newline*/
 import Mongoose from "mongoose";
 
 const guild_schema = new Mongoose.Schema({
     "guild_id": String,
-    "forbidden_knowlage": Boolean
+    "forbidden_knowlage": {"type": Boolean, "default": false}
 });
 
 export default guild_schema;

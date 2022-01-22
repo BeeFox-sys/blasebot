@@ -1,3 +1,6 @@
+/* eslint-disable */
+/* TODO: convert to mjs */
+
 /* eslint-disable max-len */
 /* eslint-disable no-warning-comments */
 // In this file you can configure migrate-mongo

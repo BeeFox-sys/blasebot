@@ -12,10 +12,8 @@ console.log(`       ▞▚
 
 import Discord from "discord.js";
 import dotenv from "dotenv";
-import {readdir} from "fs/promises";
 // Setup Mongoose
 import Mongoose from "mongoose";
-import {performance} from "perf_hooks";
 import process, {exit} from "process";
 import "./event_distribution/game_loop.mjs";
 
@@ -28,32 +26,6 @@ const client = new Discord.Client({
 });
 
 dotenv.config();
-
-(async () => {
-
-    console.log("Loading commands...");
-    const commandLoadStart = performance.now();
-
-    client.commands = {};
-    const commandFiles = await readdir("./bot/commands")
-        .then((res) => res.filter((file) => file.endsWith(".mjs")));
-    let loadedCommands = 0;
-    
-
-    for (const file of commandFiles) {
-
-        const command = await import(`./commands/${file}`);
-
-        client.commands[command.action] = command.execute;
-        loadedCommands++;
-
-    }
-    const commandLoadEnd = performance.now();
-
-    console.log(`Loaded ${loadedCommands} root commands in ${
-        Math.ceil(commandLoadEnd - commandLoadStart)}ms!`);
-
-})();
 
 
 Mongoose.connect(process.env.DB_URL || process.env.dbUrl, {
@@ -75,12 +47,24 @@ Mongoose.connection
         console.log("Connected to database");
         console.log("Connecting to discord...");
         client.login(process.env.discordToken).catch(console.err);
-    
+
     });
 
 client.on("ready", () => {
 
     console.log("ready");
+
+});
+
+import commands from "./commands/index.mjs";
+
+client.on("interactionCreate", (interaction) => {
+
+    if (interaction.isCommand()) {
+
+        commands[interaction.commandName](interaction);
+
+    }
 
 });
 

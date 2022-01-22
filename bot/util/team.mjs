@@ -65,6 +65,21 @@ export async function get_team (team_id) {
 }
 
 /**
+ *
+ * @returns {json} array of active teams
+ */
+export async function get_active_teams () {
+
+    return fetch(
+        "https://api.blaseball.com/database/teams",
+        fetch_options
+    )
+        .then((result) => result.json())
+        .catch(() => null);
+
+}
+
+/**
  * Normalizes emoji
  * @param {string} emoji
  * @returns {string}
