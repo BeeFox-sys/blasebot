@@ -12,7 +12,7 @@ export const commandData = new SlashCommandBuilder()
 
 
 // eslint-disable-next-line no-unused-vars
-import {CommandInteraction, MessageActionRow, MessageButton, MessageSelectMenu} from "discord.js";
+import {CommandInteraction, MessageActionRow, MessageButton, MessageSelectMenu, Permissions} from "discord.js";
 import {getChannelSub, getTeamSub} from "../util/guild.mjs";
 import {get_active_teams} from "../util/team.mjs";
 
@@ -22,6 +22,17 @@ import {get_active_teams} from "../util/team.mjs";
  */
 export async function commandFunction (commandEvent) {
 
+    if (!commandEvent.memberPermissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) {
+
+        commandEvent.reply({
+            "content": "You do not have permission to set the subscriptions for this channel, you require the manage channel permission to do so!\nPlease contact someone who has such permission!",
+            "ephemeral": true
+        });
+        
+        return;
+    
+    }
+    
     switch (commandEvent.options.getSubcommand()) {
 
     case "team":
@@ -85,7 +96,8 @@ async function team_subscription (commandEvent) {
 
     response.awaitMessageComponent({
         "componentType": "SELECT_MENU",
-        "time": 60000
+        "time": 60000,
+        "filter": (interaction) => interaction.user === commandEvent.user
     })
         .then(async (interaction) => {
 
@@ -138,7 +150,7 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                     .setLabel("Summaries")
                     .setCustomId("sub_summaries")
                     .setStyle(model.sub_summaries ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
             ),
         new MessageActionRow()
             .addComponents(
@@ -146,12 +158,12 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                     .setLabel("Players")
                     .setCustomId("sub_player_changes")
                     .setStyle(model.sub_player_changes ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled),
+                    .setDisabled(true),
                 new MessageButton()
                     .setLabel(" Items ")
                     .setCustomId("sub_items")
                     .setStyle(model.sub_items ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
             ),
         new MessageActionRow()
             .addComponents(
@@ -159,12 +171,12 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                     .setLabel("Flavour")
                     .setCustomId("sub_flavour")
                     .setStyle(model.sub_flavour ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled),
+                    .setDisabled(true),
                 new MessageButton()
                     .setLabel(" Plays ")
                     .setCustomId("sub_plays")
                     .setStyle(model.sub_plays ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
             )
     ];
 
@@ -193,7 +205,8 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
 
     response.awaitMessageComponent({
         "componentType": "BUTTON",
-        "time": 60000
+        "time": 60000,
+        "filter": (inter) => inter.user === interaction.user
     })
         .then(async (buttonInteraction) => {
             
@@ -246,19 +259,19 @@ async function event_subscription (interaction, model = null, disabled = false) 
                     .setLabel("Bets")
                     .setCustomId("sub_bets")
                     .setStyle(model.sub_bets ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
                 ,
                 new MessageButton()
                     .setLabel("Weather")
                     .setCustomId("sub_weather")
                     .setStyle(model.sub_weather ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
                 ,
                 new MessageButton()
                     .setLabel("Items")
                     .setCustomId("sub_items")
                     .setStyle(model.sub_items ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
 
             ),
         new MessageActionRow()
@@ -267,19 +280,19 @@ async function event_subscription (interaction, model = null, disabled = false) 
                     .setLabel("Modifications")
                     .setCustomId("sub_modifications")
                     .setStyle(model.sub_modifications ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
                 ,
                 new MessageButton()
                     .setLabel("Changes")
                     .setCustomId("sub_changes")
                     .setStyle(model.sub_changes ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
                 ,
                 new MessageButton()
                     .setLabel("Takeover")
                     .setCustomId("sub_takeover")
                     .setStyle(model.sub_takeover ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
 
             ),
         new MessageActionRow()
@@ -294,7 +307,7 @@ async function event_subscription (interaction, model = null, disabled = false) 
                     .setLabel("Misc")
                     .setCustomId("sub_misc")
                     .setStyle(model.sub_misc ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(true)
 
             )
             
@@ -334,7 +347,8 @@ async function event_subscription (interaction, model = null, disabled = false) 
 
     response.awaitMessageComponent({
         "componentType": "BUTTON",
-        "time": 60000
+        "time": 60000,
+        "filter": (inter) => inter.user === interaction.user
     })
         .then(async (buttonInteraction) => {
             

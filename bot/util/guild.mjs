@@ -2,8 +2,7 @@ import NodeCache from "node-cache";
 import {model as Guilds} from "../../schemas/guild.mjs";
 import {model as TeamSubs} from "../../schemas/team_subscription.mjs";
 import {model as ChannelSubs} from "../../schemas/channel.mjs";
-// eslint-disable-next-line no-unused-vars
-import {Model} from "mongoose";
+// import {Model} from "mongoose";
 
 const guildCache = new NodeCache({"stdTTL": 60 * 60});
 
