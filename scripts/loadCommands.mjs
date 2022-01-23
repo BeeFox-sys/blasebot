@@ -24,7 +24,7 @@ const rest = new REST({"version": "9"}).setToken(process.env.discordToken);
         console.log("Started refreshing application (/) commands.");
 
         await rest.put(
-            process.argv.slice(2)[0] === "Global"
+            process.argv.slice(2)[0].toLocaleLowerCase() === "global"
                 ? Routes.applicationCommands(process.env.clientID)
                 : Routes.applicationGuildCommands(process.env.clientID, process.argv.slice(2)[0]),
             {"body": commandJson}
