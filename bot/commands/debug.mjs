@@ -28,8 +28,6 @@ export async function commandFunction (commandEvent) {
     await commandEvent.deferReply();
     const events = await get_events(commandEvent.options.getString("event_id").split(","));
 
-    console.log(events);
-
     await event_sorting(events, true);
 
     commandEvent.editReply({

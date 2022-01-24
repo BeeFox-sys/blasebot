@@ -101,7 +101,7 @@ async function team_subscription (commandEvent) {
     })
         .then(async (interaction) => {
 
-            const sub = await getTeamSub(interaction.channelID, interaction.values[0]);
+            const sub = await getTeamSub(interaction.channelId, interaction.values[0]);
 
             const teamObj = teamMap.find((team) => team.value === interaction.values[0]);
 
