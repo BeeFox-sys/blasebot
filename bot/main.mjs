@@ -62,7 +62,21 @@ client.on("interactionCreate", (interaction) => {
 
     if (interaction.isCommand()) {
 
-        commands[interaction.commandName](interaction);
+        commands[interaction.commandName](interaction)
+            .catch((error) => {
+
+                console.error(error);
+                console.error(interaction);
+                if (!interaction.isAutocomplete()) {
+
+                    interaction.followUp({
+                        "ephemeral": true,
+                        "content": "There was an error with this command, please report it!"
+                    });
+                
+                }
+
+            });
 
     }
 

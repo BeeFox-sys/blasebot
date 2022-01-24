@@ -282,7 +282,11 @@ export async function get_events (events_array) {
         fetch_options
     )
         .then((result) => result.json())
-        .catch(() => null);
+        .catch((error) => {
+
+            throw error;
+
+        });
 
 }
 

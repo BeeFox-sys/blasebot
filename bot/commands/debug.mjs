@@ -31,7 +31,7 @@ export async function commandFunction (commandEvent) {
     console.log(events);
 
     await event_sorting(events, true);
-    
+
     commandEvent.editReply({
         "content": `Debuged event ${commandEvent.options.getString("event_id")}`
     });
