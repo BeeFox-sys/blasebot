@@ -1,13 +1,16 @@
 import {send_teams} from "../send_events.mjs";
-import {get_events, get_game} from "../../util/game.mjs";
+import {get_events, get_game, event_flags} from "../../util/game.mjs";
 import {emoji_string} from "../../util/team.mjs";
+
+
+export const eventList = [event_flags.RUNS_SCORED];
 
 
 /**
  *
  * @param {JSON} event - Event object from feed
  */
-export async function score_event (event) {
+export async function eventFunction (event) {
 
     let game = null;
     let siblings = [];

@@ -25,13 +25,12 @@ import {get_events} from "../util/game.mjs";
  */
 export async function commandFunction (commandEvent) {
 
-    console.log(commandEvent);
     await commandEvent.deferReply();
-    const events = await get_events([commandEvent.options.getString("event_id")]);
+    const events = await get_events(commandEvent.options.getString("event_id").split(","));
 
     console.log(events);
 
-    await event_sorting(events);
+    await event_sorting(events, true);
     
     commandEvent.editReply({
         "content": `Debuged event ${commandEvent.options.getString("event_id")}`
