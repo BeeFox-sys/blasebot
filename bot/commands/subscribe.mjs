@@ -150,7 +150,7 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                     .setLabel("Summaries")
                     .setCustomId("sub_summaries")
                     .setStyle(model.sub_summaries ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
             ),
         new MessageActionRow()
             .addComponents(
@@ -158,12 +158,12 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                     .setLabel("Players")
                     .setCustomId("sub_player_changes")
                     .setStyle(model.sub_player_changes ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled),
+                    .setDisabled(disabled || true),
                 new MessageButton()
                     .setLabel(" Items ")
                     .setCustomId("sub_items")
                     .setStyle(model.sub_items ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
             ),
         new MessageActionRow()
             .addComponents(
@@ -171,12 +171,12 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                     .setLabel("Flavour")
                     .setCustomId("sub_flavour")
                     .setStyle(model.sub_flavour ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled),
+                    .setDisabled(disabled || true),
                 new MessageButton()
                     .setLabel(" Plays ")
                     .setCustomId("sub_plays")
                     .setStyle(model.sub_plays ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
             )
     ];
 
@@ -259,19 +259,19 @@ async function event_subscription (interaction, model = null, disabled = false) 
                     .setLabel("Bets")
                     .setCustomId("sub_bets")
                     .setStyle(model.sub_bets ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
                 ,
                 new MessageButton()
                     .setLabel("Weather")
                     .setCustomId("sub_weather")
                     .setStyle(model.sub_weather ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
                 ,
                 new MessageButton()
                     .setLabel("Items")
                     .setCustomId("sub_items")
                     .setStyle(model.sub_items ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
 
             ),
         new MessageActionRow()
@@ -280,13 +280,13 @@ async function event_subscription (interaction, model = null, disabled = false) 
                     .setLabel("Modifications")
                     .setCustomId("sub_modifications")
                     .setStyle(model.sub_modifications ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
                 ,
                 new MessageButton()
                     .setLabel("Changes")
                     .setCustomId("sub_changes")
                     .setStyle(model.sub_changes ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
                 ,
                 new MessageButton()
                     .setLabel("Takeover")
@@ -307,7 +307,7 @@ async function event_subscription (interaction, model = null, disabled = false) 
                     .setLabel("Misc")
                     .setCustomId("sub_misc")
                     .setStyle(model.sub_misc ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled)
+                    .setDisabled(disabled || true)
 
             )
             
