@@ -24,6 +24,6 @@ export async function eventFunction (event) {
         .setDescription(event.description);
 
 
-    send_channels({"sub_incineration": true}, {embed});
+    send_channels({"sub_incineration": true}, {"embeds": [embed]});
 
 }
