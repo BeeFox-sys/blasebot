@@ -1,7 +1,7 @@
 import {MessageEmbed} from "discord.js";
-import {send_channels} from "../send_events.mjs";
+import {send_channels} from "../../send_events.mjs";
 
-import {event_flags, get_events} from "../../util/game.mjs";
+import {event_flags, get_events} from "../../../util/game.mjs";
 
 export const eventList = [
     event_flags.INCINERATION_BLOCKED,
