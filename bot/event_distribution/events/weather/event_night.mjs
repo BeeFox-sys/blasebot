@@ -4,7 +4,7 @@ import {send_channels} from "../../send_events.mjs";
 // eslint-disable-next-line no-unused-vars
 import {event_flags, get_events} from "../../../util/game.mjs";
 
-export const eventList = [];
+export const eventList = [event_flags.NIGHT_NIGHT_SHIFT];
 
 
 /**
@@ -12,24 +12,11 @@ export const eventList = [];
  * @param {Object} event
  */
 export async function eventFunction (event) {
-    
-    // This one is pretty easy to set up!
-
-    let siblings = [];
-
-
-    if (event.metadata.siblingIds.length) {
-
-        siblings = await get_events(event.metadata.siblingIds);
-
-    }
-
-    console.log(siblings);
 
     const embed = new MessageEmbed()
-        .setColor("RANDOM")
+        .setColor("NOT_QUITE_BLACK")
         .setDescription(`**${event.description}**`)
-        .setAuthor("Ballclark", "https://cdn.discordapp.com/emojis/907678547420794990.webp");
+        .setAuthor("Night", "https://www.blaseball.wiki/images/0/03/Weather_night.png", "https://www.blaseball.wiki/w/Night");
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
 

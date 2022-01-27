@@ -4,7 +4,12 @@ import {send_channels} from "../../send_events.mjs";
 // eslint-disable-next-line no-unused-vars
 import {event_flags, get_events} from "../../../util/game.mjs";
 
-export const eventList = [];
+export const eventList = [
+    event_flags.REVERB_FULL,
+    event_flags.REVERB_LINEUP,
+    event_flags.REVERB_ROTATION,
+    event_flags.GAINING_REVERBERATING
+];
 
 
 /**
@@ -13,23 +18,11 @@ export const eventList = [];
  */
 export async function eventFunction (event) {
     
-    // This one is pretty easy to set up!
-
-    let siblings = [];
-
-
-    if (event.metadata.siblingIds.length) {
-
-        siblings = await get_events(event.metadata.siblingIds);
-
-    }
-
-    console.log(siblings);
-
     const embed = new MessageEmbed()
-        .setColor("RANDOM")
+        .setColor("#61b3ff")
         .setDescription(`**${event.description}**`)
-        .setAuthor("Ballclark", "https://cdn.discordapp.com/emojis/907678547420794990.webp");
+        // eslint-disable-next-line max-len
+        .setAuthor("Reverb", "https://www.blaseball.wiki/images/thumb/8/8f/Tgb_reverb.png/599px-Tgb_reverb.png", "https://www.blaseball.wiki/w/Reverb");
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
 

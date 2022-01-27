@@ -21,7 +21,7 @@ export async function eventFunction (event) {
         .setColor("#c4aa70")
         .setDescription(`**${event.description}**`)
         // eslint-disable-next-line max-len
-        .setThumbnail("https://www.blaseball.wiki/images/thumb/6/6e/Tgb_peanut-weather.png/800px-Tgb_peanut-weather.png");
+        .setAuthor("Peanuts", "https://www.blaseball.wiki/images/thumb/6/6e/Tgb_peanut-weather.png/800px-Tgb_peanut-weather.png", "https://www.blaseball.wiki/w/Peanuts_(weather)");
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
 

@@ -4,7 +4,7 @@ import {send_channels} from "../../send_events.mjs";
 // eslint-disable-next-line no-unused-vars
 import {event_flags, get_events} from "../../../util/game.mjs";
 
-export const eventList = [];
+export const eventList = [event_flags.BASERUNNERS_SWEPT];
 
 
 /**
@@ -13,23 +13,11 @@ export const eventList = [];
  */
 export async function eventFunction (event) {
     
-    // This one is pretty easy to set up!
-
-    let siblings = [];
-
-
-    if (event.metadata.siblingIds.length) {
-
-        siblings = await get_events(event.metadata.siblingIds);
-
-    }
-
-    console.log(siblings);
-
     const embed = new MessageEmbed()
-        .setColor("RANDOM")
+        .setColor("#8cb8ad")
         .setDescription(`**${event.description}**`)
-        .setAuthor("Ballclark", "https://cdn.discordapp.com/emojis/907678547420794990.webp");
+        // eslint-disable-next-line max-len
+        .setAuthor("Flooding", "https://www.blaseball.wiki/images/thumb/2/29/Tgb_flooding.png/600px-Tgb_flooding.png", "https://www.blaseball.wiki/w/Flooding");
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
 

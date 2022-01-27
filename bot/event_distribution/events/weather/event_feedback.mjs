@@ -36,8 +36,10 @@ export async function eventFunction (event) {
     siblings.shift();
     const embed = new MessageEmbed()
         .setColor("#ed0960")
-        .setDescription(`**${event.description}**\n${siblings.map((sib) => sib.description).join("\n")}`)
-        .setThumbnail("https://www.blaseball.wiki/images/thumb/8/88/Tgb_feedback.png/600px-Tgb_feedback.png");
+        .setDescription(`**${event.description}**\n${
+            siblings.map((sib) => sib.description).join("\n")}`)
+        // eslint-disable-next-line max-len
+        .setAuthor("Feedback", "https://www.blaseball.wiki/images/thumb/8/88/Tgb_feedback.png/600px-Tgb_feedback.png", "https://www.blaseball.wiki/w/Feedback");
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
 

@@ -20,7 +20,7 @@ export async function eventFunction (event) {
     let siblings = [];
 
 
-    if (event.metadata.siblingIds.length) {
+    if (event.metadata?.siblingIds?.length) {
 
         siblings = await get_events(event.metadata.siblingIds);
 
@@ -28,8 +28,9 @@ export async function eventFunction (event) {
 
     const embed = new MessageEmbed()
         .setColor("WHITE")
-        .setDescription(`**${event.description}**\n${siblings[4].description}`)
-        .setThumbnail("https://www.blaseball.wiki/images/thumb/5/51/Tgb_eclipse.png/60px-Tgb_eclipse.png");
+        .setDescription(`**${event.description}**\n${siblings[4]?.description ?? ""}`)
+        // eslint-disable-next-line max-len
+        .setAuthor("Solar Eclipse", "https://www.blaseball.wiki/images/thumb/5/51/Tgb_eclipse.png/60px-Tgb_eclipse.png", "https://www.blaseball.wiki/w/Solar_Eclipse");
 
     send_channels({"sub_incineration": true,
         "sub_weather": true}, {"embeds": [embed]});
