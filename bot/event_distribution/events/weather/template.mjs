@@ -3,10 +3,7 @@ import {send_channels} from "../../send_events.mjs";
 
 import {event_flags, get_events} from "../../../util/game.mjs";
 
-export const eventList = [
-    event_flags.INCINERATION_BLOCKED,
-    event_flags.INCINERATION
-];
+export const eventList = [];
 
 
 /**
@@ -26,10 +23,12 @@ export async function eventFunction (event) {
 
     }
 
+    console.log(siblings);
+
     const embed = new MessageEmbed()
-        .setColor("WHITE")
-        .setDescription(`**${event.description}**\n${siblings[4].description}`)
-        .setThumbnail("https://www.blaseball.wiki/images/thumb/5/51/Tgb_eclipse.png/60px-Tgb_eclipse.png");
+        .setColor("RANDOM")
+        .setDescription(`**${event.description}**`)
+        .setThumbnail("https://cdn.discordapp.com/emojis/907678547420794990.webp");
 
     send_channels({"sub_incineration": true}, {"embeds": [embed]});
 

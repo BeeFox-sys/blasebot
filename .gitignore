@@ -7,3 +7,4 @@ npm-debug.log
 backup-*
 package-lock.json
 temp.*
+package-lock.*

@@ -65,7 +65,7 @@ client.on("ready", () => {
         .toString()
         .trim();
 
-    console.info(`COMMIT: ${revision}`, modified.split("\n").filter((str) => str !== ""));
+    console.log(`COMMIT: ${revision}`, modified.split("\n").filter((str) => str !== ""));
     client.presence.set({
         "status": "online",
         "activities": [
