@@ -1,3 +1,4 @@
+/* eslint-disable no-sync */
 console.log(`       ▞▚
       ▞  ▚
      ▞    ▚
@@ -50,9 +51,34 @@ Mongoose.connection
 
     });
 
+import * as child_process from "child_process";
+
 client.on("ready", () => {
 
     console.log("ready");
+    const revision = child_process
+        .execSync("git rev-parse --short HEAD")
+        .toString()
+        .trim();
+    const modified = child_process
+        .execSync("git ls-files --modified")
+        .toString()
+        .trim();
+
+    console.log(modified);
+
+    console.log(`COMMIT: ${revision}`, modified.split("\n").filter((str) => str !== ""));
+    console.log(client.presence.set({
+        "status": "online",
+        "activities": [
+            {
+                "name": `Blaseball! | ${revision}${modified.split("\n").filter((str) => str !== "").length > 0 ? `+M${modified.split("\n").filter((str) => str !== "").length}` : ""}`,
+                "type": "PLAYING",
+                "url": "https://www.blaseball.com"
+            }
+        ]
+    }));
+
 
 });
 

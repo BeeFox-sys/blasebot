@@ -176,7 +176,7 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                     .setLabel(" Plays ")
                     .setCustomId("sub_plays")
                     .setStyle(model.sub_plays ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled || true)
+                    .setDisabled(disabled)
             )
     ];
 
