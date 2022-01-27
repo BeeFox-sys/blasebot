@@ -65,19 +65,17 @@ client.on("ready", () => {
         .toString()
         .trim();
 
-    console.log(modified);
-
-    console.log(`COMMIT: ${revision}`, modified.split("\n").filter((str) => str !== ""));
-    console.log(client.presence.set({
+    console.info(`COMMIT: ${revision}`, modified.split("\n").filter((str) => str !== ""));
+    client.presence.set({
         "status": "online",
         "activities": [
             {
                 "name": `Blaseball! | ${revision}${modified.split("\n").filter((str) => str !== "").length > 0 ? `+M${modified.split("\n").filter((str) => str !== "").length}` : ""}`,
-                "type": "PLAYING",
+                "type": "WATCHING",
                 "url": "https://www.blaseball.com"
             }
         ]
-    }));
+    });
 
 
 });
