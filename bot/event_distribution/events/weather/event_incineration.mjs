@@ -31,6 +31,7 @@ export async function eventFunction (event) {
         .setDescription(`**${event.description}**\n${siblings[4].description}`)
         .setThumbnail("https://www.blaseball.wiki/images/thumb/5/51/Tgb_eclipse.png/60px-Tgb_eclipse.png");
 
-    send_channels({"sub_incineration": true}, {"embeds": [embed]});
+    send_channels({"sub_incineration": true,
+        "sub_weather": true}, {"embeds": [embed]});
 
 }

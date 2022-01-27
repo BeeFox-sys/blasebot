@@ -267,7 +267,7 @@ async function event_subscription (interaction, model = null, disabled = false) 
                     .setLabel("Weather")
                     .setCustomId("sub_weather")
                     .setStyle(model.sub_weather ? "SUCCESS" : "SECONDARY")
-                    .setDisabled(disabled || true)
+                    .setDisabled(disabled)
                 ,
                 new MessageButton()
                     .setLabel("Items")

@@ -1,10 +1,12 @@
 import {MessageEmbed} from "discord.js";
 import {send_channels} from "../../send_events.mjs";
 
-// eslint-disable-next-line no-unused-vars
 import {event_flags, get_events} from "../../../util/game.mjs";
 
-export const eventList = [];
+export const eventList = [
+    event_flags.FEEDBACK_SWAP,
+    event_flags.FEEDBACK_SWAP_BLOCKED
+];
 
 
 /**
@@ -24,12 +26,18 @@ export async function eventFunction (event) {
 
     }
 
-    console.log(siblings);
+    // Capture only the first sibling, as some siblings here share the same type so we do not want repeats
+    if (siblings[0]?.id !== event.id) {
 
+        return;
+    
+    }
+
+    siblings.shift();
     const embed = new MessageEmbed()
-        .setColor("RANDOM")
-        .setDescription(`**${event.description}**`)
-        .setThumbnail("https://cdn.discordapp.com/emojis/907678547420794990.webp");
+        .setColor("#ed0960")
+        .setDescription(`**${event.description}**\n${siblings.map((sib) => sib.description).join("\n")}`)
+        .setThumbnail("https://www.blaseball.wiki/images/thumb/8/88/Tgb_feedback.png/600px-Tgb_feedback.png");
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
 
