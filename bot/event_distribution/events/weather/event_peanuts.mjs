@@ -1,7 +1,9 @@
 import {MessageEmbed} from "discord.js";
 import {send_channels} from "../../send_events.mjs";
 
-import {event_flags} from "../../../util/game.mjs";
+import {event_flags, get_game} from "../../../util/game.mjs";
+import {emoji_string} from "../../../util/team.mjs";
+
 
 export const eventList = [
     event_flags.ALLERGIC_REACTION,
@@ -17,11 +19,15 @@ export const eventList = [
  */
 export async function eventFunction (event) {
     
+    const game = await get_game(event.gameTags[0]);
+
     const embed = new MessageEmbed()
         .setColor("#c4aa70")
         .setDescription(`**${event.description}**`)
         // eslint-disable-next-line max-len
-        .setAuthor("Peanuts", "https://www.blaseball.wiki/images/thumb/6/6e/Tgb_peanut-weather.png/800px-Tgb_peanut-weather.png", "https://www.blaseball.wiki/w/Peanuts_(weather)");
+        .setAuthor("Peanuts", "https://www.blaseball.wiki/images/thumb/6/6e/Tgb_peanut-weather.png/800px-Tgb_peanut-weather.png", "https://www.blaseball.wiki/w/Peanuts_(weather)")
+        .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
+            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji)} @ ${emoji_string(game.homeTeamEmoji)}`);
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
 
