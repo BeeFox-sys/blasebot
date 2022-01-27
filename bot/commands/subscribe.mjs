@@ -12,7 +12,8 @@ export const commandData = new SlashCommandBuilder()
 
 
 // eslint-disable-next-line no-unused-vars
-import {CommandInteraction, MessageActionRow, MessageButton, MessageSelectMenu, Permissions} from "discord.js";
+import {CommandInteraction, MessageActionRow,
+    MessageButton, MessageSelectMenu, Permissions} from "discord.js";
 import {getChannelSub, getTeamSub} from "../util/guild.mjs";
 import {get_active_teams} from "../util/team.mjs";
 
@@ -25,6 +26,7 @@ export async function commandFunction (commandEvent) {
     if (!commandEvent.memberPermissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) {
 
         commandEvent.reply({
+            // eslint-disable-next-line max-len
             "content": "You do not have permission to set the subscriptions for this channel, you require the manage channel permission to do so!\nPlease contact someone who has such permission!",
             "ephemeral": true
         });

@@ -70,7 +70,10 @@ client.on("ready", () => {
         "status": "online",
         "activities": [
             {
-                "name": `Blaseball! | ${revision}${modified.split("\n").filter((str) => str !== "").length > 0 ? `+M${modified.split("\n").filter((str) => str !== "").length}` : ""}`,
+                "name": `Blaseball! | ${revision}${
+                    modified.split("\n").filter((str) => str !== "").length > 0
+                        ? `+M${modified.split("\n").filter((str) => str !== "").length}`
+                        : ""}`,
                 "type": "WATCHING",
                 "url": "https://www.blaseball.com"
             }

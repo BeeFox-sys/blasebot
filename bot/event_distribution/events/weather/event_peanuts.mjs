@@ -20,6 +20,7 @@ export async function eventFunction (event) {
     const embed = new MessageEmbed()
         .setColor("#c4aa70")
         .setDescription(`**${event.description}**`)
+        // eslint-disable-next-line max-len
         .setThumbnail("https://www.blaseball.wiki/images/thumb/6/6e/Tgb_peanut-weather.png/800px-Tgb_peanut-weather.png");
 
     send_channels({"sub_incineration": true}, {"embeds": [embed]});
