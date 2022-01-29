@@ -39,8 +39,6 @@ export async function eventFunction (event) {
 
     const game = await get_game(event.gameTags[0]);
 
-    if()
-
     const embed = new MessageEmbed()
         .setColor("#ed0960")
         .setDescription(`**${event.description}**\n${
