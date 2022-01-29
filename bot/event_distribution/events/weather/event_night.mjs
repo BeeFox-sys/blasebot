@@ -20,7 +20,7 @@ export async function eventFunction (event) {
         .setColor("NOT_QUITE_BLACK")
         .setDescription(`**${event.description}**`)
         .setAuthor("Night", "https://www.blaseball.wiki/images/0/03/Weather_night.png", "https://www.blaseball.wiki/w/Night")
-        .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
+        .setFooter(`Day ${game.day + 1} of season ${event.season + 1}${
             game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});

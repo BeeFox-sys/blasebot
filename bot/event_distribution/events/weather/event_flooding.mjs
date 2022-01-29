@@ -23,7 +23,7 @@ export async function eventFunction (event) {
         .setDescription(`**${event.description}**`)
         // eslint-disable-next-line max-len
         .setAuthor("Flooding", "https://www.blaseball.wiki/images/thumb/2/29/Tgb_flooding.png/600px-Tgb_flooding.png", "https://www.blaseball.wiki/w/Flooding")
-        .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
+        .setFooter(`Day ${game.day + 1} of season ${event.season + 1}${
             game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
 

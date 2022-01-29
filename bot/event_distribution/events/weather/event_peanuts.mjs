@@ -26,7 +26,7 @@ export async function eventFunction (event) {
         .setDescription(`**${event.description}**`)
         // eslint-disable-next-line max-len
         .setAuthor("Peanuts", "https://www.blaseball.wiki/images/thumb/6/6e/Tgb_peanut-weather.png/800px-Tgb_peanut-weather.png", "https://www.blaseball.wiki/w/Peanuts_(weather)")
-        .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
+        .setFooter(`Day ${game.day + 1} of season ${event.season + 1}${
             game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});

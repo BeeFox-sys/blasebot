@@ -35,7 +35,7 @@ export async function eventFunction (event) {
         .setDescription(`**${event.description}**\n${siblings[4]?.description ?? ""}`)
         // eslint-disable-next-line max-len
         .setAuthor("Solar Eclipse", "https://www.blaseball.wiki/images/thumb/5/51/Tgb_eclipse.png/60px-Tgb_eclipse.png", "https://www.blaseball.wiki/w/Solar_Eclipse")
-        .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
+        .setFooter(`Day ${game.day + 1} of season ${event.season + 1}${
             game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
 

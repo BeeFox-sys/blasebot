@@ -33,7 +33,7 @@ export async function eventFunction (event) {
         .setColor("RANDOM")
         .setDescription(`**${event.description}**`)
         .setAuthor("Ballclark", "https://cdn.discordapp.com/emojis/907678547420794990.webp")
-        .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
+        .setFooter(`Day ${game.day + 1} of season ${event.season + 1}${
             game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
 
