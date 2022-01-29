@@ -24,7 +24,7 @@ export async function eventFunction (event) {
         // eslint-disable-next-line max-len
         .setAuthor("Glitter", "https://www.blaseball.wiki/images/thumb/c/c5/Tgb_glitter.png/600px-Tgb_glitter.png", "https://www.blaseball.wiki/w/Glitter")
         .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
-            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji)} @ ${emoji_string(game.homeTeamEmoji)}`);
+            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});

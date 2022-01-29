@@ -34,7 +34,7 @@ export async function eventFunction (event) {
         .setDescription(`**${event.description}**`)
         .setAuthor("Ballclark", "https://cdn.discordapp.com/emojis/907678547420794990.webp")
         .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
-            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji)} @ ${emoji_string(game.homeTeamEmoji)}`);
+            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});

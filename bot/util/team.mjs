@@ -84,8 +84,8 @@ export async function get_active_teams () {
  * @param {string} emoji
  * @returns {string}
  */
-export function emoji_string (emoji) {
+export function emoji_string (emoji, fix = false) {
 
-    return `${Number(emoji) ? String.fromCodePoint(emoji) : emoji}\uFE0F`;
+    return `${Number(emoji) ? String.fromCodePoint(emoji) : emoji}${fix ? "\uFE0F" : ""}`;
 
 }

@@ -28,7 +28,7 @@ export async function eventFunction (event) {
         // eslint-disable-next-line max-len
         .setAuthor("Reverb", "https://www.blaseball.wiki/images/thumb/8/8f/Tgb_reverb.png/599px-Tgb_reverb.png", "https://www.blaseball.wiki/w/Reverb")
         .setFooter(`Day ${game.day + 1} of season ${game.season + 1}${
-            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji)} @ ${emoji_string(game.homeTeamEmoji)}`);
+            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
 
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
