@@ -33,6 +33,12 @@ export async function eventFunction (event) {
             ] = results;
                     
         });
+
+    if (!game) {
+
+        return;
+    
+    }
     
     // Was the team who scored the home team?
     let score_by_home = false;
