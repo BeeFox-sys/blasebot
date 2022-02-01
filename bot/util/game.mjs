@@ -298,7 +298,7 @@ export async function get_events (events_array) {
  */
 export async function get_game (id) {
 
-    return fetch(`https://api.blaseball.com/database/gameById/${id}`)
+    return fetch(`https://api.blaseball.com/api/games/${id}`)
         .then((result) => result.json())
         .catch(() => null);
 
