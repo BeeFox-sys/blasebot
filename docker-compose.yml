@@ -2,10 +2,10 @@ version: "3"
 services: 
     blasebot: 
         build: . 
-        image: nodejs:14
+        image: nodejs:16
         container_name: blasebot
         restart: unless-stopped
-        env_file: .env
+        # env_file: .env
         environment: 
             dbUrl: mongodb://database/blasebot
         volumes: 
