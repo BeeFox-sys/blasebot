@@ -5,7 +5,7 @@ services:
         image: nodejs:16
         container_name: blasebot
         restart: unless-stopped
-        # env_file: .env
+        env_file: stack.env
         environment: 
             dbUrl: mongodb://database/blasebot
         volumes: 
