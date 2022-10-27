@@ -56,24 +56,31 @@ import * as child_process from "child_process";
 client.on("ready", () => {
 
     console.log("ready");
-    const revision = child_process
-        .execSync("git rev-parse --short HEAD")
-        .toString()
-        .trim();
-    const modified = child_process
-        .execSync("git ls-files --modified")
-        .toString()
-        .trim();
 
-    console.log(`COMMIT: ${revision}`, modified.split("\n").filter((str) => str !== ""));
+    /*
+     * const revision = child_process
+     *     .execSync("git rev-parse --short HEAD")
+     *     .toString()
+     *     .trim();
+     * const modified = child_process
+     *     .execSync("git ls-files --modified")
+     *     .toString()
+     *     .trim();
+     */
+
+    // console.log(`COMMIT: ${revision}`, modified.split("\n").filter((str) => str !== ""));
     client.presence.set({
         "status": "online",
         "activities": [
             {
-                "name": `Blaseball! | ${revision}${
-                    modified.split("\n").filter((str) => str !== "").length > 0
-                        ? `+M${modified.split("\n").filter((str) => str !== "").length}`
-                        : ""}`,
+
+                /*
+                 * "name": `Blaseball! | ${revision}${
+                 *     modified.split("\n").filter((str) => str !== "").length > 0
+                 *         ? `+M${modified.split("\n").filter((str) => str !== "").length}`
+                 *         : ""}`,
+                 */
+                "name": "Blaseball!",
                 "type": "WATCHING",
                 "url": "https://www.blaseball.com"
             }
