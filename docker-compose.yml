@@ -3,7 +3,7 @@ services:
     blasebot: 
         build: . 
         image: nodejs:16
-        container_name: blasebot
+        container_name: blasebot_instance
         restart: unless-stopped
         env_file: stack.env
         environment: 
@@ -14,7 +14,7 @@ services:
             - database
     database:
         image: mongo:4.1.8-xenial
-        container_name: database
+        container_name: blasebot_database
         restart: unless-stopped
         volumes:
             - dbdata:/data/db
