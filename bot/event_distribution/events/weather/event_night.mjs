@@ -1,4 +1,4 @@
-import {MessageEmbed} from "discord.js";
+import {Embed} from "discord.js";
 import {send_channels} from "../../send_events.mjs";
 
 // eslint-disable-next-line no-unused-vars
@@ -16,7 +16,7 @@ export async function eventFunction (event) {
 
     const game = await get_game(event.gameTags[0]);
 
-    const embed = new MessageEmbed()
+    const embed = new Embed()
         .setColor("NOT_QUITE_BLACK")
         .setDescription(`**${event.description}**`)
         .setAuthor("Night", "https://www.blaseball.wiki/images/0/03/Weather_night.png", "https://www.blaseball.wiki/w/Night")

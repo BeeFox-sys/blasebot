@@ -1,4 +1,4 @@
-import {MessageEmbed} from "discord.js";
+import {Embed} from "discord.js";
 import {send_channels} from "../../send_events.mjs";
 
 import {event_flags, get_game} from "../../../util/game.mjs";
@@ -21,7 +21,7 @@ export async function eventFunction (event) {
     
     const game = await get_game(event.gameTags[0]);
 
-    const embed = new MessageEmbed()
+    const embed = new Embed()
         .setColor("#c4aa70")
         .setDescription(`**${event.description}**`)
         // eslint-disable-next-line max-len

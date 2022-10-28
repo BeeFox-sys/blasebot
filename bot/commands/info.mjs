@@ -1,4 +1,4 @@
-import {SlashCommandBuilder} from "@discordjs/builders";
+import {SlashCommandBuilder} from "discord.js";
 
 export const commandData = new SlashCommandBuilder()
     .setName("info")
@@ -6,7 +6,7 @@ export const commandData = new SlashCommandBuilder()
 
 
 // eslint-disable-next-line no-unused-vars
-import {CommandInteraction, MessageEmbed, PermissionsBitField} from "discord.js";
+import {CommandInteraction, Embed, PermissionsBitField} from "discord.js";
 
 
 /**
@@ -15,7 +15,7 @@ import {CommandInteraction, MessageEmbed, PermissionsBitField} from "discord.js"
  */
 export async function commandFunction (commandEvent) {
 
-    const embed = new MessageEmbed()
+    const embed = new Embed()
         .setAuthor(
             "Beefox",
             // eslint-disable-next-line max-len

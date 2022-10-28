@@ -7,7 +7,7 @@ import {client} from "../main.mjs";
  * Distributes a message to channels of team subscriptions
  * @param {Array<String>} teams - Team IDs
  * @param {Object} filter - Filter for found objects
- * @param {Object} message - Discordjs MessageOptions
+ * @param {Object} message - DiscordjsOptions
  * @returns {Promise}
  */
 export async function send_teams (teams, filter, message) {
@@ -79,7 +79,7 @@ export async function send_teams (teams, filter, message) {
 /**
  * Distributes a message to channels
  * @param {Object} filter - Filter for found objects
- * @param {Object} message - Discordjs MessageOptions
+ * @param {Object} message - DiscordjsOptions
  * @returns {Promise}
  */
 export async function send_channels (filter, message) {

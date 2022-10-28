@@ -1,4 +1,4 @@
-import {MessageEmbed} from "discord.js";
+import {Embed} from "discord.js";
 import {send_channels} from "../../send_events.mjs";
 
 import {event_flags, get_events, get_game} from "../../../util/game.mjs";
@@ -39,7 +39,7 @@ export async function eventFunction (event) {
 
     const game = await get_game(event.gameTags[0]);
 
-    const embed = new MessageEmbed()
+    const embed = new Embed()
         .setColor("#ed0960")
         .setDescription(`**${event.description}**\n${
             siblings.map((sib) => sib.description).join("\n")}`)

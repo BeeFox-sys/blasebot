@@ -1,10 +1,10 @@
-import {SlashCommandBuilder} from "@discordjs/builders";
+import {SlashCommandBuilder} from "discord.js";
 
 export const commandData = new SlashCommandBuilder()
     .setName("debug")
     .setDescription("debugs blasebot")
-    .setDefaultMemberPermissions(false)
-    .setDMPermission(false)
+    .setDefaultMemberPermissions(null)
+    .setDMPermission(null)
     .addSubcommand((subcommand) => subcommand
         .setName("event")
         .setDescription("debugs a specific event")
@@ -13,9 +13,6 @@ export const commandData = new SlashCommandBuilder()
             .setDescription("event to processs")
             .setRequired(true)));
 
-
-// eslint-disable-next-line no-unused-vars
-import {CommandInteraction} from "discord.js";
 
 import {event_sorting} from "../event_distribution/event_distributor.mjs";
 import {get_events} from "../util/game.mjs";
