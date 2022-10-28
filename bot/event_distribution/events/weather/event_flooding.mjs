@@ -1,4 +1,4 @@
-import {Embed} from "discord.js";
+import {EmbedBuilder} from "discord.js";
 import {send_channels} from "../../send_events.mjs";
 
 // eslint-disable-next-line no-unused-vars
@@ -18,13 +18,15 @@ export async function eventFunction (event) {
     const game = await get_game(event.gameTags[0]);
 
     
-    const embed = new Embed()
+    const embed = new EmbedBuilder()
         .setColor("#8cb8ad")
         .setDescription(`**${event.description}**`)
         // eslint-disable-next-line max-len
-        .setAuthor("Flooding", "https://www.blaseball.wiki/images/thumb/2/29/Tgb_flooding.png/600px-Tgb_flooding.png", "https://www.blaseball.wiki/w/Flooding")
+        .setAuthor({"name": "Flooding",
+            "iconUrl": "https://www.blaseball.wiki/images/thumb/2/29/Tgb_flooding.png/600px-Tgb_flooding.png",
+            "url": "https://www.blaseball.wiki/w/Flooding"})
         .setFooter(`Day ${game.day + 1} of season ${event.season + 1}${
-            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji,true)} @ ${emoji_string(game.homeTeamEmoji,true)}`);
+            game.sim !== "thisidisstaticyo" ? ` of ${game.sim}` : ""}, ${emoji_string(game.awayTeamEmoji, true)} @ ${emoji_string(game.homeTeamEmoji, true)}`);
 
 
     send_channels({"sub_weather": true}, {"embeds": [embed]});
