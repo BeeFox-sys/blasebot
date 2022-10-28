@@ -10,6 +10,14 @@ console.log(`       ▞▚
   ▚  ▞    \x1b[5m▜██▛\x1b[0m
    ▚▞      \x1b[5m▜▛\x1b[0m  
 \x1b[1mBlasebot Loading\x1b[0m`);
+import * as fs from "fs";
+
+const packagejson = JSON.parse(fs.readFileSync("./package.json"));
+
+const vlength = packagejson.version.length;
+const pad = (16 - vlength) / 2;
+
+console.log(`${" ".repeat(Math.floor(pad))}v${packagejson.version}${" ".repeat(Math.ceil(pad))}\n`);
 
 import Discord from "discord.js";
 import dotenv from "dotenv";
@@ -53,6 +61,7 @@ Mongoose.connection
 
 client.on("ready", () => {
 
+
     console.log("ready");
     client.presence.set({
         "status": "online",
@@ -65,7 +74,7 @@ client.on("ready", () => {
                  *         ? `+M${modified.split("\n").filter((str) => str !== "").length}`
                  *         : ""}`,
                  */
-                "name": "Blaseball!",
+                "name": `Blaseball! | v${packagejson.version}`,
                 "type": "WATCHING",
                 "url": "https://www.blaseball.com"
             }
@@ -76,6 +85,7 @@ client.on("ready", () => {
 });
 
 import commands from "./commands/index.mjs";
+import {assert} from "console";
 
 client.on("interactionCreate", (interaction) => {
 
