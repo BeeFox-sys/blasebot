@@ -4,21 +4,7 @@ A Discord bot for [Blaseball](https://www.blaseball.com/).
 
 ## Features
 
-* Game lookup (`/lookup day [season] [day] <team playing>`)
-* Player lookup (`/lookup player [full name]`)
-* Team lookup (`/lookup team [team name]`)
-* Game score updates (`/subscribe scores [team]`)
-* Game summaries (`/subscribe summaries [team]`)
-* Event subscription (`/subscribe events`)
-* End-of-game betting reminders (`/subscribe bets`)
-
-## Game Scores
-
-Game score update subscription allows you to have scoring plays for all games that a specific team play be sent directly to a channel of your choice. You can enable this by using `/subscribe scores [team]`. If you wish to stop having this information sent to a channel, you can use `/unsubscribe scores [team]`. You may only have scores for one team sent to a channel, and you cannot have a given team's scores be sent to multiple channels.
-
-## Game Summaries
-
-Game summaries are similar to score update subscriptions. When a game ends, a score card – the same style that is generated with game lookups – will be sent to the subscribed channel. Unlike game score subscriptions, you may have multiple teams' summaries sent to the same channel. You can subscribe to summaries using `/subscribe summaries [team]` and unsubscribe with `/unsubscribe summaries [team]`.
+(this section is being rewritten)
 
 ## Privacy
 
@@ -42,3 +28,12 @@ If you wish to run the bot without docker, you will need to use Node 14.5.0 mini
 Blasebot uses a Mongoose database to store subscriptions – if you are running the bot locally, leave [MongoDB](https://www.mongodb.com/try/download/community) (`mongo`) running in the background before starting up the bot.
 
 Once everything is set up, you can run Blasebot with `node bot/main` from the top directory.
+
+## Contributing
+
+When contributing, be aware of current versions. develop is for new features, main is live. all new features need to be tested before moving to main.
+
+Semantic Versioning Guide:
+Small changes like minor bug fixes and new weather events: Patch
+New Features: Minor
+Rewrites: Major
