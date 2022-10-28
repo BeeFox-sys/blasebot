@@ -1,4 +1,4 @@
-import {SlashCommandBuilder, SlashCommandSubcommandBuilder} from "@discordjs/builders";
+import {SlashCommandBuilder, SlashCommandSubcommandBuilder, ButtonStyle} from "@discordjs/builders";
 
 export const commandData = new SlashCommandBuilder()
     .setName("subscribe")
@@ -13,7 +13,7 @@ export const commandData = new SlashCommandBuilder()
 
 // eslint-disable-next-line no-unused-vars
 import {CommandInteraction, MessageActionRow,
-    MessageButton, MessageSelectMenu, Permissions} from "discord.js";
+    MessageButton, MessageSelectMenu, PermissionsBitField} from "discord.js";
 import {getChannelSub, getTeamSub} from "../util/guild.mjs";
 import {get_active_teams} from "../util/team.mjs";
 
@@ -23,7 +23,7 @@ import {get_active_teams} from "../util/team.mjs";
  */
 export async function commandFunction (commandEvent) {
 
-    if (!commandEvent.memberPermissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) {
+    if (!commandEvent.memberPermissions.has(PermissionsBitField.FLAGS.MANAGE_CHANNELS)) {
 
         commandEvent.reply({
             // eslint-disable-next-line max-len
@@ -146,12 +146,12 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                 new MessageButton()
                     .setLabel("Scores ")
                     .setCustomId("sub_scores")
-                    .setStyle(model.sub_scores ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_scores ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled),
                 new MessageButton()
                     .setLabel("Summaries")
                     .setCustomId("sub_summaries")
-                    .setStyle(model.sub_summaries ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_summaries ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
             ),
         new MessageActionRow()
@@ -159,12 +159,12 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                 new MessageButton()
                     .setLabel("Players")
                     .setCustomId("sub_player_changes")
-                    .setStyle(model.sub_player_changes ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_player_changes ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true),
                 new MessageButton()
                     .setLabel(" Items ")
                     .setCustomId("sub_items")
-                    .setStyle(model.sub_items ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_items ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
             ),
         new MessageActionRow()
@@ -172,12 +172,12 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
                 new MessageButton()
                     .setLabel("Flavour")
                     .setCustomId("sub_flavour")
-                    .setStyle(model.sub_flavour ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_flavour ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true),
                 new MessageButton()
                     .setLabel(" Plays ")
                     .setCustomId("sub_plays")
-                    .setStyle(model.sub_plays ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_plays ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled)
             )
     ];
@@ -260,19 +260,19 @@ async function event_subscription (interaction, model = null, disabled = false) 
                 new MessageButton()
                     .setLabel("Bets")
                     .setCustomId("sub_bets")
-                    .setStyle(model.sub_bets ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_bets ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
                 ,
                 new MessageButton()
                     .setLabel("Weather")
                     .setCustomId("sub_weather")
-                    .setStyle(model.sub_weather ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_weather ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled)
                 ,
                 new MessageButton()
                     .setLabel("Items")
                     .setCustomId("sub_items")
-                    .setStyle(model.sub_items ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_items ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
 
             ),
@@ -281,19 +281,19 @@ async function event_subscription (interaction, model = null, disabled = false) 
                 new MessageButton()
                     .setLabel("Modifications")
                     .setCustomId("sub_modifications")
-                    .setStyle(model.sub_modifications ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_modifications ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
                 ,
                 new MessageButton()
                     .setLabel("Changes")
                     .setCustomId("sub_changes")
-                    .setStyle(model.sub_changes ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_changes ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
                 ,
                 new MessageButton()
                     .setLabel("Takeover")
                     .setCustomId("sub_takeover")
-                    .setStyle(model.sub_takeover ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_takeover ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled)
 
             ),
@@ -302,13 +302,13 @@ async function event_subscription (interaction, model = null, disabled = false) 
                 new MessageButton()
                     .setLabel("Incineration")
                     .setCustomId("sub_incineration")
-                    .setStyle(model.sub_incineration ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_incineration ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled)
                 ,
                 new MessageButton()
                     .setLabel("Misc")
                     .setCustomId("sub_misc")
-                    .setStyle(model.sub_misc ? "SUCCESS" : "SECONDARY")
+                    .setStyle(model.sub_misc ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
 
             )

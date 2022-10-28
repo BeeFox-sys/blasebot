@@ -6,7 +6,6 @@ bot/data/
 !sample.env
 npm-debug.log
 backup-*
-package-lock.json
 temp.*
 package-lock.*
 bbdb.gz
