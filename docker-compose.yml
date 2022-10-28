@@ -2,7 +2,7 @@ version: "3"
 services: 
     blasebot: 
         build: . 
-        image: nodejs:16
+        image: nodejs:17
         container_name: blasebot_instance
         restart: unless-stopped
         env_file: stack.env
