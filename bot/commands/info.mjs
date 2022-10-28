@@ -1,13 +1,8 @@
-import {SlashCommandBuilder} from "discord.js";
+import {SlashCommandBuilder, CommandInteraction, EmbedBuilder, PermissionsBitField} from "discord.js";
 
 export const commandData = new SlashCommandBuilder()
     .setName("info")
     .setDescription("Provides info about blasebot");
-
-
-// eslint-disable-next-line no-unused-vars
-import {CommandInteraction, Embed, PermissionsBitField} from "discord.js";
-
 
 /**
  *
@@ -15,13 +10,13 @@ import {CommandInteraction, Embed, PermissionsBitField} from "discord.js";
  */
 export async function commandFunction (commandEvent) {
 
-    const embed = new Embed()
-        .setAuthor(
-            "Beefox",
+    const embed = new EmbedBuilder()
+        .setAuthor({
+            "name": "Beefox",
             // eslint-disable-next-line max-len
-            "https://cdn.discordapp.com/avatars/178116262390398976/834d281174a4acf6d96fcb7a1861a7cd.webp",
-            "https://beefox.xyz"
-        )
+            "iconURL": "https://cdn.discordapp.com/avatars/178116262390398976/834d281174a4acf6d96fcb7a1861a7cd.webp",
+            "url": "https://beefox.xyz"
+        })
         .setTitle("Blasebot")
         .setDescription(`
 Blasebot is a Blaseball reporting discord bot.
@@ -34,16 +29,19 @@ If you wish to invite blasebot to your server, so you too may participate in the
             "applications.commands"
         ],
         "permissions": [
-            PermissionsBitField.FLAGS.ViewChannel,
-            PermissionsBitField.FLAGS.SendMessages,
-            PermissionsBitField.FLAGS.EmbedLinks,
-            PermissionsBitField.FLAGS.UseExternalEmojis,
-            PermissionsBitField.FLAGS.UseApplicationCommands
+            PermissionsBitField.Flags.ViewChannel,
+            PermissionsBitField.Flags.SendMessages,
+            PermissionsBitField.Flags.EmbedLinks,
+            PermissionsBitField.Flags.UseExternalEmojis,
+            PermissionsBitField.Flags.UseApplicationCommands
         ]
     })
 })
 `.trim())
-        .addField("Support", "Blasebot is run by Beefox, a disabled and queer programer. Server costs are mostly covered by star, however if you wish to help out you can [donate on liberapay](https://liberapay.com/beefox/), a patreon like service with no fees.")
+        .addFields({
+            "name": "Support",
+            "value": "Blasebot is run by Beefox, a disabled and queer programer. Server costs are covered by SIBR, to whom you can [donate on patreon](https://www.patreon.com/sibr). If you like what star has done with this bot, [there are many ways to donate to star](https://beefox.xyz/contact)."
+        })
         .setColor("#eeaa66");
 
     commandEvent.reply({

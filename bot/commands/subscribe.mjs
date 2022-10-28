@@ -23,7 +23,7 @@ import {get_active_teams} from "../util/team.mjs";
  */
 export async function commandFunction (commandEvent) {
 
-    if (!commandEvent.memberPermissions.has(PermissionsBitField.FLAGS.MANAGE_CHANNELS)) {
+    if (!commandEvent.memberPermissions.has(PermissionsBitField.Flags.MANAGE_CHANNELS)) {
 
         commandEvent.reply({
             // eslint-disable-next-line max-len
