@@ -1,4 +1,4 @@
-import {SlashCommandBuilder, SlashCommandSubcommandBuilder, ButtonStyle} from "@discordjs/builders";
+import {SlashCommandBuilder, SlashCommandSubcommandBuilder, ButtonStyle} from "discord.js";
 
 export const commandData = new SlashCommandBuilder()
     .setName("subscribe")
@@ -12,8 +12,8 @@ export const commandData = new SlashCommandBuilder()
 
 
 // eslint-disable-next-line no-unused-vars
-import {CommandInteraction, MessageActionRow,
-    MessageButton, MessageSelectMenu, PermissionsBitField} from "discord.js";
+import {CommandInteraction, ActionRow,
+    ButtonBuilder, SelectMenuBuilder, PermissionsBitField} from "discord.js";
 import {getChannelSub, getTeamSub} from "../util/guild.mjs";
 import {get_active_teams} from "../util/team.mjs";
 
@@ -83,8 +83,8 @@ async function team_subscription (commandEvent) {
 
 
     const row
-     = new MessageActionRow()
-         .addComponents(new MessageSelectMenu()
+     = new ActionRow()
+         .addComponents(newSelectMenuBuilder()
              .setCustomId("subscription_team_select")
              .setPlaceholder("Select a Team")
              .addOptions(teamMap));
@@ -107,7 +107,7 @@ async function team_subscription (commandEvent) {
 
             const teamObj = teamMap.find((team) => team.value === interaction.values[0]);
 
-            await createTeamButtonPanel(sub, interaction, teamObj);
+            await createTeamPanel(sub, interaction, teamObj);
 
         })
         .catch(async (error) => {
@@ -138,43 +138,43 @@ async function team_subscription (commandEvent) {
  * @param {*} disabled
  * @returns {void}
  */
-async function createTeamButtonPanel (model, interaction, teamObj, disabled = false) {
+async function createTeamPanel (model, interaction, teamObj, disabled = false) {
 
     const rows = [
-        new MessageActionRow()
+        new ActionRow()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Scores ")
                     .setCustomId("sub_scores")
                     .setStyle(model.sub_scores ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled),
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Summaries")
                     .setCustomId("sub_summaries")
                     .setStyle(model.sub_summaries ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
             ),
-        new MessageActionRow()
+        new ActionRow()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Players")
                     .setCustomId("sub_player_changes")
                     .setStyle(model.sub_player_changes ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true),
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel(" Items ")
                     .setCustomId("sub_items")
                     .setStyle(model.sub_items ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
             ),
-        new MessageActionRow()
+        new ActionRow()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Flavour")
                     .setCustomId("sub_flavour")
                     .setStyle(model.sub_flavour ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true),
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel(" Plays ")
                     .setCustomId("sub_plays")
                     .setStyle(model.sub_plays ? ButtonStyle.Success : ButtonStyle.Secondary)
@@ -216,14 +216,14 @@ async function createTeamButtonPanel (model, interaction, teamObj, disabled = fa
 
             const newModel = await model.save();
 
-            createTeamButtonPanel(newModel, buttonInteraction, teamObj);
+            createTeamPanel(newModel, buttonInteraction, teamObj);
         
         })
         .catch((error) => {
 
             if (error.code === "INTERACTION_COLLECTOR_ERROR") {
 
-                createTeamButtonPanel(model, interaction, teamObj, true);
+                createTeamPanel(model, interaction, teamObj, true);
             
             } else {
 
@@ -255,57 +255,57 @@ async function event_subscription (interaction, model = null, disabled = false) 
     }
 
     const rows = [
-        new MessageActionRow()
+        new ActionRow()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Bets")
                     .setCustomId("sub_bets")
                     .setStyle(model.sub_bets ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
                 ,
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Weather")
                     .setCustomId("sub_weather")
                     .setStyle(model.sub_weather ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled)
                 ,
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Items")
                     .setCustomId("sub_items")
                     .setStyle(model.sub_items ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
 
             ),
-        new MessageActionRow()
+        new ActionRow()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Modifications")
                     .setCustomId("sub_modifications")
                     .setStyle(model.sub_modifications ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
                 ,
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Changes")
                     .setCustomId("sub_changes")
                     .setStyle(model.sub_changes ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled || true)
                 ,
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Takeover")
                     .setCustomId("sub_takeover")
                     .setStyle(model.sub_takeover ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled)
 
             ),
-        new MessageActionRow()
+        new ActionRow()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Incineration")
                     .setCustomId("sub_incineration")
                     .setStyle(model.sub_incineration ? ButtonStyle.Success : ButtonStyle.Secondary)
                     .setDisabled(disabled)
                 ,
-                new MessageButton()
+                new ButtonBuilder()
                     .setLabel("Misc")
                     .setCustomId("sub_misc")
                     .setStyle(model.sub_misc ? ButtonStyle.Success : ButtonStyle.Secondary)
