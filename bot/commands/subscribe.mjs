@@ -84,7 +84,7 @@ async function team_subscription (commandEvent) {
 
     const row
      = new ActionRow()
-         .addComponents(newSelectMenuBuilder()
+         .addComponents(new SelectMenuBuilder()
              .setCustomId("subscription_team_select")
              .setPlaceholder("Select a Team")
              .addOptions(teamMap));
@@ -97,7 +97,7 @@ async function team_subscription (commandEvent) {
     });
 
     response.awaitMessageComponent({
-        "componentType": "SELECT_MENU",
+        "componentType": 3,
         "time": 60000,
         "filter": (interaction) => interaction.user === commandEvent.user
     })
@@ -206,7 +206,7 @@ async function createTeamPanel (model, interaction, teamObj, disabled = false) {
     
 
     response.awaitMessageComponent({
-        "componentType": "BUTTON",
+        "componentType": 2,
         "time": 60000,
         "filter": (inter) => inter.user === interaction.user
     })
@@ -348,7 +348,7 @@ async function event_subscription (interaction, model = null, disabled = false) 
     }
 
     response.awaitMessageComponent({
-        "componentType": "BUTTON",
+        "componentType": 2,
         "time": 60000,
         "filter": (inter) => inter.user === interaction.user
     })
