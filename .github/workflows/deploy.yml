@@ -20,6 +20,6 @@ jobs:
               with:
                   context: .
                   push: true
-                  tags: ghcr.io/blasebot
+                  tags: ghcr.io/beefoxsys/blasebot
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
