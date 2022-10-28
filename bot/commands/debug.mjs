@@ -3,7 +3,8 @@ import {SlashCommandBuilder} from "@discordjs/builders";
 export const commandData = new SlashCommandBuilder()
     .setName("debug")
     .setDescription("debugs blasebot")
-    .setDefaultPermission(false)
+    .setDefaultMemberPermissions(false)
+    .setDMPermission(false)
     .addSubcommand((subcommand) => subcommand
         .setName("event")
         .setDescription("debugs a specific event")

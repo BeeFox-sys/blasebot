@@ -1,4 +1,4 @@
-import {Permissions} from "discord.js";
+import {PermissionsBitField} from "discord.js";
 import {model as channels} from "../../schemas/channel.mjs";
 import {model as team_subscription} from "../../schemas/team_subscription.mjs";
 import {client} from "../main.mjs";
@@ -33,7 +33,7 @@ export async function send_teams (teams, filter, message) {
                 if (channel.guild
                     && !channel
                         .permissionsFor(channel.guild.me)
-                        .has(Permissions.FLAGS.SEND_MESSAGES)
+                        .has(PermissionsBitField.Flags.SendMessages)
                 ) {
 
                     return;
@@ -104,7 +104,7 @@ export async function send_channels (filter, message) {
                 if (channel.guild
                     && !channel
                         .permissionsFor(channel.guild.me)
-                        .has(Permissions.FLAGS.SEND_MESSAGES)
+                        .has(PermissionsBitField.Flags.SendMessages)
                 ) {
 
                     return;

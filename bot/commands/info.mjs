@@ -6,7 +6,7 @@ export const commandData = new SlashCommandBuilder()
 
 
 // eslint-disable-next-line no-unused-vars
-import {CommandInteraction, MessageEmbed, Permissions} from "discord.js";
+import {CommandInteraction, MessageEmbed, PermissionsBitField} from "discord.js";
 
 
 /**
@@ -34,11 +34,11 @@ If you wish to invite blasebot to your server, so you too may participate in the
             "applications.commands"
         ],
         "permissions": [
-            Permissions.FLAGS.VIEW_CHANNEL,
-            Permissions.FLAGS.SEND_MESSAGES,
-            Permissions.FLAGS.EMBED_LINKS,
-            Permissions.FLAGS.USE_EXTERNAL_EMOJIS,
-            Permissions.FLAGS.USE_APPLICATION_COMMANDS
+            PermissionsBitField.FLAGS.ViewChannel,
+            PermissionsBitField.FLAGS.SendMessages,
+            PermissionsBitField.FLAGS.EmbedLinks,
+            PermissionsBitField.FLAGS.UseExternalEmojis,
+            PermissionsBitField.FLAGS.UseApplicationCommands
         ]
     })
 })

@@ -29,8 +29,8 @@ import "./event_distribution/game_loop.mjs";
 const client = new Discord.Client({
     "restGlobalRateLimit": 48,
     "intents": [
-        Discord.Intents.FLAGS.GUILDS,
-        Discord.Intents.FLAGS.DIRECT_MESSAGES
+        Discord.GatewayIntentBits.Guilds,
+        Discord.GatewayIntentBits.DirectMessages
     ]
 });
 
