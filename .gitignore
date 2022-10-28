@@ -8,3 +8,4 @@ backup-*
 package-lock.json
 temp.*
 package-lock.*
+bbdb.gz
