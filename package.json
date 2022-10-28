@@ -1,6 +1,6 @@
 {
   "name": "blasebot",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "A discordbot for blaseball",
   "main": "bot/main.mjs",
   "scripts": {
