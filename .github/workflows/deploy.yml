@@ -20,6 +20,6 @@ jobs:
               with:
                   context: .
                   push: true
-                  tags: ghcr.io/${{ github.repository }}
+                  tags: ghcr.io/blasebot
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
