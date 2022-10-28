@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "description": "A discordbot for blaseball",
   "main": "bot/main.mjs",
+  "type": "module",
   "scripts": {
     "update": "git pull && pm2 restart blasebot"
   },

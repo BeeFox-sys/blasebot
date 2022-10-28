@@ -7,4 +7,4 @@ RUN npm install
 
 COPY . .
 
-CMD ["node", "./bot/main.mjs"]
+CMD ["node", "."]
