@@ -1,9 +1,8 @@
 {
   "name": "blasebot",
-  "version": "0.1.0",
+  "version": "2.0.1",
   "description": "A discordbot for blaseball",
   "main": "bot/main.mjs",
-  "module": "node12",
   "scripts": {
     "update": "git pull && pm2 restart blasebot"
   },
